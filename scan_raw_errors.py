@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Inventory raw Lean errors from candidates of problems unsolved in a Pass@32 run.
 
-Keep all parsed error messages in JSONL. Count verbatim diagnostic first lines
-without assigning categories or normalizing identifiers. The default frequency
-unit is one (sample, source line, source column, message head) occurrence.
+Preserve every parsed diagnostic and inventory complete available messages.
+Record both diagnostic counts and the historical per-position occurrence
+counts. Category mapping and template aggregation are separate stages.
 """
 from __future__ import annotations
 
@@ -34,6 +34,7 @@ def problem_id(sample_name: str) -> str:
 
 
 def is_pass(sample: dict[str, Any]) -> bool:
+    """Return the structured verifier verdict: pass and complete must be true and sorries empty; no Lean rerun occurs."""
     result = sample.get("compilation_result") or {}
     return bool(result.get("pass")) and bool(result.get("complete")) and not bool(
         result.get("sorries")
@@ -41,6 +42,7 @@ def is_pass(sample: dict[str, Any]) -> bool:
 
 
 def load_excluded_problems(path: Path | None) -> set[str]:
+    """Read an optional JSON exclusion list into problem IDs; reject malformed names or list entries."""
     if path is None:
         return set()
     with path.expanduser().resolve().open(encoding="utf-8") as handle:
@@ -63,6 +65,7 @@ def load_excluded_problems(path: Path | None) -> set[str]:
 
 
 def load_input(path: Path, input_format: str) -> list[dict[str, Any]]:
+    """Read historical JSON/JSONL verification objects; expand nested Pythagoras miniF2F samples and retain their source indices."""
     if input_format in {"standard-json", "pythagoras-minif2f-json"}:
         data = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(data, list) or not all(isinstance(row, dict) for row in data):
@@ -103,6 +106,7 @@ def load_input(path: Path, input_format: str) -> list[dict[str, Any]]:
 
 
 def row_problem(row: dict[str, Any], input_format: str) -> str:
+    """Return the problem identifier under the selected historical adapter, preserving its original grouping semantics."""
     if input_format == "kimina-jsonl":
         return str(row.get("name", ""))
     if input_format == "pythagoras-jsonl":
@@ -111,6 +115,7 @@ def row_problem(row: dict[str, Any], input_format: str) -> str:
 
 
 def row_sample(row: dict[str, Any], input_format: str) -> str:
+    """Return the candidate identifier under the selected adapter; preserve the original generation numbering."""
     if input_format == "kimina-jsonl":
         return str(row.get("problem_id", ""))
     if input_format == "pythagoras-jsonl":
@@ -119,18 +124,20 @@ def row_sample(row: dict[str, Any], input_format: str) -> str:
 
 
 def row_success(row: dict[str, Any], input_format: str) -> bool:
+    """Return the stored candidate-success verdict using the adapter-specific fields."""
     if input_format in {"kimina-jsonl", "pythagoras-jsonl"}:
         return str(row.get("success")).lower() == "true"
     return is_pass(row)
 
 
 def message_head(message: str) -> str:
-    """The verbatim first line of a Lean diagnostic — the project's raw error unit."""
+    """Return the diagnostic header used internally for historical deduplication; keep the complete message in outputs."""
     lines = message.splitlines()
     return lines[0] if lines else ""
 
 
 def standard_diagnostics(row: dict[str, Any]) -> Iterable[tuple[int | None, int | None, str]]:
+    """Yield line, column and full message for structured severity=error entries; ignore warnings and non-string payloads."""
     result = row.get("compilation_result") or {}
     for diagnostic in result.get("errors", []):
         if not (
@@ -146,6 +153,7 @@ def standard_diagnostics(row: dict[str, Any]) -> Iterable[tuple[int | None, int 
 
 
 def kimina_diagnostics(row: dict[str, Any]) -> Iterable[tuple[int | None, int | None, str]]:
+    """Yield errors split from flattened Kimina messages, excluding known noncompiler outcomes and stripping position markers."""
     if row.get("error_type") in NON_COMPILER_ERROR_TYPES:
         return
     error = row.get("error")
@@ -204,6 +212,7 @@ def pythagoras_truncated_final_diagnostic(row: dict[str, Any]) -> int:
 
 
 def diagnostics_for_format(input_format: str):
+    """Return the diagnostic parser for one supported input format; raise ValueError for an unsupported format."""
     if input_format in {"standard-json", "pythagoras-minif2f-json"}:
         return standard_diagnostics
     if input_format == "kimina-jsonl":
@@ -214,6 +223,7 @@ def diagnostics_for_format(input_format: str):
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse required input/format/model/benchmark/output paths and explicit exclusion/counting options from the CLI."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--input', type=Path, required=True)
     parser.add_argument('--input-format', choices=INPUT_FORMATS, required=True)
@@ -224,11 +234,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--allow-missing-exclusions', action='store_true')
     parser.add_argument('--count-rule', choices=('per-sample-position', 'raw'),
                         default='per-sample-position',
-                        help='Frequency counts: deduplicate heads at each sample position, or count every diagnostic.')
+                        help='Occurrence counts: apply historical per-position deduplication, or count every diagnostic.')
     return parser.parse_args()
 
 
 def file_sha256(path: Path) -> str:
+    """Stream a local file to compute its SHA-256 fingerprint without loading a second full copy into memory."""
     digest = hashlib.sha256()
     with path.open('rb') as handle:
         for chunk in iter(lambda: handle.read(1024 * 1024), b''):
@@ -237,6 +248,7 @@ def file_sha256(path: Path) -> str:
 
 
 def main() -> None:
+    """Read one verification artifact, select unsolved problems after exclusions, and overwrite the three inventory outputs. Preserve every parsed diagnostic and report both pre-deduplication and occurrence counts; reject invalid IDs or an output path that aliases an input."""
     args = parse_args()
     source = args.input.expanduser().resolve()
     out = args.output_dir.expanduser().resolve()
@@ -261,7 +273,8 @@ def main() -> None:
     scope = all_problems - solved
     selected = [(i, r) for i, r in eligible if row_problem(r, args.input_format) in scope]
     parser = diagnostics_for_format(args.input_format)
-    counts: Counter[str] = Counter()
+    raw_counts: Counter[str] = Counter()
+    occurrence_counts: Counter[str] = Counter()
     samples_with_error = raw_total = missing_position = truncated = 0
     out.mkdir(parents=True, exist_ok=True)
     with (out / 'raw_errors.jsonl').open('w', encoding='utf-8') as handle:
@@ -273,12 +286,13 @@ def main() -> None:
             seen: set[tuple[int | None, int | None, str]] = set()
             for diagnostic_index, (line, column, message) in enumerate(diagnostics):
                 raw_total += 1
+                raw_counts[message] += 1
                 head = message_head(message)
                 key = (line, column, head)
                 counted = args.count_rule == 'raw' or key not in seen
                 seen.add(key)
                 if counted:
-                    counts[head] += 1
+                    occurrence_counts[message] += 1
                     missing_position += line is None or column is None
                 record = {
                     'source_record_index': row.get('_source_record_index', source_index)
@@ -287,17 +301,18 @@ def main() -> None:
                     'sample_id': row_sample(row, args.input_format),
                     'diagnostic_index': diagnostic_index,
                     'line': line, 'column': column,
-                    'message': message, 'raw_error_head': head, 'counted': counted,
+                    'message': message, 'counted': counted,
                 }
                 handle.write(json.dumps(record, ensure_ascii=False) + '\n')
-    total = sum(counts.values())
+    total = sum(occurrence_counts.values())
     with (out / 'raw_error_counts.csv').open('w', encoding='utf-8', newline='') as handle:
         writer = csv.writer(handle)
-        writer.writerow(('rank', 'count', 'ratio', 'raw_error_head'))
-        for rank, (head, count) in enumerate(sorted(counts.items(), key=lambda item: (-item[1], item[0])), 1):
-            writer.writerow((rank, count, f'{100 * count / total:.6f}', head))
+        writer.writerow(('rank', 'diagnostic_count', 'occurrence_count', 'raw_error_message'))
+        ranked = sorted(raw_counts, key=lambda message: (-occurrence_counts[message], -raw_counts[message], message))
+        for rank, message in enumerate(ranked, 1):
+            writer.writerow((rank, raw_counts[message], occurrence_counts[message], message))
     summary = {
-        'model': args.model, 'benchmark': args.benchmark,
+        'schema_version': 2, 'model': args.model, 'benchmark': args.benchmark,
         'input_file': source.name, 'input_sha256': file_sha256(source),
         'input_format': args.input_format, 'scope': 'unsolved-problems-in-input',
         'exclusion_file': exclusions_path.name if exclusions_path else None,
@@ -310,7 +325,7 @@ def main() -> None:
         'samples_with_compiler_error': samples_with_error,
         'samples_without_compiler_error': len(selected) - samples_with_error,
         'count_rule': args.count_rule, 'raw_diagnostics_before_rule': raw_total,
-        'counted_error_occurrences': total, 'distinct_raw_error_heads': len(counts),
+        'counted_error_occurrences': total, 'distinct_raw_messages': len(raw_counts),
         'diagnostics_without_position': missing_position,
         'truncated_final_diagnostics_excluded': truncated,
     }
