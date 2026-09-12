@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "analysis_dimension": "plan_to_code_errors",
+  "category": "Proof-Step Assembly Errors",
+  "annotation_method": "Manual local-mechanism interpretation with independent mathematical explanation; not a compiler-message classifier.",
+  "model": "Goedel-Prover-V2-32B",
+  "benchmark": "miniF2F",
+  "candidate_id": "algebra_sum1onsqrt2to1onsqrt10000lt198_g27",
+  "generation_index": 27,
+  "sources": {
+    "generation": {
+      "artifact": "full_records.json",
+      "artifact_sha256": "ce9304fd22a004bf9e46637c9a4c75d595e9088f9cabcdb6c306a482e9c8e75a",
+      "record_index": 3643,
+      "record_index_base": 0
+    },
+    "verification": {
+      "artifact": "code_compilation_repl.json",
+      "artifact_sha256": "9a46557218c47f89c0b898394dcd11029f57a7300b000a97a1509608f3024d59",
+      "record_index": 7426,
+      "record_index_base": 0
+    }
+  },
+  "model_output": {
+    "file": "model_output.txt",
+    "source_field": "model_output",
+    "sha256": "8a6d671e9944884eaa0b80fca5b4ca223994486858f81216e65c22c8a1503392",
+    "encoding": "UTF-8",
+    "preservation": "Exact decoded source string; no added newline or edits."
+  },
+  "statement_excerpt": {
+    "start_line": 155,
+    "end_line": 156,
+    "sha256": "aa781aae1e4398e4101db63e6844f6e47110282b3b6d8adbcc077e4316b5486c"
+  },
+  "case_excerpts": [
+    {
+      "start_line": 126,
+      "end_line": 137,
+      "sha256": "9e624d45b49a67de1518b1b4cea446ffc197d000fa322cde7b435054c3975845"
+    },
+    {
+      "start_line": 213,
+      "end_line": 218,
+      "sha256": "b0ac0582e489150bedb2978025db8575a5c65a1ae51bee1386f958b3fe61037d"
+    }
+  ],
+  "excerpt_line_index_base": 1,
+  "input_statement": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that $\\sum_{k=2}^{10000} \\frac{1}{\\sqrt{k}} < 198$.-/\ntheorem algebra_sum1onsqrt2to1onsqrt10000lt198 :\n    (∑ k in Finset.Icc (2 : ℕ) 10000, 1 / Real.sqrt k) < 198 := by\n",
+  "generation_extracted_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n\ntheorem algebra_sum1onsqrt2to1onsqrt10000lt198 :\n    (∑ k in Finset.Icc (2 : ℕ) 10000, 1 / Real.sqrt k) < 198 := by \n  have h_main_ineq : ∀ (k : ℕ), 2 ≤ k → (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n    intro k hk\n    have h₁ : (k : ℝ) ≥ 2 := by exact_mod_cast hk\n    have h₂ : (k : ℝ) - 1 ≥ 1 := by linarith\n    have h₃ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)\n    have h₄ : 0 < Real.sqrt (k - 1 : ℝ) := Real.sqrt_pos.mpr (by\n      have h₅ : (k : ℝ) - 1 > 0 := by linarith\n      linarith)\n    have h₅ : 0 < Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity\n    \n    have h₆ : 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) < 2 * (k : ℝ) - 1 := by\n      have h₇ : 0 < (k : ℝ) := by positivity\n      have h₈ : 0 < (k : ℝ) - 1 := by linarith\n      have h₉ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)\n      have h₁₀ : 0 < Real.sqrt (k - 1 : ℝ) := Real.sqrt_pos.mpr (by linarith)\n      have h₁₁ : 0 < Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity\n      \n      have h₁₂ : (Real.sqrt k * Real.sqrt (k - 1 : ℝ)) ^ 2 < ((2 * (k : ℝ) - 1) / 2) ^ 2 := by\n        have h₁₃ : (Real.sqrt k * Real.sqrt (k - 1 : ℝ)) ^ 2 = (k : ℝ) * ((k : ℝ) - 1) := by\n          calc\n            (Real.sqrt k * Real.sqrt (k - 1 : ℝ)) ^ 2 = (Real.sqrt k) ^ 2 * (Real.sqrt (k - 1 : ℝ)) ^ 2 := by ring\n            _ = (k : ℝ) * ((k : ℝ) - 1) := by\n              rw [Real.sq_sqrt (by positivity), Real.sq_sqrt (by linarith)]\n              <;> ring_nf\n              <;> field_simp\n              <;> ring_nf\n        rw [h₁₃]\n        have h₁₄ : ((2 * (k : ℝ) - 1) / 2) ^ 2 = (2 * (k : ℝ) - 1) ^ 2 / 4 := by\n          ring_nf\n          <;> field_simp\n          <;> ring_nf\n        rw [h₁₄]\n        have h₁₅ : (k : ℝ) * ((k : ℝ) - 1) < (2 * (k : ℝ) - 1) ^ 2 / 4 := by\n          nlinarith [sq_nonneg ((k : ℝ) - 1 / 2)]\n        linarith\n      \n      have h₁₃ : 0 ≤ Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity\n      have h₁₄ : 0 ≤ (2 * (k : ℝ) - 1) / 2 := by\n        have h₁₅ : (2 * (k : ℝ) - 1 : ℝ) ≥ 1 := by\n          have h₁₆ : (k : ℝ) ≥ 2 := by exact_mod_cast hk\n          linarith\n        linarith\n      nlinarith [Real.sq_sqrt (show 0 ≤ (k : ℝ) by positivity),\n        Real.sq_sqrt (show 0 ≤ (k - 1 : ℝ) by linarith)]\n    \n    have h₇ : (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n      have h₈ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)\n      have h₉ : 0 < Real.sqrt (k - 1 : ℝ) := Real.sqrt_pos.mpr (by\n        have h₁₀ : (k : ℝ) - 1 > 0 := by linarith\n        linarith)\n      have h₁₀ : 0 < Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity\n      \n      have h₁₁ : 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) < 2 * (k : ℝ) - 1 := h₆\n      have h₁₂ : 1 < 2 * (k : ℝ) - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by linarith\n      have h₁₃ : 1 < 2 * (k : ℝ) - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by linarith\n      have h₁₄ : 1 < 2 * Real.sqrt k * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n        calc\n          1 < 2 * (k : ℝ) - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := h₁₃\n          _ = 2 * Real.sqrt k * Real.sqrt k - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by\n            rw [Real.mul_self_sqrt (by positivity : 0 ≤ (k : ℝ))]\n            <;> ring_nf\n          _ = 2 * Real.sqrt k * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by ring\n      have h₁₅ : (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n        calc\n          (1 : ℝ) / Real.sqrt k = 1 / Real.sqrt k := by norm_num\n          _ < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n            \n            have h₁₆ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)\n            have h₁₇ : 0 < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n              have h₁₈ : Real.sqrt (k - 1 : ℝ) < Real.sqrt k := Real.sqrt_lt_sqrt (by linarith) (by linarith)\n              linarith\n            rw [div_lt_iff (by positivity)]\n            nlinarith [Real.sqrt_nonneg k, Real.sqrt_nonneg (k - 1 : ℝ)]\n      exact h₁₅\n    exact h₇\n  \n  have h_sum_ineq : (∑ k in Finset.Icc (2 : ℕ) 10000, (1 : ℝ) / Real.sqrt k) < 198 := by\n    have h₁ : (∑ k in Finset.Icc (2 : ℕ) 10000, (1 : ℝ) / Real.sqrt k) < 198 := by\n      have h₂ : (∑ k in Finset.Icc (2 : ℕ) 10000, (1 : ℝ) / Real.sqrt k) < ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) := by\n        apply Finset.sum_lt_sum_of_nonempty (Finset.nonempty_of_ne_empty (by decide))\n        intro k hk\n        have h₃ : k ∈ Finset.Icc (2 : ℕ) 10000 := hk\n        have h₄ : 2 ≤ k ∧ k ≤ 10000 := Finset.mem_Icc.mp h₃\n        have h₅ : 2 ≤ k := h₄.1\n        have h₆ : (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := h_main_ineq k h₅\n        have h₇ : (2 : ℝ) * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n          norm_num [Real.sqrt_eq_iff_sq_eq]\n          <;>\n          (try norm_num) <;>\n          (try ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>\n          (try field_simp at * <;> ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>\n          (try linarith)\n          <;>\n          (try norm_num) <;>\n          (try ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>\n          (try field_simp at * <;> ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>\n          (try linarith)\n        rw [h₇] at *\n        exact h₆\n      have h₃ : ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 198 := by\n        have h₄ : ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 2 * (Real.sqrt 10000 - Real.sqrt (1 : ℝ)) := by\n          \n          have h₅ : ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 2 * ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) := by\n            rw [Finset.mul_sum]\n          rw [h₅]\n          have h₆ : ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt 10000 - Real.sqrt (1 : ℝ) := by\n            \n            have h₇ : ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt 10000 - Real.sqrt (1 : ℝ) := by\n              \n              have h₈ : ∀ (n : ℕ), 2 ≤ n → ∑ k in Finset.Icc (2 : ℕ) n, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt (n : ℝ) - Real.sqrt (1 : ℝ) := by\n                intro n hn\n                induction' hn with n hn IH\n                · norm_num [Finset.sum_Icc_succ_top]\n                · rw [Finset.sum_Icc_succ_top (by omega : 2 ≤ n.succ)]\n                  rw [IH]\n                  simp [Nat.cast_add, Nat.cast_one, Real.sqrt_eq_iff_sq_eq]\n                  <;> ring_nf <;> norm_num <;>\n                  (try\n                    {\n                      nlinarith [Real.sqrt_nonneg (n : ℝ), Real.sqrt_nonneg ((n : ℝ) + 1),\n                        Real.sq_sqrt (show 0 ≤ (n : ℝ) by positivity),\n                        Real.sq_sqrt (show 0 ≤ ((n : ℝ) + 1 : ℝ) by positivity)]\n                    })\n                  <;>\n                  (try\n                    {\n                      field_simp [Real.sqrt_eq_iff_sq_eq]\n                      <;> ring_nf\n                      <;> norm_num\n                      <;> nlinarith [Real.sqrt_nonneg (n : ℝ), Real.sqrt_nonneg ((n : ℝ) + 1),\n                        Real.sq_sqrt (show 0 ≤ (n : ℝ) by positivity),\n                        Real.sq_sqrt (show 0 ≤ ((n : ℝ) + 1 : ℝ) by positivity)]\n                    })\n              have h₉ : ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt (10000 : ℝ) - Real.sqrt (1 : ℝ) := by\n                apply h₈\n                <;> norm_num\n              rw [h₉]\n              <;> norm_num\n            rw [h₇]\n          rw [h₆]\n          <;> ring\n        rw [h₄]\n        have h₅ : Real.sqrt 10000 = 100 := by\n          rw [Real.sqrt_eq_iff_sq_eq] <;> norm_num\n        have h₆ : Real.sqrt (1 : ℝ) = 1 := by\n          rw [Real.sqrt_eq_iff_sq_eq] <;> norm_num\n        rw [h₅, h₆]\n        <;> norm_num\n      linarith\n    exact h₁\n  \n  exact h_sum_ineq",
+  "submitted_code_sha256": "b92fff05083f0a8f6ff8475901722bca845a1e0d83984bc11ecaa5a25321728b",
+  "verification_record": {
+    "code": "\n\n\n\ntheorem algebra_sum1onsqrt2to1onsqrt10000lt198 :\n    (∑ k in Finset.Icc (2 : ℕ) 10000, 1 / Real.sqrt k) < 198 := by \n  have h_main_ineq : ∀ (k : ℕ), 2 ≤ k → (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n    intro k hk\n    have h₁ : (k : ℝ) ≥ 2 := by exact_mod_cast hk\n    have h₂ : (k : ℝ) - 1 ≥ 1 := by linarith\n    have h₃ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)\n    have h₄ : 0 < Real.sqrt (k - 1 : ℝ) := Real.sqrt_pos.mpr (by\n      have h₅ : (k : ℝ) - 1 > 0 := by linarith\n      linarith)\n    have h₅ : 0 < Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity\n    \n    have h₆ : 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) < 2 * (k : ℝ) - 1 := by\n      have h₇ : 0 < (k : ℝ) := by positivity\n      have h₈ : 0 < (k : ℝ) - 1 := by linarith\n      have h₉ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)\n      have h₁₀ : 0 < Real.sqrt (k - 1 : ℝ) := Real.sqrt_pos.mpr (by linarith)\n      have h₁₁ : 0 < Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity\n      \n      have h₁₂ : (Real.sqrt k * Real.sqrt (k - 1 : ℝ)) ^ 2 < ((2 * (k : ℝ) - 1) / 2) ^ 2 := by\n        have h₁₃ : (Real.sqrt k * Real.sqrt (k - 1 : ℝ)) ^ 2 = (k : ℝ) * ((k : ℝ) - 1) := by\n          calc\n            (Real.sqrt k * Real.sqrt (k - 1 : ℝ)) ^ 2 = (Real.sqrt k) ^ 2 * (Real.sqrt (k - 1 : ℝ)) ^ 2 := by ring\n            _ = (k : ℝ) * ((k : ℝ) - 1) := by\n              rw [Real.sq_sqrt (by positivity), Real.sq_sqrt (by linarith)]\n              <;> ring_nf\n              <;> field_simp\n              <;> ring_nf\n        rw [h₁₃]\n        have h₁₄ : ((2 * (k : ℝ) - 1) / 2) ^ 2 = (2 * (k : ℝ) - 1) ^ 2 / 4 := by\n          ring_nf\n          <;> field_simp\n          <;> ring_nf\n        rw [h₁₄]\n        have h₁₅ : (k : ℝ) * ((k : ℝ) - 1) < (2 * (k : ℝ) - 1) ^ 2 / 4 := by\n          nlinarith [sq_nonneg ((k : ℝ) - 1 / 2)]\n        linarith\n      \n      have h₁₃ : 0 ≤ Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity\n      have h₁₄ : 0 ≤ (2 * (k : ℝ) - 1) / 2 := by\n        have h₁₅ : (2 * (k : ℝ) - 1 : ℝ) ≥ 1 := by\n          have h₁₆ : (k : ℝ) ≥ 2 := by exact_mod_cast hk\n          linarith\n        linarith\n      nlinarith [Real.sq_sqrt (show 0 ≤ (k : ℝ) by positivity),\n        Real.sq_sqrt (show 0 ≤ (k - 1 : ℝ) by linarith)]\n    \n    have h₇ : (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n      have h₈ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)\n      have h₉ : 0 < Real.sqrt (k - 1 : ℝ) := Real.sqrt_pos.mpr (by\n        have h₁₀ : (k : ℝ) - 1 > 0 := by linarith\n        linarith)\n      have h₁₀ : 0 < Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity\n      \n      have h₁₁ : 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) < 2 * (k : ℝ) - 1 := h₆\n      have h₁₂ : 1 < 2 * (k : ℝ) - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by linarith\n      have h₁₃ : 1 < 2 * (k : ℝ) - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by linarith\n      have h₁₄ : 1 < 2 * Real.sqrt k * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n        calc\n          1 < 2 * (k : ℝ) - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := h₁₃\n          _ = 2 * Real.sqrt k * Real.sqrt k - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by\n            rw [Real.mul_self_sqrt (by positivity : 0 ≤ (k : ℝ))]\n            <;> ring_nf\n          _ = 2 * Real.sqrt k * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by ring\n      have h₁₅ : (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n        calc\n          (1 : ℝ) / Real.sqrt k = 1 / Real.sqrt k := by norm_num\n          _ < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n            \n            have h₁₆ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)\n            have h₁₇ : 0 < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n              have h₁₈ : Real.sqrt (k - 1 : ℝ) < Real.sqrt k := Real.sqrt_lt_sqrt (by linarith) (by linarith)\n              linarith\n            rw [div_lt_iff (by positivity)]\n            nlinarith [Real.sqrt_nonneg k, Real.sqrt_nonneg (k - 1 : ℝ)]\n      exact h₁₅\n    exact h₇\n  \n  have h_sum_ineq : (∑ k in Finset.Icc (2 : ℕ) 10000, (1 : ℝ) / Real.sqrt k) < 198 := by\n    have h₁ : (∑ k in Finset.Icc (2 : ℕ) 10000, (1 : ℝ) / Real.sqrt k) < 198 := by\n      have h₂ : (∑ k in Finset.Icc (2 : ℕ) 10000, (1 : ℝ) / Real.sqrt k) < ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) := by\n        apply Finset.sum_lt_sum_of_nonempty (Finset.nonempty_of_ne_empty (by decide))\n        intro k hk\n        have h₃ : k ∈ Finset.Icc (2 : ℕ) 10000 := hk\n        have h₄ : 2 ≤ k ∧ k ≤ 10000 := Finset.mem_Icc.mp h₃\n        have h₅ : 2 ≤ k := h₄.1\n        have h₆ : (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := h_main_ineq k h₅\n        have h₇ : (2 : ℝ) * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by\n          norm_num [Real.sqrt_eq_iff_sq_eq]\n          <;>\n          (try norm_num) <;>\n          (try ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>\n          (try field_simp at * <;> ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>\n          (try linarith)\n          <;>\n          (try norm_num) <;>\n          (try ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>\n          (try field_simp at * <;> ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>\n          (try linarith)\n        rw [h₇] at *\n        exact h₆\n      have h₃ : ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 198 := by\n        have h₄ : ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 2 * (Real.sqrt 10000 - Real.sqrt (1 : ℝ)) := by\n          \n          have h₅ : ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 2 * ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) := by\n            rw [Finset.mul_sum]\n          rw [h₅]\n          have h₆ : ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt 10000 - Real.sqrt (1 : ℝ) := by\n            \n            have h₇ : ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt 10000 - Real.sqrt (1 : ℝ) := by\n              \n              have h₈ : ∀ (n : ℕ), 2 ≤ n → ∑ k in Finset.Icc (2 : ℕ) n, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt (n : ℝ) - Real.sqrt (1 : ℝ) := by\n                intro n hn\n                induction' hn with n hn IH\n                · norm_num [Finset.sum_Icc_succ_top]\n                · rw [Finset.sum_Icc_succ_top (by omega : 2 ≤ n.succ)]\n                  rw [IH]\n                  simp [Nat.cast_add, Nat.cast_one, Real.sqrt_eq_iff_sq_eq]\n                  <;> ring_nf <;> norm_num <;>\n                  (try\n                    {\n                      nlinarith [Real.sqrt_nonneg (n : ℝ), Real.sqrt_nonneg ((n : ℝ) + 1),\n                        Real.sq_sqrt (show 0 ≤ (n : ℝ) by positivity),\n                        Real.sq_sqrt (show 0 ≤ ((n : ℝ) + 1 : ℝ) by positivity)]\n                    })\n                  <;>\n                  (try\n                    {\n                      field_simp [Real.sqrt_eq_iff_sq_eq]\n                      <;> ring_nf\n                      <;> norm_num\n                      <;> nlinarith [Real.sqrt_nonneg (n : ℝ), Real.sqrt_nonneg ((n : ℝ) + 1),\n                        Real.sq_sqrt (show 0 ≤ (n : ℝ) by positivity),\n                        Real.sq_sqrt (show 0 ≤ ((n : ℝ) + 1 : ℝ) by positivity)]\n                    })\n              have h₉ : ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt (10000 : ℝ) - Real.sqrt (1 : ℝ) := by\n                apply h₈\n                <;> norm_num\n              rw [h₉]\n              <;> norm_num\n            rw [h₇]\n          rw [h₆]\n          <;> ring\n        rw [h₄]\n        have h₅ : Real.sqrt 10000 = 100 := by\n          rw [Real.sqrt_eq_iff_sq_eq] <;> norm_num\n        have h₆ : Real.sqrt (1 : ℝ) = 1 := by\n          rw [Real.sqrt_eq_iff_sq_eq] <;> norm_num\n        rw [h₅, h₆]\n        <;> norm_num\n      linarith\n    exact h₁\n  \n  exact h_sum_ineq",
+    "compilation_result": {
+      "sorries": [],
+      "tactics": [],
+      "errors": [
+        {
+          "severity": "error",
+          "pos": {
+            "line": 66,
+            "column": 16
+          },
+          "endPos": {
+            "line": 66,
+            "column": 64
+          },
+          "data": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  √↑k * √↑k\nk : ℕ\nhk : 2 ≤ k\nh₁ : ↑k ≥ 2\nh₂ : ↑k - 1 ≥ 1\nh₃ : 0 < √↑k\nh₄ : 0 < √(↑k - 1)\nh₅ : 0 < √↑k * √(↑k - 1)\nh₆ : 2 * √↑k * √(↑k - 1) < 2 * ↑k - 1\nh₈ : 0 < √↑k\nh₉ : 0 < √(↑k - 1)\nh₁₀ : 0 < √↑k * √(↑k - 1)\nh₁₁ : 2 * √↑k * √(↑k - 1) < 2 * ↑k - 1\nh₁₂ h₁₃ : 1 < 2 * ↑k - 2 * √↑k * √(↑k - 1)\n⊢ 2 * ↑k - 2 * √↑k * √(↑k - 1) = 2 * √↑k * √↑k - 2 * √↑k * √(↑k - 1)"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 120,
+            "column": 50
+          },
+          "endPos": {
+            "line": 120,
+            "column": 55
+          },
+          "data": "omega could not prove the goal:\nNo usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants."
+        }
+      ],
+      "warnings": [],
+      "infos": [],
+      "ast": {},
+      "system_errors": null,
+      "pass": false,
+      "complete": false
+    },
+    "name": "algebra_sum1onsqrt2to1onsqrt10000lt198_g27",
+    "verify_time": 10.57
+  },
+  "problem_scope": {
+    "candidates_in_source_run": 32,
+    "successful_candidates": 0,
+    "problem_solved_at_pass32": false,
+    "included_in_published_unsolved_problem_scope": true,
+    "selection_purpose": "Qualitative illustration of a local mechanism; no frequency estimate."
+  },
+  "selected_diagnostic_index": 0,
+  "diagnostic_index_base": 0,
+  "local_checks": {
+    "lean_version": "4.9.0-rc1",
+    "lean_commit": "be6c4894e0a6",
+    "mathlib_revision": "2f65ba7f1a9144b20c8e7358513548e317d26de1",
+    "scope": "Analyst-written minimal local obligations; not full candidate repairs.",
+    "checks": [
+      {
+        "name": "assembly_original",
+        "source": "import Mathlib\nopen BigOperators\n\nexample (k : ℕ) : (2 : ℝ) * k = 2 * Real.sqrt k * Real.sqrt k := by\n  rw [Real.mul_self_sqrt (Nat.cast_nonneg k)]\n",
+        "source_sha256": "d0ceccae1d3adc384c67164f0bccebe1ec6af8e8db7c169389d454162af9ed96",
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "--stdin"
+        ],
+        "exit_code": 1,
+        "stdout": "<stdin>:5:6: error: tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  √↑k * √↑k\nk : ℕ\n⊢ 2 * ↑k = 2 * √↑k * √↑k\n",
+        "stderr": "",
+        "expected_exit_code": 1,
+        "passed_expectation": true
+      },
+      {
+        "name": "assembly_fixed",
+        "source": "import Mathlib\nopen BigOperators\n\nexample (k : ℕ) : (2 : ℝ) * k = 2 * Real.sqrt k * Real.sqrt k := by\n  rw [mul_assoc, Real.mul_self_sqrt (Nat.cast_nonneg k)]\n",
+        "source_sha256": "e9a0d8285bbe3dd1796cbc3d3070cf18abd2854c9e9a38ab36e2de0bafcce4aa",
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "--stdin"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+        "expected_exit_code": 0,
+        "passed_expectation": true
+      }
+    ]
+  }
+}

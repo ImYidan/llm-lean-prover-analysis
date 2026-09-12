@@ -1,6 +1,6 @@
 # LLM Lean Prover Analysis
 
-Code for the diagnostic analysis of the [LLM Lean prover experiments](https://github.com/ImYidan/llm-lean-prover-evaluation): complete error inventories, eight-category mappings, compiler-message templates, cumulative-50% error tables, and category heatmaps.
+Code and documented error analysis of the [LLM Lean prover experiments](https://github.com/ImYidan/llm-lean-prover-evaluation): complete error inventories, eight-category mappings, compiler-message templates, cumulative-50% error tables, category heatmaps, mathematical reasoning errors, and plan-to-code errors.
 
 ## Repository layout
 
@@ -13,7 +13,7 @@ Code for the diagnostic analysis of the [LLM Lean prover experiments](https://gi
 | `scripts/plot_heatmaps.py` | Render and validate the category heatmaps. |
 | `requirements.txt` | Pin the plotting dependency used for validation. |
 
-All analysis code lives in `scripts/`. Published tables, compressed complete-message mappings, heatmaps and their Markdown guide live in [`results/`](results/README.md). Experiment inputs and intermediate candidate inventories are generated locally. The analysis does not run Lean or query a language model.
+All analysis code lives in `scripts/`. Published tables, compressed complete-message mappings, heatmaps and documented error examples live in [`results/`](results/README.md). Experiment inputs and intermediate candidate inventories are generated locally. The statistical pipeline does not run Lean or query a language model; the translation examples separately record local Lean validation.
 
 ```text
 scripts/                 Analysis scripts and mapping rules
@@ -21,14 +21,24 @@ results/
   README.md              Result index, scope and statistical overview
   tables/                CSV tables, metadata and compressed full-message mapping
   figures/               Cell and pooled-model heatmaps in PNG/PDF
-  case_studies/          Eight definitions, cases and original response evidence
+  compiler_diagnostics/           Eight compiler categories and original evidence
+  mathematical_reasoning_errors/  Three mathematical error categories and evidence
+  plan_to_code_errors/            Three translation categories and local Lean checks
 README.md                Methods, commands and function reference
 requirements.txt         Plotting dependency
 ```
 
-## Eight-category case studies
+## Error definitions, examples and original outputs
 
-The [case-study index](results/case_studies/README.md) organizes the eight cases from thesis Table 6.1. Each category has a `README.md` with **definition → case study → explanation**, plus sibling `model_output.txt`, `case_excerpt.md` and `verification.json` files. Excerpts preserve the original text and record its line ranges; the verification evidence preserves all diagnostics and distinguishes model output from submitted code. The selected diagnostic is interpreted without an exclusive primary label. The case index separately documents scope: the syntax illustration comes from a solved problem and is not part of the published unsolved-problem statistics.
+| Analysis | What it describes | Categories |
+|---|---|---|
+| [Compiler diagnostic categories](results/compiler_diagnostics/README.md) | Observable Lean error messages, with the eight examples from thesis Table 6.1. | Eight compiler categories used by the statistical scripts. |
+| [Mathematical reasoning errors](results/mathematical_reasoning_errors/README.md) | Defects in selected informal mathematical steps, established through calculations or counterexamples. | Insufficient proof strategy; False intermediate claim; Invalid inference. |
+| [Plan-to-code errors](results/plan_to_code_errors/README.md) | How a valid local mathematical step fails in its Lean encoding or execution. | Representation Errors; Library Application Errors; Proof-Step Assembly Errors. |
+
+Each category directory contains a `README.md` organized as **definition → case study → explanation**, plus sibling `model_output.txt`, `case_excerpt.md` and `verification.json`. The complete output is unchanged; excerpts record verbatim source ranges; verification evidence distinguishes the original response from extracted and submitted code. Mathematical explanations include independent derivations and preserve the model's later corrections where present. The translation examples additionally include analyst-written minimal Lean checks, with code, environment and observed results recorded in their JSON evidence.
+
+These are separate analytical dimensions. Compiler-message rules do not automatically assign the three mathematical or three translation labels. The qualitative examples do not estimate those labels' frequency or alter the statistical tables. A candidate can exhibit several mechanisms, and a local translation example does not require every other step in its response to be correct. The compiler index explains its one solved-problem illustration; all six mathematical/translation examples come from problems unsolved in their corresponding 32-candidate run.
 
 ## Install and run
 

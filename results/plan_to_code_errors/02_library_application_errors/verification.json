@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "analysis_dimension": "plan_to_code_errors",
+  "category": "Library Application Errors",
+  "annotation_method": "Manual local-mechanism interpretation with independent mathematical explanation; not a compiler-message classifier.",
+  "model": "Goedel-Prover-V2-32B",
+  "benchmark": "miniF2F",
+  "candidate_id": "amc12a_2003_p23_g0",
+  "generation_index": 0,
+  "sources": {
+    "generation": {
+      "artifact": "full_records.json",
+      "artifact_sha256": "ce9304fd22a004bf9e46637c9a4c75d595e9088f9cabcdb6c306a482e9c8e75a",
+      "record_index": 4544,
+      "record_index_base": 0
+    },
+    "verification": {
+      "artifact": "code_compilation_repl.json",
+      "artifact_sha256": "9a46557218c47f89c0b898394dcd11029f57a7300b000a97a1509608f3024d59",
+      "record_index": 1679,
+      "record_index_base": 0
+    }
+  },
+  "model_output": {
+    "file": "model_output.txt",
+    "source_field": "model_output",
+    "sha256": "4fad23010e9b4d080a32658beb95baca539eb1510e5c3550608770afb5d1a8e6",
+    "encoding": "UTF-8",
+    "preservation": "Exact decoded source string; no added newline or edits."
+  },
+  "statement_excerpt": {
+    "start_line": 1135,
+    "end_line": 1136,
+    "sha256": "4a47161e24c6a9362d1f45560eda29a6a690026d9a6d5697464156cf39ff381e"
+  },
+  "case_excerpts": [
+    {
+      "start_line": 160,
+      "end_line": 190,
+      "sha256": "d8002bf4cd72d60b561e41293f49e296fe4aadbcce0a2e7cf61d11e164cc91cb"
+    },
+    {
+      "start_line": 354,
+      "end_line": 357,
+      "sha256": "1b55843d25e58cd3bf42905bb4ab133a39d607ec656c420f8729f3411ca68061"
+    },
+    {
+      "start_line": 1193,
+      "end_line": 1202,
+      "sha256": "0d39dac4483ddb18899ffa9d6594c0ff7497c16670264ebcffb571e5dfff4b94"
+    }
+  ],
+  "excerpt_line_index_base": 1,
+  "input_statement": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- How many perfect squares are divisors of the product $1! \\cdot 2! \\cdot 3! \\cdot \\hdots \\cdot 9!$?\n\n$ \\textbf{(A)}\\ 504\\qquad\\textbf{(B)}\\ 672\\qquad\\textbf{(C)}\\ 864\\qquad\\textbf{(D)}\\ 936\\qquad\\textbf{(E)}\\ 1008 $ Show that it is \\mathrm{(B)}.-/\ntheorem amc12a_2003_p23 (S : Finset ℕ)\n    (h₀ : ∀ k : ℕ, k ∈ S ↔ 0 < k ∧ (k * k : ℕ) ∣ ∏ i in Finset.Icc 1 9, i !) : S.card = 672 := by\n",
+  "generation_extracted_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n\ntheorem amc12a_2003_p23 (S : Finset ℕ)\n    (h₀ : ∀ k : ℕ, k ∈ S ↔ 0 < k ∧ (k * k : ℕ) ∣ ∏ i in Finset.Icc 1 9, i !) : S.card = 672 := by \n  have h_v2 : (∏ i in Finset.Icc 1 9, i !) % (2 ^ 30 : ℕ) = 0 := by\n    apply Nat.mod_eq_zero_of_dvd\n    apply dvd_of_mod_eq_zero\n    rfl\n  \n  have h_v3 : (∏ i in Finset.Icc 1 9, i !) % (3 ^ 13 : ℕ) = 0 := by\n    apply Nat.mod_eq_zero_of_dvd\n    apply dvd_of_mod_eq_zero\n    rfl\n  \n  have h_v5 : (∏ i in Finset.Icc 1 9, i !) % (5 ^ 5 : ℕ) = 0 := by\n    apply Nat.mod_eq_zero_of_dvd\n    apply dvd_of_mod_eq_zero\n    rfl\n  \n  have h_v7 : (∏ i in Finset.Icc 1 9, i !) % (7 ^ 3 : ℕ) = 0 := by\n    apply Nat.mod_eq_zero_of_dvd\n    apply dvd_of_mod_eq_zero\n    rfl\n  \n  have h_v2_max : ¬((∏ i in Finset.Icc 1 9, i !) % (2 ^ 31 : ℕ) = 0) := by\n    norm_num [Finset.prod_Icc_succ_top, Nat.factorial_succ, Nat.pow_succ, Nat.mul_assoc] at h_v2 ⊢\n    <;>\n    (try decide) <;>\n    (try omega) <;>\n    (try norm_num) <;>\n    (try ring_nf at * <;> omega)\n  \n  have h_v3_max : ¬((∏ i in Finset.Icc 1 9, i !) % (3 ^ 14 : ℕ) = 0) := by\n    norm_num [Finset.prod_Icc_succ_top, Nat.factorial_succ, Nat.pow_succ, Nat.mul_assoc] at h_v3 ⊢\n    <;>\n    (try decide) <;>\n    (try omega) <;>\n    (try norm_num) <;>\n    (try ring_nf at * <;> omega)\n  \n  have h_v5_max : ¬((∏ i in Finset.Icc 1 9, i !) % (5 ^ 6 : ℕ) = 0) := by\n    norm_num [Finset.prod_Icc_succ_top, Nat.factorial_succ, Nat.pow_succ, Nat.mul_assoc] at h_v5 ⊢\n    <;>\n    (try decide) <;>\n    (try omega) <;>\n    (try norm_num) <;>\n    (try ring_nf at * <;> omega)\n  \n  have h_v7_max : ¬((∏ i in Finset.Icc 1 9, i !) % (7 ^ 4 : ℕ) = 0) := by\n    norm_num [Finset.prod_Icc_succ_top, Nat.factorial_succ, Nat.pow_succ, Nat.mul_assoc] at h_v7 ⊢\n    <;>\n    (try decide) <;>\n    (try omega) <;>\n    (try norm_num) <;>\n    (try ring_nf at * <;> omega)\n  \n  have h_no_other_primes : ∀ (p : ℕ), p.Prime → 11 ≤ p → ¬(p ∣ ∏ i in Finset.Icc 1 9, i !) := by\n    intro p hp hge\n    have h₁ : p ≥ 11 := hge\n    have h₂ : p.Prime := hp\n    have h₃ : ¬(p ∣ ∏ i in Finset.Icc 1 9, i !) := by\n      intro h\n      \n      have h₄ : p ∣ ∏ i in Finset.Icc 1 9, i ! := h\n      have h₅ : ∃ i ∈ Finset.Icc 1 9, p ∣ i ! := by\n        \n        have h₅₁ : p ∣ ∏ i in Finset.Icc 1 9, i ! := h₄\n        have h₅₂ : ∃ i ∈ Finset.Icc 1 9, p ∣ i ! := by\n          apply (Finset.Prime.dvd_prod_iff hp).mp h₅₁\n        exact h₅₂\n      \n      obtain ⟨i, hi, hpi⟩ := h₅\n      \n      have h₆ : i ≤ 9 := by\n        simp [Finset.mem_Icc] at hi\n        linarith\n      have h₇ : i ≥ 1 := by\n        simp [Finset.mem_Icc] at hi\n        linarith\n      have h₈ : p ∣ i ! := hpi\n      have h₉ : p > i := by\n        have h₉₁ : p ≥ 11 := h₁\n        have h₉₂ : i ≤ 9 := h₆\n        linarith\n      \n      have h₁₀ : ¬(p ∣ i !) := by\n        have h₁₀₁ : p.Prime := hp\n        have h₁₀₂ : p > i := h₉\n        have h₁₀₃ : ¬(p ∣ i !) := by\n          intro h₁₀₄\n          have h₁₀₅ : p ∣ i ! := h₁₀₄\n          have h₁₀₆ : p ∣ i ! := h₁₀₅\n          have h₁₀₇ : p ≤ i := by\n            have h₁₀₈ : p ∣ i ! := h₁₀₆\n            have h₁₀₉ : p ≤ i := by\n              have h₁₁₀ : p ∣ i ! := h₁₀₈\n              have h₁₁₁ : p ≤ i := by\n                \n                have h₁₁₂ : p ∣ i ! := h₁₁₀\n                have h₁₁₃ : p ≤ i := by\n                  by_contra h₁₁₄\n                  have h₁₁₅ : i < p := by linarith\n                  have h₁₁₆ : ¬(p ∣ i !) := by\n                    \n                    have h₁₁₇ : i !.factorization p = 0 := by\n                      \n                      have h₁₁₈ : p > i := by linarith\n                      have h₁₁₉ : i !.factorization p = 0 := by\n                        rw [Nat.factorization_eq_zero_iff]\n                        <;>\n                        (try simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]) <;>\n                        (try omega) <;>\n                        (try\n                          {\n                            have h₁₂₀ : p > i := by linarith\n                            have h₁₂₁ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                              intro n hn\n                              have h₁₂₂ : n ≤ i := hn\n                              have h₁₂₃ : n < p := by\n                                omega\n                              have h₁₂₄ : ¬p ∣ n := by\n                                intro h₁₂₅\n                                have h₁₂₆ : p ≤ n := Nat.le_of_dvd (by\n                                  have h₁₂₇ : 0 < n := by\n                                    have h₁₂₈ : 1 ≤ n := by\n                                      omega\n                                    linarith\n                                  linarith) h₁₂₅\n                                omega\n                              exact h₁₂₄\n                            have h₁₂₅ : ¬p ∣ i ! := by\n                              intro h₁₂₆\n                              have h₁₂₇ : p ∣ i ! := h₁₂₆\n                              have h₁₂₈ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                \n                                have h₁₂₉ : p ∣ i ! := h₁₂₇\n                                have h₁₃₀ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                  \n                                  have h₁₃₁ : p ∣ i ! := h₁₂₉\n                                  have h₁₃₂ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                    \n                                    by_contra! h₁₃₃\n                                    have h₁₃₄ : ∀ (n : ℕ), n ≤ i → ¬p ∣ n := by\n                                      intro n hn\n                                      have h₁₃₅ := h₁₃₃ n hn\n                                      tauto\n                                    have h₁₃₆ : i !.factorization p = 0 := by\n                                      rw [Nat.factorization_eq_zero_iff]\n                                      <;>\n                                      (try simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]) <;>\n                                      (try omega) <;>\n                                      (try\n                                        {\n                                          have h₁₃₇ : p > i := by linarith\n                                          have h₁₃₈ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                                            intro n hn\n                                            have h₁₃₉ : n ≤ i := hn\n                                            have h₁₄₀ : n < p := by\n                                              omega\n                                            have h₁₄₁ : ¬p ∣ n := by\n                                              intro h₁₄₂\n                                              have h₁₄₃ : p ≤ n := Nat.le_of_dvd (by\n                                                have h₁₄₄ : 0 < n := by\n                                                  have h₁₄₅ : 1 ≤ n := by\n                                                    omega\n                                                  linarith\n                                                linarith) h₁₄₂\n                                              omega\n                                            exact h₁₄₁\n                                          have h₁₄₆ : ¬p ∣ i ! := by\n                                            intro h₁₄₇\n                                            have h₁₄₈ : p ∣ i ! := h₁₄₇\n                                            have h₁₄₉ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                              \n                                              have h₁₅₀ : p ∣ i ! := h₁₄₈\n                                              have h₁₅₁ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                                \n                                                by_contra! h₁₅₂\n                                                have h₁₅₃ : ∀ (n : ℕ), n ≤ i → ¬p ∣ n := by\n                                                  intro n hn\n                                                  have h₁₅₄ := h₁₅₂ n hn\n                                                  tauto\n                                                have h₁₅₅ : i !.factorization p = 0 := by\n                                                  rw [Nat.factorization_eq_zero_iff]\n                                                  <;>\n                                                  (try simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]) <;>\n                                                  (try omega) <;>\n                                                  (try\n                                                    {\n                                                      have h₁₅₆ : p > i := by linarith\n                                                      have h₁₅₇ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                                                        intro n hn\n                                                        have h₁₅₈ : n ≤ i := hn\n                                                        have h₁₅₉ : n < p := by\n                                                          omega\n                                                        have h₁₆₀ : ¬p ∣ n := by\n                                                          intro h₁₆₁\n                                                          have h₁₆₂ : p ≤ n := Nat.le_of_dvd (by\n                                                            have h₁₆₃ : 0 < n := by\n                                                              have h₁₆₄ : 1 ≤ n := by\n                                                                omega\n                                                              linarith\n                                                            linarith) h₁₆₁\n                                                          omega\n                                                        exact h₁₆₀\n                                                      have h₁₆₁ : ¬p ∣ i ! := by\n                                                        intro h₁₆₂\n                                                        have h₁₆₃ : p ∣ i ! := h₁₆₂\n                                                        have h₁₆₄ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                                          \n                                                          have h₁₆₅ : p ∣ i ! := h₁₆₃\n                                                          have h₁₆₆ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                                            \n                                                            by_contra! h₁₆₇\n                                                            have h₁₆₈ : ∀ (n : ℕ), n ≤ i → ¬p ∣ n := by\n                                                              intro n hn\n                                                              have h₁₆₉ := h₁₆₇ n hn\n                                                              tauto\n                                                            simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                                                          exact h₁₆₆\n                                                        obtain ⟨n, hn₁, hn₂⟩ := h₁₆₄\n                                                        have h₁₆₅ : p ∣ n := hn₂\n                                                        have h₁₆₆ : n ≤ i := hn₁\n                                                        have h₁₆₇ : ¬p ∣ n := by\n                                                          have h₁₆₈ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                                                            intro n hn\n                                                            have h₁₆₉ : n ≤ i := hn\n                                                            have h₁₇₀ : n < p := by\n                                                              omega\n                                                            have h₁₇₁ : ¬p ∣ n := by\n                                                              intro h₁₇₂\n                                                              have h₁₇₃ : p ≤ n := Nat.le_of_dvd (by\n                                                                have h₁₇₄ : 0 < n := by\n                                                                  have h₁₇₅ : 1 ≤ n := by\n                                                                    omega\n                                                                  linarith\n                                                                linarith) h₁₇₂\n                                                              omega\n                                                            exact h₁₇₁\n                                                          exact h₁₆₈ n hn₁\n                                                        contradiction\n                                                      contradiction\n                                                    })\n                                                  <;>\n                                                  simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                                                simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                                              exact h₁₅₁\n                                            obtain ⟨n, hn₁, hn₂⟩ := h₁₄₉\n                                            have h₁₅₀ : p ∣ n := hn₂\n                                            have h₁₅₁ : n ≤ i := hn₁\n                                            have h₁₅₂ : ¬p ∣ n := by\n                                              have h₁₅₃ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                                                intro n hn\n                                                have h₁₅₄ : n ≤ i := hn\n                                                have h₁₅₅ : n < p := by\n                                                  omega\n                                                have h₁₅₆ : ¬p ∣ n := by\n                                                  intro h₁₅₇\n                                                  have h₁₅₈ : p ≤ n := Nat.le_of_dvd (by\n                                                    have h₁₅₉ : 0 < n := by\n                                                      have h₁₆₀ : 1 ≤ n := by\n                                                        omega\n                                                      linarith\n                                                    linarith) h₁₅₇\n                                                  omega\n                                                exact h₁₅₆\n                                              exact h₁₅₃ n hn₁\n                                            contradiction\n                                          contradiction\n                                        })\n                                      <;>\n                                      simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                                    simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                                  exact h₁₃₂\n                                exact h₁₃₀\n                              obtain ⟨n, hn₁, hn₂⟩ := h₁₂₈\n                              have h₁₃₁ : p ∣ n := hn₂\n                              have h₁₃₂ : n ≤ i := hn₁\n                              have h₁₃₃ : ¬p ∣ n := by\n                                have h₁₃₄ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                                  intro n hn\n                                  have h₁₃₅ : n ≤ i := hn\n                                  have h₁₃₆ : n < p := by\n                                    omega\n                                  have h₁₃₇ : ¬p ∣ n := by\n                                    intro h₁₃₈\n                                    have h₁₃₉ : p ≤ n := Nat.le_of_dvd (by\n                                      have h₁₄₀ : 0 < n := by\n                                        have h₁₄₁ : 1 ≤ n := by\n                                          omega\n                                        linarith\n                                      linarith) h₁₃₈\n                                    omega\n                                  exact h₁₃₇\n                                exact h₁₃₄ n hn₁\n                              contradiction\n                            contradiction\n                          })\n                        <;>\n                        simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                      exact h₁₁₉\n                    have h₁₂₀ : i !.factorization p = 0 := h₁₁₇\n                    simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                  simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                linarith\n              linarith\n            linarith\n          linarith\n        linarith\n      <;>\n      simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n      <;>\n      omega\n    have h₁₁ : ¬(p ∣ i !) := h₁₀\n    have h₁₂ : p ∣ i ! := hpi\n    contradiction\n  exact h₃\n  <;>\n  simp_all [Finset.mem_Icc]\n  <;>\n  norm_num\n  <;>\n  try contradiction\n  \n  have h_card : S.card = 672 := by\n    have h₁ : S.card = 672 := by\n      \n      have h₂ : S = Finset.filter (fun x => 0 < x) (Finset.filter (fun x => (x * x : ℕ) ∣ ∏ i in Finset.Icc 1 9, i !) (Finset.Icc 1 42345600)) := by\n        apply Finset.ext\n        intro k\n        simp only [Finset.mem_filter, Finset.mem_Icc, h₀]\n        <;>\n        (try decide) <;>\n        (try omega) <;>\n        (try\n          {\n            constructor <;> intro h <;>\n            (try cases h <;> simp_all [Nat.lt_succ_iff]) <;>\n            (try omega) <;>\n            (try\n              {\n                have h₃ : k ≤ 42345600 := by\n                  \n                  have h₄ : k * k ∣ ∏ i in Finset.Icc 1 9, i ! := by tauto\n                  have h₅ : k * k ≤ ∏ i in Finset.Icc 1 9, i ! := Nat.le_of_dvd (by\n                    \n                    apply Finset.prod_pos\n                    intro i hi\n                    have h₆ : 1 ≤ i := by\n                      simp [Finset.mem_Icc] at hi\n                      linarith\n                    have h₇ : i ≤ 9 := by\n                      simp [Finset.mem_Icc] at hi\n                      linarith\n                    have h₈ : 0 < i ! := Nat.factorial_pos i\n                    linarith\n                  ) h₄\n                  have h₆ : ∏ i in Finset.Icc 1 9, i ! = 1076019600000000000 := by\n                    rfl\n                  have h₇ : k * k ≤ 1076019600000000000 := by\n                    rw [h₆] at h₅\n                    exact h₅\n                  have h₈ : k ≤ 1037331000 := by\n                    nlinarith\n                  \n                  nlinarith\n                omega\n              }) <;>\n            (try\n              {\n                have h₃ : 1 ≤ k := by tauto\n                have h₄ : k ≤ 42345600 := by\n                  \n                  have h₅ : k * k ∣ ∏ i in Finset.Icc 1 9, i ! := by tauto\n                  have h₆ : k * k ≤ ∏ i in Finset.Icc 1 9, i ! := Nat.le_of_dvd (by\n                    \n                    apply Finset.prod_pos\n                    intro i hi\n                    have h₇ : 1 ≤ i := by\n                      simp [Finset.mem_Icc] at hi\n                      linarith\n                    have h₈ : i ≤ 9 := by\n                      simp [Finset.mem_Icc] at hi\n                      linarith\n                    have h₉ : 0 < i ! := Nat.factorial_pos i\n                    linarith\n                  ) h₅\n                  have h₇ : ∏ i in Finset.Icc 1 9, i ! = 1076019600000000000 := by\n                    rfl\n                  have h₈ : k * k ≤ 1076019600000000000 := by\n                    rw [h₇] at h₆\n                    exact h₆\n                  have h₉ : k ≤ 1037331000 := by\n                    nlinarith\n                  \n                  nlinarith\n                omega\n              })\n          })\n      rw [h₂]\n      \n      rfl\n    exact h₁\n  \n  exact h_card",
+  "submitted_code_sha256": "1b1ccbd281a9168dd241a4985cee5ba7231b32f962c0369f5a15f66e6d1b445a",
+  "verification_record": {
+    "code": "\n\n\n\ntheorem amc12a_2003_p23 (S : Finset ℕ)\n    (h₀ : ∀ k : ℕ, k ∈ S ↔ 0 < k ∧ (k * k : ℕ) ∣ ∏ i in Finset.Icc 1 9, i !) : S.card = 672 := by \n  have h_v2 : (∏ i in Finset.Icc 1 9, i !) % (2 ^ 30 : ℕ) = 0 := by\n    apply Nat.mod_eq_zero_of_dvd\n    apply dvd_of_mod_eq_zero\n    rfl\n  \n  have h_v3 : (∏ i in Finset.Icc 1 9, i !) % (3 ^ 13 : ℕ) = 0 := by\n    apply Nat.mod_eq_zero_of_dvd\n    apply dvd_of_mod_eq_zero\n    rfl\n  \n  have h_v5 : (∏ i in Finset.Icc 1 9, i !) % (5 ^ 5 : ℕ) = 0 := by\n    apply Nat.mod_eq_zero_of_dvd\n    apply dvd_of_mod_eq_zero\n    rfl\n  \n  have h_v7 : (∏ i in Finset.Icc 1 9, i !) % (7 ^ 3 : ℕ) = 0 := by\n    apply Nat.mod_eq_zero_of_dvd\n    apply dvd_of_mod_eq_zero\n    rfl\n  \n  have h_v2_max : ¬((∏ i in Finset.Icc 1 9, i !) % (2 ^ 31 : ℕ) = 0) := by\n    norm_num [Finset.prod_Icc_succ_top, Nat.factorial_succ, Nat.pow_succ, Nat.mul_assoc] at h_v2 ⊢\n    <;>\n    (try decide) <;>\n    (try omega) <;>\n    (try norm_num) <;>\n    (try ring_nf at * <;> omega)\n  \n  have h_v3_max : ¬((∏ i in Finset.Icc 1 9, i !) % (3 ^ 14 : ℕ) = 0) := by\n    norm_num [Finset.prod_Icc_succ_top, Nat.factorial_succ, Nat.pow_succ, Nat.mul_assoc] at h_v3 ⊢\n    <;>\n    (try decide) <;>\n    (try omega) <;>\n    (try norm_num) <;>\n    (try ring_nf at * <;> omega)\n  \n  have h_v5_max : ¬((∏ i in Finset.Icc 1 9, i !) % (5 ^ 6 : ℕ) = 0) := by\n    norm_num [Finset.prod_Icc_succ_top, Nat.factorial_succ, Nat.pow_succ, Nat.mul_assoc] at h_v5 ⊢\n    <;>\n    (try decide) <;>\n    (try omega) <;>\n    (try norm_num) <;>\n    (try ring_nf at * <;> omega)\n  \n  have h_v7_max : ¬((∏ i in Finset.Icc 1 9, i !) % (7 ^ 4 : ℕ) = 0) := by\n    norm_num [Finset.prod_Icc_succ_top, Nat.factorial_succ, Nat.pow_succ, Nat.mul_assoc] at h_v7 ⊢\n    <;>\n    (try decide) <;>\n    (try omega) <;>\n    (try norm_num) <;>\n    (try ring_nf at * <;> omega)\n  \n  have h_no_other_primes : ∀ (p : ℕ), p.Prime → 11 ≤ p → ¬(p ∣ ∏ i in Finset.Icc 1 9, i !) := by\n    intro p hp hge\n    have h₁ : p ≥ 11 := hge\n    have h₂ : p.Prime := hp\n    have h₃ : ¬(p ∣ ∏ i in Finset.Icc 1 9, i !) := by\n      intro h\n      \n      have h₄ : p ∣ ∏ i in Finset.Icc 1 9, i ! := h\n      have h₅ : ∃ i ∈ Finset.Icc 1 9, p ∣ i ! := by\n        \n        have h₅₁ : p ∣ ∏ i in Finset.Icc 1 9, i ! := h₄\n        have h₅₂ : ∃ i ∈ Finset.Icc 1 9, p ∣ i ! := by\n          apply (Finset.Prime.dvd_prod_iff hp).mp h₅₁\n        exact h₅₂\n      \n      obtain ⟨i, hi, hpi⟩ := h₅\n      \n      have h₆ : i ≤ 9 := by\n        simp [Finset.mem_Icc] at hi\n        linarith\n      have h₇ : i ≥ 1 := by\n        simp [Finset.mem_Icc] at hi\n        linarith\n      have h₈ : p ∣ i ! := hpi\n      have h₉ : p > i := by\n        have h₉₁ : p ≥ 11 := h₁\n        have h₉₂ : i ≤ 9 := h₆\n        linarith\n      \n      have h₁₀ : ¬(p ∣ i !) := by\n        have h₁₀₁ : p.Prime := hp\n        have h₁₀₂ : p > i := h₉\n        have h₁₀₃ : ¬(p ∣ i !) := by\n          intro h₁₀₄\n          have h₁₀₅ : p ∣ i ! := h₁₀₄\n          have h₁₀₆ : p ∣ i ! := h₁₀₅\n          have h₁₀₇ : p ≤ i := by\n            have h₁₀₈ : p ∣ i ! := h₁₀₆\n            have h₁₀₉ : p ≤ i := by\n              have h₁₁₀ : p ∣ i ! := h₁₀₈\n              have h₁₁₁ : p ≤ i := by\n                \n                have h₁₁₂ : p ∣ i ! := h₁₁₀\n                have h₁₁₃ : p ≤ i := by\n                  by_contra h₁₁₄\n                  have h₁₁₅ : i < p := by linarith\n                  have h₁₁₆ : ¬(p ∣ i !) := by\n                    \n                    have h₁₁₇ : i !.factorization p = 0 := by\n                      \n                      have h₁₁₈ : p > i := by linarith\n                      have h₁₁₉ : i !.factorization p = 0 := by\n                        rw [Nat.factorization_eq_zero_iff]\n                        <;>\n                        (try simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]) <;>\n                        (try omega) <;>\n                        (try\n                          {\n                            have h₁₂₀ : p > i := by linarith\n                            have h₁₂₁ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                              intro n hn\n                              have h₁₂₂ : n ≤ i := hn\n                              have h₁₂₃ : n < p := by\n                                omega\n                              have h₁₂₄ : ¬p ∣ n := by\n                                intro h₁₂₅\n                                have h₁₂₆ : p ≤ n := Nat.le_of_dvd (by\n                                  have h₁₂₇ : 0 < n := by\n                                    have h₁₂₈ : 1 ≤ n := by\n                                      omega\n                                    linarith\n                                  linarith) h₁₂₅\n                                omega\n                              exact h₁₂₄\n                            have h₁₂₅ : ¬p ∣ i ! := by\n                              intro h₁₂₆\n                              have h₁₂₇ : p ∣ i ! := h₁₂₆\n                              have h₁₂₈ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                \n                                have h₁₂₉ : p ∣ i ! := h₁₂₇\n                                have h₁₃₀ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                  \n                                  have h₁₃₁ : p ∣ i ! := h₁₂₉\n                                  have h₁₃₂ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                    \n                                    by_contra! h₁₃₃\n                                    have h₁₃₄ : ∀ (n : ℕ), n ≤ i → ¬p ∣ n := by\n                                      intro n hn\n                                      have h₁₃₅ := h₁₃₃ n hn\n                                      tauto\n                                    have h₁₃₆ : i !.factorization p = 0 := by\n                                      rw [Nat.factorization_eq_zero_iff]\n                                      <;>\n                                      (try simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]) <;>\n                                      (try omega) <;>\n                                      (try\n                                        {\n                                          have h₁₃₇ : p > i := by linarith\n                                          have h₁₃₈ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                                            intro n hn\n                                            have h₁₃₉ : n ≤ i := hn\n                                            have h₁₄₀ : n < p := by\n                                              omega\n                                            have h₁₄₁ : ¬p ∣ n := by\n                                              intro h₁₄₂\n                                              have h₁₄₃ : p ≤ n := Nat.le_of_dvd (by\n                                                have h₁₄₄ : 0 < n := by\n                                                  have h₁₄₅ : 1 ≤ n := by\n                                                    omega\n                                                  linarith\n                                                linarith) h₁₄₂\n                                              omega\n                                            exact h₁₄₁\n                                          have h₁₄₆ : ¬p ∣ i ! := by\n                                            intro h₁₄₇\n                                            have h₁₄₈ : p ∣ i ! := h₁₄₇\n                                            have h₁₄₉ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                              \n                                              have h₁₅₀ : p ∣ i ! := h₁₄₈\n                                              have h₁₅₁ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                                \n                                                by_contra! h₁₅₂\n                                                have h₁₅₃ : ∀ (n : ℕ), n ≤ i → ¬p ∣ n := by\n                                                  intro n hn\n                                                  have h₁₅₄ := h₁₅₂ n hn\n                                                  tauto\n                                                have h₁₅₅ : i !.factorization p = 0 := by\n                                                  rw [Nat.factorization_eq_zero_iff]\n                                                  <;>\n                                                  (try simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]) <;>\n                                                  (try omega) <;>\n                                                  (try\n                                                    {\n                                                      have h₁₅₆ : p > i := by linarith\n                                                      have h₁₅₇ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                                                        intro n hn\n                                                        have h₁₅₈ : n ≤ i := hn\n                                                        have h₁₅₉ : n < p := by\n                                                          omega\n                                                        have h₁₆₀ : ¬p ∣ n := by\n                                                          intro h₁₆₁\n                                                          have h₁₆₂ : p ≤ n := Nat.le_of_dvd (by\n                                                            have h₁₆₃ : 0 < n := by\n                                                              have h₁₆₄ : 1 ≤ n := by\n                                                                omega\n                                                              linarith\n                                                            linarith) h₁₆₁\n                                                          omega\n                                                        exact h₁₆₀\n                                                      have h₁₆₁ : ¬p ∣ i ! := by\n                                                        intro h₁₆₂\n                                                        have h₁₆₃ : p ∣ i ! := h₁₆₂\n                                                        have h₁₆₄ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                                          \n                                                          have h₁₆₅ : p ∣ i ! := h₁₆₃\n                                                          have h₁₆₆ : ∃ (n : ℕ), n ≤ i ∧ p ∣ n := by\n                                                            \n                                                            by_contra! h₁₆₇\n                                                            have h₁₆₈ : ∀ (n : ℕ), n ≤ i → ¬p ∣ n := by\n                                                              intro n hn\n                                                              have h₁₆₉ := h₁₆₇ n hn\n                                                              tauto\n                                                            simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                                                          exact h₁₆₆\n                                                        obtain ⟨n, hn₁, hn₂⟩ := h₁₆₄\n                                                        have h₁₆₅ : p ∣ n := hn₂\n                                                        have h₁₆₆ : n ≤ i := hn₁\n                                                        have h₁₆₇ : ¬p ∣ n := by\n                                                          have h₁₆₈ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                                                            intro n hn\n                                                            have h₁₆₉ : n ≤ i := hn\n                                                            have h₁₇₀ : n < p := by\n                                                              omega\n                                                            have h₁₇₁ : ¬p ∣ n := by\n                                                              intro h₁₇₂\n                                                              have h₁₇₃ : p ≤ n := Nat.le_of_dvd (by\n                                                                have h₁₇₄ : 0 < n := by\n                                                                  have h₁₇₅ : 1 ≤ n := by\n                                                                    omega\n                                                                  linarith\n                                                                linarith) h₁₇₂\n                                                              omega\n                                                            exact h₁₇₁\n                                                          exact h₁₆₈ n hn₁\n                                                        contradiction\n                                                      contradiction\n                                                    })\n                                                  <;>\n                                                  simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                                                simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                                              exact h₁₅₁\n                                            obtain ⟨n, hn₁, hn₂⟩ := h₁₄₉\n                                            have h₁₅₀ : p ∣ n := hn₂\n                                            have h₁₅₁ : n ≤ i := hn₁\n                                            have h₁₅₂ : ¬p ∣ n := by\n                                              have h₁₅₃ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                                                intro n hn\n                                                have h₁₅₄ : n ≤ i := hn\n                                                have h₁₅₅ : n < p := by\n                                                  omega\n                                                have h₁₅₆ : ¬p ∣ n := by\n                                                  intro h₁₅₇\n                                                  have h₁₅₈ : p ≤ n := Nat.le_of_dvd (by\n                                                    have h₁₅₉ : 0 < n := by\n                                                      have h₁₆₀ : 1 ≤ n := by\n                                                        omega\n                                                      linarith\n                                                    linarith) h₁₅₇\n                                                  omega\n                                                exact h₁₅₆\n                                              exact h₁₅₃ n hn₁\n                                            contradiction\n                                          contradiction\n                                        })\n                                      <;>\n                                      simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                                    simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                                  exact h₁₃₂\n                                exact h₁₃₀\n                              obtain ⟨n, hn₁, hn₂⟩ := h₁₂₈\n                              have h₁₃₁ : p ∣ n := hn₂\n                              have h₁₃₂ : n ≤ i := hn₁\n                              have h₁₃₃ : ¬p ∣ n := by\n                                have h₁₃₄ : ∀ {n : ℕ}, n ≤ i → ¬p ∣ n := by\n                                  intro n hn\n                                  have h₁₃₅ : n ≤ i := hn\n                                  have h₁₃₆ : n < p := by\n                                    omega\n                                  have h₁₃₇ : ¬p ∣ n := by\n                                    intro h₁₃₈\n                                    have h₁₃₉ : p ≤ n := Nat.le_of_dvd (by\n                                      have h₁₄₀ : 0 < n := by\n                                        have h₁₄₁ : 1 ≤ n := by\n                                          omega\n                                        linarith\n                                      linarith) h₁₃₈\n                                    omega\n                                  exact h₁₃₇\n                                exact h₁₃₄ n hn₁\n                              contradiction\n                            contradiction\n                          })\n                        <;>\n                        simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                      exact h₁₁₉\n                    have h₁₂₀ : i !.factorization p = 0 := h₁₁₇\n                    simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                  simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n                linarith\n              linarith\n            linarith\n          linarith\n        linarith\n      <;>\n      simp_all [Nat.Prime.ne_zero, Nat.Prime.pos]\n      <;>\n      omega\n    have h₁₁ : ¬(p ∣ i !) := h₁₀\n    have h₁₂ : p ∣ i ! := hpi\n    contradiction\n  exact h₃\n  <;>\n  simp_all [Finset.mem_Icc]\n  <;>\n  norm_num\n  <;>\n  try contradiction\n  \n  have h_card : S.card = 672 := by\n    have h₁ : S.card = 672 := by\n      \n      have h₂ : S = Finset.filter (fun x => 0 < x) (Finset.filter (fun x => (x * x : ℕ) ∣ ∏ i in Finset.Icc 1 9, i !) (Finset.Icc 1 42345600)) := by\n        apply Finset.ext\n        intro k\n        simp only [Finset.mem_filter, Finset.mem_Icc, h₀]\n        <;>\n        (try decide) <;>\n        (try omega) <;>\n        (try\n          {\n            constructor <;> intro h <;>\n            (try cases h <;> simp_all [Nat.lt_succ_iff]) <;>\n            (try omega) <;>\n            (try\n              {\n                have h₃ : k ≤ 42345600 := by\n                  \n                  have h₄ : k * k ∣ ∏ i in Finset.Icc 1 9, i ! := by tauto\n                  have h₅ : k * k ≤ ∏ i in Finset.Icc 1 9, i ! := Nat.le_of_dvd (by\n                    \n                    apply Finset.prod_pos\n                    intro i hi\n                    have h₆ : 1 ≤ i := by\n                      simp [Finset.mem_Icc] at hi\n                      linarith\n                    have h₇ : i ≤ 9 := by\n                      simp [Finset.mem_Icc] at hi\n                      linarith\n                    have h₈ : 0 < i ! := Nat.factorial_pos i\n                    linarith\n                  ) h₄\n                  have h₆ : ∏ i in Finset.Icc 1 9, i ! = 1076019600000000000 := by\n                    rfl\n                  have h₇ : k * k ≤ 1076019600000000000 := by\n                    rw [h₆] at h₅\n                    exact h₅\n                  have h₈ : k ≤ 1037331000 := by\n                    nlinarith\n                  \n                  nlinarith\n                omega\n              }) <;>\n            (try\n              {\n                have h₃ : 1 ≤ k := by tauto\n                have h₄ : k ≤ 42345600 := by\n                  \n                  have h₅ : k * k ∣ ∏ i in Finset.Icc 1 9, i ! := by tauto\n                  have h₆ : k * k ≤ ∏ i in Finset.Icc 1 9, i ! := Nat.le_of_dvd (by\n                    \n                    apply Finset.prod_pos\n                    intro i hi\n                    have h₇ : 1 ≤ i := by\n                      simp [Finset.mem_Icc] at hi\n                      linarith\n                    have h₈ : i ≤ 9 := by\n                      simp [Finset.mem_Icc] at hi\n                      linarith\n                    have h₉ : 0 < i ! := Nat.factorial_pos i\n                    linarith\n                  ) h₅\n                  have h₇ : ∏ i in Finset.Icc 1 9, i ! = 1076019600000000000 := by\n                    rfl\n                  have h₈ : k * k ≤ 1076019600000000000 := by\n                    rw [h₇] at h₆\n                    exact h₆\n                  have h₉ : k ≤ 1037331000 := by\n                    nlinarith\n                  \n                  nlinarith\n                omega\n              })\n          })\n      rw [h₂]\n      \n      rfl\n    exact h₁\n  \n  exact h_card",
+    "compilation_result": {
+      "sorries": [],
+      "tactics": [],
+      "errors": [
+        {
+          "severity": "error",
+          "pos": {
+            "line": 71,
+            "column": 17
+          },
+          "endPos": {
+            "line": 71,
+            "column": 45
+          },
+          "data": "unknown constant 'Finset.Prime.dvd_prod_iff'"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 107,
+            "column": 32
+          },
+          "endPos": {
+            "line": 107,
+            "column": 55
+          },
+          "data": "function expected at\n  i\nterm has type\n  ℕ"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 110,
+            "column": 34
+          },
+          "endPos": {
+            "line": 110,
+            "column": 57
+          },
+          "data": "function expected at\n  i\nterm has type\n  ℕ"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 111,
+            "column": 28
+          },
+          "endPos": {
+            "line": 111,
+            "column": 57
+          },
+          "data": "tactic 'rewrite' failed, did not find instance of the pattern in the target expression\n  ?n.factorization ?p = 0\nS : Finset ℕ\nh₀ : ∀ (k : ℕ), k ∈ S ↔ 0 < k ∧ k * k ∣ ∏ i ∈ Finset.Icc 1 9, i !\nh_v2 : (∏ i ∈ Finset.Icc 1 9, i !) % 2 ^ 30 = 0\nh_v3 : (∏ i ∈ Finset.Icc 1 9, i !) % 3 ^ 13 = 0\nh_v5 : (∏ i ∈ Finset.Icc 1 9, i !) % 5 ^ 5 = 0\nh_v7 : (∏ i ∈ Finset.Icc 1 9, i !) % 7 ^ 3 = 0\nh_v2_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 2 ^ 31 = 0\nh_v3_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 3 ^ 14 = 0\nh_v5_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 5 ^ 6 = 0\nh_v7_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 7 ^ 4 = 0\np : ℕ\nhp : p.Prime\nhge : 11 ≤ p\nh₁ : p ≥ 11\nh₂ : p.Prime\nh h₄ : p ∣ ∏ i ∈ Finset.Icc 1 9, i !\ni : ℕ\nhi : i ∈ Finset.Icc 1 9\nhpi : p ∣ i !\nh₆ : i ≤ 9\nh₇ : i ≥ 1\nh₈ : p ∣ i !\nh₉ : p > i\nh₁₀₁ : p.Prime\nh₁₀₂ : p > i\nh₁₀₄ h₁₀₅ h₁₀₆ h₁₀₈ h₁₁₀ h₁₁₂ : p ∣ i !\nh₁₁₄ : ¬p ≤ i\nh₁₁₅ : i < p\nh₁₁₈ : p > i\n⊢ sorryAx (Sort ?u.86712) true"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 304,
+            "column": 32
+          },
+          "endPos": {
+            "line": 304,
+            "column": 55
+          },
+          "data": "function expected at\n  i\nterm has type\n  ℕ"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 105,
+            "column": 44
+          },
+          "endPos": {
+            "line": 305,
+            "column": 63
+          },
+          "data": "unsolved goals\nS : Finset ℕ\np i : ℕ\nh₁₁₇ h₁₂₀ : sorryAx (Sort ?u.86712) true\nh₀ : ∀ (k : ℕ), k ∈ S ↔ 0 < k ∧ k * k ∣ sf 9\nh_v2 : (sf 9) % 1073741824 = 0\nh_v3 : (sf 9) % 1594323 = 0\nh_v5 : (sf 9) % 3125 = 0\nh_v7 : (sf 9) % 343 = 0\nh_v2_max : ¬(sf 9) % 2147483648 = 0\nh_v3_max : ¬(sf 9) % 4782969 = 0\nh_v5_max : ¬(sf 9) % 15625 = 0\nh_v7_max : ¬(sf 9) % 2401 = 0\nh₁ : 11 ≤ p\nh : p ∣ sf 9\nh₆ : i ≤ 9\nh₇ : 1 ≤ i\nh₁₀₁ : p.Prime\nh₁₁₂ : p ∣ i !\nh₁₁₅ : i < p\n⊢ False"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 311,
+            "column": 8
+          },
+          "endPos": {
+            "line": 311,
+            "column": 16
+          },
+          "data": "linarith failed to find a contradiction\nS : Finset ℕ\nh₀ : ∀ (k : ℕ), k ∈ S ↔ 0 < k ∧ k * k ∣ ∏ i ∈ Finset.Icc 1 9, i !\nh_v2 : (∏ i ∈ Finset.Icc 1 9, i !) % 2 ^ 30 = 0\nh_v3 : (∏ i ∈ Finset.Icc 1 9, i !) % 3 ^ 13 = 0\nh_v5 : (∏ i ∈ Finset.Icc 1 9, i !) % 5 ^ 5 = 0\nh_v7 : (∏ i ∈ Finset.Icc 1 9, i !) % 7 ^ 3 = 0\nh_v2_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 2 ^ 31 = 0\nh_v3_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 3 ^ 14 = 0\nh_v5_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 5 ^ 6 = 0\nh_v7_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 7 ^ 4 = 0\np : ℕ\nhp : p.Prime\nhge : 11 ≤ p\nh₁ : p ≥ 11\nh₂ : p.Prime\nh h₄ : p ∣ ∏ i ∈ Finset.Icc 1 9, i !\ni : ℕ\nhi : i ∈ Finset.Icc 1 9\nhpi : p ∣ i !\nh₆ : i ≤ 9\nh₇ : i ≥ 1\nh₈ : p ∣ i !\nh₉ : p > i\nh₁₀₁ : p.Prime\nh₁₀₂ : p > i\nh₁₀₃ : ¬p ∣ i !\n⊢ False\nfailed"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 63,
+            "column": 51
+          },
+          "endPos": {
+            "line": 315,
+            "column": 11
+          },
+          "data": "unsolved goals\ncase intro.intro\nS : Finset ℕ\nh₀ : ∀ (k : ℕ), k ∈ S ↔ 0 < k ∧ k * k ∣ ∏ i ∈ Finset.Icc 1 9, i !\nh_v2 : (∏ i ∈ Finset.Icc 1 9, i !) % 2 ^ 30 = 0\nh_v3 : (∏ i ∈ Finset.Icc 1 9, i !) % 3 ^ 13 = 0\nh_v5 : (∏ i ∈ Finset.Icc 1 9, i !) % 5 ^ 5 = 0\nh_v7 : (∏ i ∈ Finset.Icc 1 9, i !) % 7 ^ 3 = 0\nh_v2_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 2 ^ 31 = 0\nh_v3_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 3 ^ 14 = 0\nh_v5_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 5 ^ 6 = 0\nh_v7_max : ¬(∏ i ∈ Finset.Icc 1 9, i !) % 7 ^ 4 = 0\np : ℕ\nhp : p.Prime\nhge : 11 ≤ p\nh₁ : p ≥ 11\nh₂ : p.Prime\nh h₄ : p ∣ ∏ i ∈ Finset.Icc 1 9, i !\ni : ℕ\nhi : i ∈ Finset.Icc 1 9\nhpi : p ∣ i !\nh₆ : i ≤ 9\nh₇ : i ≥ 1\nh₈ : p ∣ i !\nh₉ : p > i\nh₁₀ : ¬p ∣ i !\n⊢ False"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 316,
+            "column": 21
+          },
+          "endPos": {
+            "line": 316,
+            "column": 22
+          },
+          "data": "unknown identifier 'i'"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 316,
+            "column": 29
+          },
+          "endPos": {
+            "line": 316,
+            "column": 32
+          },
+          "data": "unknown identifier 'h₁₀'"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 317,
+            "column": 19
+          },
+          "endPos": {
+            "line": 317,
+            "column": 20
+          },
+          "data": "unknown identifier 'i'"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 317,
+            "column": 26
+          },
+          "endPos": {
+            "line": 317,
+            "column": 29
+          },
+          "data": "unknown identifier 'hpi'"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 319,
+            "column": 8
+          },
+          "endPos": {
+            "line": 319,
+            "column": 10
+          },
+          "data": "unknown identifier 'h₃'"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 327,
+            "column": 2
+          },
+          "endPos": {
+            "line": 327,
+            "column": 6
+          },
+          "data": "no goals to be solved"
+        }
+      ],
+      "warnings": [],
+      "infos": [],
+      "ast": {},
+      "system_errors": null,
+      "pass": false,
+      "complete": false
+    },
+    "name": "amc12a_2003_p23_g0",
+    "verify_time": 6.82
+  },
+  "problem_scope": {
+    "candidates_in_source_run": 32,
+    "successful_candidates": 0,
+    "problem_solved_at_pass32": false,
+    "included_in_published_unsolved_problem_scope": true,
+    "selection_purpose": "Qualitative illustration of a local mechanism; no frequency estimate."
+  },
+  "selected_diagnostic_index": 0,
+  "diagnostic_index_base": 0,
+  "local_checks": {
+    "lean_version": "4.9.0-rc1",
+    "lean_commit": "be6c4894e0a6",
+    "mathlib_revision": "2f65ba7f1a9144b20c8e7358513548e317d26de1",
+    "scope": "Analyst-written minimal local obligations; not full candidate repairs.",
+    "checks": [
+      {
+        "name": "library_original",
+        "source": "import Mathlib\nopen BigOperators\n\nexample (p : ℕ) (hp : Nat.Prime p) (h : p ∣ ∏ i in Finset.Icc 1 9, i.factorial) :\n    ∃ i ∈ Finset.Icc 1 9, p ∣ i.factorial := by\n  exact (Finset.Prime.dvd_prod_iff hp).mp h\n",
+        "source_sha256": "072bd473a8dd5ecff5829e5168c67c8da6783305fbf6bb0d4a6cf74b435e0bb4",
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "--stdin"
+        ],
+        "exit_code": 1,
+        "stdout": "<stdin>:6:9: error: unknown constant 'Finset.Prime.dvd_prod_iff'\n",
+        "stderr": "",
+        "expected_exit_code": 1,
+        "passed_expectation": true
+      },
+      {
+        "name": "library_name_only",
+        "source": "import Mathlib\nopen BigOperators\n\nexample (p : ℕ) (hp : Nat.Prime p) (h : p ∣ ∏ i in Finset.Icc 1 9, i.factorial) :\n    ∃ i ∈ Finset.Icc 1 9, p ∣ i.factorial := by\n  exact (Prime.dvd_finset_prod_iff hp (fun i : ℕ => i.factorial)).mp h\n",
+        "source_sha256": "1b42a0f10d4de9bbdc9a07b389acaef90df5bbec1a81cb18e04757414ed3d7b1",
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "--stdin"
+        ],
+        "exit_code": 1,
+        "stdout": "<stdin>:6:35: error: application type mismatch\n  Prime.dvd_finset_prod_iff hp\nargument\n  hp\nhas type\n  p.Prime : Prop\nbut is expected to have type\n  Prime ?m.1784 : Prop\n",
+        "stderr": "",
+        "expected_exit_code": 1,
+        "passed_expectation": true
+      },
+      {
+        "name": "library_fixed",
+        "source": "import Mathlib\nopen BigOperators\n\nexample (p : ℕ) (hp : Nat.Prime p) (h : p ∣ ∏ i in Finset.Icc 1 9, i.factorial) :\n    ∃ i ∈ Finset.Icc 1 9, p ∣ i.factorial := by\n  exact (Prime.dvd_finset_prod_iff hp.prime (fun i : ℕ => i.factorial)).mp h\n",
+        "source_sha256": "51782b7897d581278449663777ccbe74e3cb47e7dc25cbc960ad00249a0b9a74",
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "--stdin"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+        "expected_exit_code": 0,
+        "passed_expectation": true
+      }
+    ]
+  }
+}

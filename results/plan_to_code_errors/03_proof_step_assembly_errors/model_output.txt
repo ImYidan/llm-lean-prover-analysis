@@ -1,0 +1,309 @@
+### Detailed Proof and Analysis
+
+We need to prove that the sum `∑_{k=2}^{10000} 1/√k < 198`. 
+
+#### Key Observations:
+1. The sum has 9999 terms (from `k=2` to `k=10000`).
+2. The function `f(k) = 1/√k` is decreasing in `k`, so the sum can be bounded above using integrals.
+3. However, in Lean, `1 / Real.sqrt k` for `k : ℕ` is not the same as the mathematical `1/√k` because Lean first casts `k` to a real number and then takes the square root. So we need to ensure we are working with real numbers.
+4. The bound `198` seems arbitrary, but we can try to find a crude upper bound for each term or groups of terms to reach this sum.
+
+#### Approach:
+We will group terms in blocks where we can bound each block by a simpler expression. Specifically:
+1. For `k ≥ 1`, `√k ≥ 1`, so `1/√k ≤ 1`. But this gives a very loose bound (`9999 < 198` is false).
+2. A better approach is to note that for `k ≥ n²`, `√k ≥ n`, so `1/√k ≤ 1/n`. We can then partition the sum into ranges where `k` is between consecutive squares.
+
+#### Partitioning the Sum:
+We will partition the sum into intervals `[n², (n+1)²)` for `n ∈ ℕ`, and bound each interval by `( (n+1)² - n² ) * (1 / n) = (2n + 1) * (1 / n) = 2 + 1/n`.
+
+But we need to adjust this because:
+- For `n=1`, `[1, 4)` includes `k=2,3`, but we start at `k=2`, so it would be `k=2,3`.
+   - `√2 ≈ 1.414`, `√3 ≈ 1.732`, so `1/√2 ≈ 0.707`, `1/√3 ≈ 0.577`, sum ≈ 1.284 < 2 + 1/1 = 3. (We can do better.)
+   - Actually, it is better to start from `n=2`, because for `n=1`, `k ∈ [1, 4)` gives `1/√k ≤ 1`, but this is not helpful.
+
+Alternatively, we can start with `n=2`:
+- For `n=2`, `k ∈ [4, 9)` (`k=4,...,8`): `√k ≥ 2` ⇒ `1/√k ≤ 1/2`, and there are `5` terms ⇒ sum ≤ 5/2 = 2.5 < 2 + 1/2 = 2.5 (but not strictly less).
+Hmm, `2 + 1/n` is too tight.
+
+Wait, perhaps we can try a looser bound: instead of `(2n + 1) * (1 / n)`, notice that `(n+1)² - n² = 2n + 1 < 2(n+1)` for `n ≥ 1`.
+Therefore, for `k ∈ [n², (n+1)²)`, `√k ≥ n`, so:
+`∑_{k=n²}^{(n+1)² - 1} 1/√k ≤ ∑_{k=n²}^{(n+1)² - 1} 1/n = (2n + 1)/n < 2(n+1)/n = 2 + 2/n`.
+But this still seems too tight. 
+
+Alternatively, perhaps we should find an explicit bound:
+Let's calculate how many terms we have for each `n`:
+- For `n=2`: `k ∈ [4,9)`, i.e., `k=4,5,6,7,8` ⇒ 5 terms.
+  Sum ≤ 5 * (1/2) = 2.5
+- For `n=3`: `k ∈ [9,16)`, i.e., `k=9,...,15` ⇒ 7 terms.
+  Sum ≤ 7 * (1/3) ≈ 2.333...
+- For `n=4`: `k ∈ [16,25)`, i.e., `k=16,...,24` ⇒ 9 terms.
+  Sum ≤ 9 * (1/4) = 2.25
+- And so on.
+
+But `2.5 + 2.333 + 2.25 + ...` will quickly add up. Maybe we can find a crude bound like:
+For `n ≥ 2`, `(2n + 1)/n ≤ 3` (since `2n + 1 ≤ 3n` when `n ≥ 1`). 
+But this would give us `3` per block, but we have many blocks.
+
+Alternatively, we can bound the sum from `k=2` to `10000` by the integral of `1/√x` from `1` to `10000`, plus some correction for the first few terms:
+`∫_{1}^{10000} 1/√x dx = 2√x |_{1}^{10000} = 2(100 - 1) = 198`.
+But the sum `∑_{k=2}^{10000} 1/√k < ∫_{1}^{10000} 1/√x dx = 198`, because `1/√x` is decreasing and for each `k ≥ 2`, `1/√k < ∫_{k-1}^{k} 1/√x dx`.
+
+But this seems too involved. Maybe instead, we can calculate the sum of the first few terms explicitly and then bound the rest crudely.
+
+Another approach:
+1. For `2 ≤ k ≤ 100`, `1/√k ≤ 1` ⇒ sum ≤ 99.
+2. For `101 ≤ k ≤ 10000`, `√k ≥ 10` ⇒ `1/√k ≤ 0.1` ⇒ sum ≤ 9900 * 0.1 = 990.
+Total sum ≤ 99 + 990 = 1089 < 198? No, 1089 > 198. So this is too crude.
+
+A better approach would be to use the integral bound properly:
+We know that for any decreasing function `f`, `∑_{k=a}^b f(k) ≤ ∫_{a-1}^b f(x) dx`.
+Here `f(x) = 1/√x`, so:
+`∑_{k=2}^{10000} 1/√k ≤ ∫_{1}^{10000} 1/√x dx = 198`.
+But we need a strict inequality. 
+
+However, in Lean, it might not be straightforward to use integrals, and perhaps we are expected to find a more elementary bound.
+
+Alternatively, we can use the following idea:
+`1/√k ≤ 2(√k - √(k-1))` for `k ≥ 1`, because:
+`2(√k - √(k-1)) = 2/(√k + √(k-1)) ≥ 2/(2√k) = 1/√k`.
+
+Therefore:
+`∑_{k=2}^n 1/√k ≤ ∑_{k=2}^n 2(√k - √(k-1)) = 2(√n - √1) = 2√n - 2`.
+For `n = 10000`, this gives `200 - 2 = 198`.
+
+But we need a strict inequality. The inequality `1/√k ≤ 2(√k - √(k-1))` becomes an equality only as `k → ∞`, but for any finite `k`, it is strict. Thus:
+`∑_{k=2}^n 1/√k < 2√n - 2`.
+For `n = 10000`, we get `< 198`.
+
+But in Lean, if we prove `1/√k < 2(√k - √(k-1))` for all `k ≥ 2`, then the sum would indeed be `< 198`.
+
+Let's check `1/√k < 2(√k - √(k-1))`:
+This is equivalent to `1 < 2√k (√k - √(k-1)) = 2k - 2√k√(k-1)`, or `2√k√(k-1) < 2k - 1`.
+Square both sides:
+`4k(k-1) < (2k - 1)² = 4k² - 4k + 1`, which is `4k² - 4k < 4k² - 4k + 1` ⇔ `0 < 1`, always true.
+
+Thus, the inequality holds for all `k ≥ 1` (but for `k=1`, `√(k-1)` is `0` and `1/√1 = 1 = 2(1 - 0)` so it is not strict).
+
+However, in Lean, we have `k ≥ 2`, so the inequality is strict.
+
+#### Formal Proof Sketch:
+1. Prove that for all `k ∈ ℕ` with `k ≥ 2`, `1 / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1))`.
+2. Sum this inequality from `k=2` to `10000`:
+   `∑_{k=2}^{10000} 1 / Real.sqrt k < 2 * (√10000 - √1) = 2 * (100 - 1) = 198`.
+
+#### Step 1: Prove the Inequality
+We need to show that `1 / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1))` for `k ∈ ℕ`, `k ≥ 2`.
+
+Let’s recall the derivation:
+`1 / √k < 2(√k - √(k-1))`
+⇔ `1 < 2√k (√k - √(k-1))`
+⇔ `1 < 2k - 2√k√(k-1)`
+⇔ `2√k√(k-1) < 2k - 1`
+Square both sides:
+`4k(k-1) < (2k - 1)^2 = 4k² - 4k + 1`
+⇔ `4k² - 4k < 4k² - 4k + 1`
+⇔ `0 < 1`, which is true.
+
+But we must ensure that `2√k√(k-1) ≥ 0` and `2k - 1 > 0`, which holds for `k ≥ 1`.
+
+But when we square, we might introduce extra solutions. So we need to check that `2√k√(k-1) < 2k - 1` is indeed true.
+
+Actually, we can rearrange it as:
+`2√k√(k-1) = 2√(k(k-1)) < 2k - 1`.
+But `k(k-1) < (k - 1/2)² = k² - k + 1/4`, since `0 < 1/4`.
+Thus `√(k(k-1)) < k - 1/2`, so `2√(k(k-1)) < 2k - 1`. 
+
+Therefore, the inequality `2√k√(k-1) < 2k - 1` is valid for `k ≥ 1`.
+
+#### Step 2: Summing Up
+Summing `1 / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1))` from `k=2` to `n`, the RHS telescopes:
+`∑_{k=2}^n 2(√k - √(k-1)) = 2(√n - √1)`.
+
+Thus, we get `∑_{k=2}^n 1 / Real.sqrt k < 2√n - 2`.
+
+For `n = 10000`, `√n = 100`, so the sum is `< 198`.
+
+### Abstract Proof Plan
+
+1. **Prove the Key Inequality**: For every integer `k ≥ 2`, show that `1 / √k < 2(√k - √(k - 1))`.
+   - Rewrite the inequality as `2√(k(k-1)) < 2k - 1`.
+   - Prove that `k(k-1) < (k - 1/2)²` by expanding and simplifying to `0 < 1/4`.
+   - Take square roots and multiply by 2 to get the desired inequality.
+
+2. **Sum the Inequalities**: Sum the inequalities from `k = 2` to `10000`.
+   - The RHS telescopes to `2(√10000 - √1) = 198`.
+   - Conclude that the sum is strictly less than 198.
+
+### Lean Proof with `have` Statements
+
+```lean4
+theorem algebra_sum1onsqrt2to1onsqrt10000lt198 :
+    (∑ k in Finset.Icc (2 : ℕ) 10000, 1 / Real.sqrt k) < 198 := by
+  -- Step 1: Prove the key inequality for each term
+  have h_main_ineq : ∀ (k : ℕ), 2 ≤ k → (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by sorry
+
+  -- Step 2: Sum the inequalities from k=2 to 10000
+  have h_sum_ineq : (∑ k in Finset.Icc (2 : ℕ) 10000, (1 : ℝ) / Real.sqrt k) < 198 := by sorry
+
+  -- The conclusion directly follows from h_sum_ineq
+  exact h_sum_ineq
+```
+
+### Complete Lean 4 Proof
+
+```lean4
+theorem algebra_sum1onsqrt2to1onsqrt10000lt198 :
+    (∑ k in Finset.Icc (2 : ℕ) 10000, 1 / Real.sqrt k) < 198 := by
+  have h_main_ineq : ∀ (k : ℕ), 2 ≤ k → (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by
+    intro k hk
+    have h₁ : (k : ℝ) ≥ 2 := by exact_mod_cast hk
+    have h₂ : (k : ℝ) - 1 ≥ 1 := by linarith
+    have h₃ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)
+    have h₄ : 0 < Real.sqrt (k - 1 : ℝ) := Real.sqrt_pos.mpr (by
+      have h₅ : (k : ℝ) - 1 > 0 := by linarith
+      linarith)
+    have h₅ : 0 < Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity
+    -- Use the fact that the square of the LHS is less than the square of the RHS
+    have h₆ : 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) < 2 * (k : ℝ) - 1 := by
+      have h₇ : 0 < (k : ℝ) := by positivity
+      have h₈ : 0 < (k : ℝ) - 1 := by linarith
+      have h₉ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)
+      have h₁₀ : 0 < Real.sqrt (k - 1 : ℝ) := Real.sqrt_pos.mpr (by linarith)
+      have h₁₁ : 0 < Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity
+      -- Use the inequality involving squares to prove the desired inequality
+      have h₁₂ : (Real.sqrt k * Real.sqrt (k - 1 : ℝ)) ^ 2 < ((2 * (k : ℝ) - 1) / 2) ^ 2 := by
+        have h₁₃ : (Real.sqrt k * Real.sqrt (k - 1 : ℝ)) ^ 2 = (k : ℝ) * ((k : ℝ) - 1) := by
+          calc
+            (Real.sqrt k * Real.sqrt (k - 1 : ℝ)) ^ 2 = (Real.sqrt k) ^ 2 * (Real.sqrt (k - 1 : ℝ)) ^ 2 := by ring
+            _ = (k : ℝ) * ((k : ℝ) - 1) := by
+              rw [Real.sq_sqrt (by positivity), Real.sq_sqrt (by linarith)]
+              <;> ring_nf
+              <;> field_simp
+              <;> ring_nf
+        rw [h₁₃]
+        have h₁₄ : ((2 * (k : ℝ) - 1) / 2) ^ 2 = (2 * (k : ℝ) - 1) ^ 2 / 4 := by
+          ring_nf
+          <;> field_simp
+          <;> ring_nf
+        rw [h₁₄]
+        have h₁₅ : (k : ℝ) * ((k : ℝ) - 1) < (2 * (k : ℝ) - 1) ^ 2 / 4 := by
+          nlinarith [sq_nonneg ((k : ℝ) - 1 / 2)]
+        linarith
+      -- Use the fact that the square of the LHS is less than the square of the RHS to prove the inequality
+      have h₁₃ : 0 ≤ Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity
+      have h₁₄ : 0 ≤ (2 * (k : ℝ) - 1) / 2 := by
+        have h₁₅ : (2 * (k : ℝ) - 1 : ℝ) ≥ 1 := by
+          have h₁₆ : (k : ℝ) ≥ 2 := by exact_mod_cast hk
+          linarith
+        linarith
+      nlinarith [Real.sq_sqrt (show 0 ≤ (k : ℝ) by positivity),
+        Real.sq_sqrt (show 0 ≤ (k - 1 : ℝ) by linarith)]
+    -- Use the inequality involving squares to prove the desired inequality
+    have h₇ : (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by
+      have h₈ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)
+      have h₉ : 0 < Real.sqrt (k - 1 : ℝ) := Real.sqrt_pos.mpr (by
+        have h₁₀ : (k : ℝ) - 1 > 0 := by linarith
+        linarith)
+      have h₁₀ : 0 < Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by positivity
+      -- Use the fact that the square of the LHS is less than the square of the RHS
+      have h₁₁ : 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) < 2 * (k : ℝ) - 1 := h₆
+      have h₁₂ : 1 < 2 * (k : ℝ) - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by linarith
+      have h₁₃ : 1 < 2 * (k : ℝ) - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by linarith
+      have h₁₄ : 1 < 2 * Real.sqrt k * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by
+        calc
+          1 < 2 * (k : ℝ) - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := h₁₃
+          _ = 2 * Real.sqrt k * Real.sqrt k - 2 * Real.sqrt k * Real.sqrt (k - 1 : ℝ) := by
+            rw [Real.mul_self_sqrt (by positivity : 0 ≤ (k : ℝ))]
+            <;> ring_nf
+          _ = 2 * Real.sqrt k * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by ring
+      have h₁₅ : (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by
+        calc
+          (1 : ℝ) / Real.sqrt k = 1 / Real.sqrt k := by norm_num
+          _ < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by
+            -- Use the fact that 1 < 2 * Real.sqrt k * (Real.sqrt k - Real.sqrt (k - 1 : ℝ))
+            have h₁₆ : 0 < Real.sqrt k := Real.sqrt_pos.mpr (by positivity)
+            have h₁₇ : 0 < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by
+              have h₁₈ : Real.sqrt (k - 1 : ℝ) < Real.sqrt k := Real.sqrt_lt_sqrt (by linarith) (by linarith)
+              linarith
+            rw [div_lt_iff (by positivity)]
+            nlinarith [Real.sqrt_nonneg k, Real.sqrt_nonneg (k - 1 : ℝ)]
+      exact h₁₅
+    exact h₇
+  
+  have h_sum_ineq : (∑ k in Finset.Icc (2 : ℕ) 10000, (1 : ℝ) / Real.sqrt k) < 198 := by
+    have h₁ : (∑ k in Finset.Icc (2 : ℕ) 10000, (1 : ℝ) / Real.sqrt k) < 198 := by
+      have h₂ : (∑ k in Finset.Icc (2 : ℕ) 10000, (1 : ℝ) / Real.sqrt k) < ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) := by
+        apply Finset.sum_lt_sum_of_nonempty (Finset.nonempty_of_ne_empty (by decide))
+        intro k hk
+        have h₃ : k ∈ Finset.Icc (2 : ℕ) 10000 := hk
+        have h₄ : 2 ≤ k ∧ k ≤ 10000 := Finset.mem_Icc.mp h₃
+        have h₅ : 2 ≤ k := h₄.1
+        have h₆ : (1 : ℝ) / Real.sqrt k < 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := h_main_ineq k h₅
+        have h₇ : (2 : ℝ) * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 2 * (Real.sqrt k - Real.sqrt (k - 1 : ℝ)) := by
+          norm_num [Real.sqrt_eq_iff_sq_eq]
+          <;>
+          (try norm_num) <;>
+          (try ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>
+          (try field_simp at * <;> ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>
+          (try linarith)
+          <;>
+          (try norm_num) <;>
+          (try ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>
+          (try field_simp at * <;> ring_nf at * <;> simp_all [Real.sqrt_eq_iff_sq_eq]) <;>
+          (try linarith)
+        rw [h₇] at *
+        exact h₆
+      have h₃ : ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 198 := by
+        have h₄ : ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 2 * (Real.sqrt 10000 - Real.sqrt (1 : ℝ)) := by
+          -- Prove that the sum telescopes to 2 * (sqrt(10000) - sqrt(1))
+          have h₅ : ∑ k in Finset.Icc (2 : ℕ) 10000, 2 * (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = 2 * ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) := by
+            rw [Finset.mul_sum]
+          rw [h₅]
+          have h₆ : ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt 10000 - Real.sqrt (1 : ℝ) := by
+            -- Prove the telescoping sum
+            have h₇ : ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt 10000 - Real.sqrt (1 : ℝ) := by
+              -- Use the fact that the sum telescopes
+              have h₈ : ∀ (n : ℕ), 2 ≤ n → ∑ k in Finset.Icc (2 : ℕ) n, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt (n : ℝ) - Real.sqrt (1 : ℝ) := by
+                intro n hn
+                induction' hn with n hn IH
+                · norm_num [Finset.sum_Icc_succ_top]
+                · rw [Finset.sum_Icc_succ_top (by omega : 2 ≤ n.succ)]
+                  rw [IH]
+                  simp [Nat.cast_add, Nat.cast_one, Real.sqrt_eq_iff_sq_eq]
+                  <;> ring_nf <;> norm_num <;>
+                  (try
+                    {
+                      nlinarith [Real.sqrt_nonneg (n : ℝ), Real.sqrt_nonneg ((n : ℝ) + 1),
+                        Real.sq_sqrt (show 0 ≤ (n : ℝ) by positivity),
+                        Real.sq_sqrt (show 0 ≤ ((n : ℝ) + 1 : ℝ) by positivity)]
+                    })
+                  <;>
+                  (try
+                    {
+                      field_simp [Real.sqrt_eq_iff_sq_eq]
+                      <;> ring_nf
+                      <;> norm_num
+                      <;> nlinarith [Real.sqrt_nonneg (n : ℝ), Real.sqrt_nonneg ((n : ℝ) + 1),
+                        Real.sq_sqrt (show 0 ≤ (n : ℝ) by positivity),
+                        Real.sq_sqrt (show 0 ≤ ((n : ℝ) + 1 : ℝ) by positivity)]
+                    })
+              have h₉ : ∑ k in Finset.Icc (2 : ℕ) 10000, (Real.sqrt (k : ℝ) - Real.sqrt ((k : ℝ) - 1)) = Real.sqrt (10000 : ℝ) - Real.sqrt (1 : ℝ) := by
+                apply h₈
+                <;> norm_num
+              rw [h₉]
+              <;> norm_num
+            rw [h₇]
+          rw [h₆]
+          <;> ring
+        rw [h₄]
+        have h₅ : Real.sqrt 10000 = 100 := by
+          rw [Real.sqrt_eq_iff_sq_eq] <;> norm_num
+        have h₆ : Real.sqrt (1 : ℝ) = 1 := by
+          rw [Real.sqrt_eq_iff_sq_eq] <;> norm_num
+        rw [h₅, h₆]
+        <;> norm_num
+      linarith
+    exact h₁
+  
+  exact h_sum_ineq
+```

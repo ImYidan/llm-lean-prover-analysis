@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "analysis_dimension": "mathematical_reasoning_errors",
+  "category": "Insufficient proof strategy",
+  "annotation_method": "Manual local-mechanism interpretation with independent mathematical explanation; not a compiler-message classifier.",
+  "model": "Goedel-Prover-V2-32B",
+  "benchmark": "miniF2F",
+  "candidate_id": "induction_pord1p1on2powklt5on2_g7",
+  "generation_index": 7,
+  "sources": {
+    "generation": {
+      "artifact": "full_records.json",
+      "artifact_sha256": "ce9304fd22a004bf9e46637c9a4c75d595e9088f9cabcdb6c306a482e9c8e75a",
+      "record_index": 2663,
+      "record_index_base": 0
+    },
+    "verification": {
+      "artifact": "code_compilation_repl.json",
+      "artifact_sha256": "9a46557218c47f89c0b898394dcd11029f57a7300b000a97a1509608f3024d59",
+      "record_index": 5641,
+      "record_index_base": 0
+    }
+  },
+  "model_output": {
+    "file": "model_output.txt",
+    "source_field": "model_output",
+    "sha256": "2b024eb8e669cfaf25311beb11d39987f71bcc07c38367d4433daaefe31a3879",
+    "encoding": "UTF-8",
+    "preservation": "Exact decoded source string; no added newline or edits."
+  },
+  "statement_excerpt": {
+    "start_line": 1102,
+    "end_line": 1103,
+    "sha256": "d99c9911935387261982096e302c286900a736074a80b10842a720a65a09ad61"
+  },
+  "case_excerpts": [
+    {
+      "start_line": 992,
+      "end_line": 1006,
+      "sha256": "68bba173fbcadac260c17bac759a50f7f0615c626b36730be4d142b1f3159033"
+    },
+    {
+      "start_line": 1075,
+      "end_line": 1087,
+      "sha256": "ebbe41c3030dcc510faf1fde02cc644cb55b987968c89fc43a7ec06cceec258a"
+    }
+  ],
+  "excerpt_line_index_base": 1,
+  "input_statement": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that for positive integer $n$, $(\\prod_{k=1}^{n} (1 + 1/2^k)) < 5/2$.-/\ntheorem induction_pord1p1on2powklt5on2 (n : ℕ) (h₀ : 0 < n) :\n    ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n",
+  "generation_extracted_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n\ntheorem induction_pord1p1on2powklt5on2 (n : ℕ) (h₀ : 0 < n) :\n    ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by \n  have h₁ : n = 1 ∨ n = 2 ∨ n = 3 ∨ n = 4 ∨ n ≥ 5 := by\n    have h₁ : n ≥ 1 := by linarith\n    have h₂ : n = 1 ∨ n = 2 ∨ n = 3 ∨ n = 4 ∨ n ≥ 5 := by\n      by_cases h : n ≥ 5\n      · exact Or.inr (Or.inr (Or.inr (Or.inr h)))\n      · \n        have h₃ : n ≤ 4 := by linarith\n        interval_cases n <;> norm_num at h₀ ⊢ <;> (try omega) <;> (try norm_num) <;> (try aesop)\n    exact h₂\n    <;> aesop\n  \n  have h₂ : ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n    have h₃ : n = 1 ∨ n = 2 ∨ n = 3 ∨ n = 4 ∨ n ≥ 5 := h₁\n    rcases h₃ with (rfl | rfl | rfl | rfl | h₃)\n    · \n      norm_num [Finset.prod_Icc_succ_top]\n    · \n      norm_num [Finset.prod_Icc_succ_top]\n    · \n      norm_num [Finset.prod_Icc_succ_top]\n    · \n      norm_num [Finset.prod_Icc_succ_top]\n    · \n      have h₄ : n ≥ 5 := h₃\n      have h₅ : ∀ m : ℕ, m ≥ 5 → ∏ k in Finset.Icc 1 m, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n        intro m hm\n        have h₆ : ∀ n : ℕ, n ≥ 5 → ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n          intro n hn\n          induction' hn with n hn IH\n          · \n            norm_num [Finset.prod_Icc_succ_top]\n          · \n            rw [Finset.prod_Icc_succ_top (by omega : 1 ≤ n.succ)]\n            have h₇ : (1 : ℝ) + 1 / (2 : ℝ) ^ (n.succ : ℕ) > 0 := by positivity\n            have h₈ : (1 : ℝ) + 1 / (2 : ℝ) ^ (n.succ : ℕ) ≤ (1 : ℝ) + 1 / (2 : ℝ) ^ 5 := by\n              have h₉ : (n.succ : ℕ) ≥ 6 := by\n                omega\n              have h₁₀ : (2 : ℝ) ^ (n.succ : ℕ) ≥ (2 : ℝ) ^ 6 := by\n                exact pow_le_pow_right (by norm_num) (by\n                  norm_cast\n                  <;> omega)\n              have h₁₁ : (1 : ℝ) / (2 : ℝ) ^ (n.succ : ℕ) ≤ (1 : ℝ) / (2 : ℝ) ^ 6 := by\n                apply div_le_div_of_le_left (by positivity) (by positivity)\n                <;>\n                  norm_cast <;>\n                  simp_all [pow_succ]\n                <;>\n                  nlinarith\n              have h₁₂ : (1 : ℝ) + 1 / (2 : ℝ) ^ (n.succ : ℕ) ≤ (1 : ℝ) + 1 / (2 : ℝ) ^ 6 := by\n                linarith\n              have h₁₃ : (1 : ℝ) + 1 / (2 : ℝ) ^ 6 ≤ (1 : ℝ) + 1 / (2 : ℝ) ^ 5 := by\n                norm_num\n              linarith\n            have h₉ : ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := IH\n            have h₁₀ : (1 : ℝ) + 1 / (2 : ℝ) ^ (n.succ : ℕ) < 2 := by\n              have h₁₁ : (1 : ℝ) / (2 : ℝ) ^ (n.succ : ℕ) < 1 := by\n                have h₁₂ : (2 : ℝ) ^ (n.succ : ℕ) ≥ 2 ^ 1 := by\n                  exact pow_le_pow_right (by norm_num) (by\n                    norm_cast <;> omega)\n                have h₁₃ : (1 : ℝ) / (2 : ℝ) ^ (n.succ : ℕ) < 1 := by\n                  rw [div_lt_one (by positivity)]\n                  have h₁₄ : (2 : ℝ) ^ (n.succ : ℕ) > 1 := by\n                    have h₁₅ : (n.succ : ℕ) ≥ 1 := by omega\n                    have h₁₆ : (2 : ℝ) ^ (n.succ : ℕ) ≥ (2 : ℝ) ^ 1 := by\n                      exact pow_le_pow_right (by norm_num) (by\n                        norm_cast <;> omega)\n                    norm_num at h₁₆ ⊢\n                    <;> linarith\n                  linarith\n                linarith\n              linarith\n            calc\n              (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) * (1 + (1 : ℝ) / 2 ^ (n.succ : ℕ)) < (5 / 2 : ℝ) * (1 + (1 : ℝ) / 2 ^ (n.succ : ℕ)) := by\n                gcongr\n              _ ≤ (5 / 2 : ℝ) * 2 := by\n                gcongr\n                <;>\n                  (try norm_num) <;>\n                  (try\n                    {\n                      have h₁₁ : (n.succ : ℕ) ≥ 6 := by\n                        omega\n                      have h₁₂ : (2 : ℝ) ^ (n.succ : ℕ) ≥ (2 : ℝ) ^ 6 := by\n                        exact pow_le_pow_right (by norm_num) (by\n                          norm_cast <;> omega)\n                      have h₁₃ : (1 : ℝ) / (2 : ℝ) ^ (n.succ : ℕ) ≤ (1 : ℝ) / (2 : ℝ) ^ 6 := by\n                        apply div_le_div_of_le_left (by positivity) (by positivity)\n                        <;>\n                          norm_cast <;>\n                          simp_all [pow_succ]\n                        <;>\n                          nlinarith\n                      have h₁₄ : (1 : ℝ) + 1 / (2 : ℝ) ^ (n.succ : ℕ) ≤ (1 : ℝ) + 1 / (2 : ℝ) ^ 6 := by\n                        linarith\n                      have h₁₅ : (1 : ℝ) + 1 / (2 : ℝ) ^ 6 ≤ 2 := by norm_num\n                      linarith\n                    })\n              _ = 5 := by ring\n              _ < 5 / 2 + 5 / 2 := by norm_num\n              _ = 5 := by ring\n              _ ≤ 5 := by norm_num\n              _ < 5 / 2 + 5 / 2 := by norm_num\n              _ = 5 := by ring\n              _ ≤ 5 := by norm_num\n              <;>\n                (try norm_num at *)\n              <;>\n                (try linarith)\n        exact h₆ m hm\n      have h₆ : ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := h₅ n h₄\n      exact h₆\n  exact h₂",
+  "submitted_code_sha256": "123bce4b4ba99936fe9171eb7e2b02f442fe189fba65c82b33d44847dfaa6c9b",
+  "verification_record": {
+    "code": "\n\n\n\ntheorem induction_pord1p1on2powklt5on2 (n : ℕ) (h₀ : 0 < n) :\n    ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by \n  have h₁ : n = 1 ∨ n = 2 ∨ n = 3 ∨ n = 4 ∨ n ≥ 5 := by\n    have h₁ : n ≥ 1 := by linarith\n    have h₂ : n = 1 ∨ n = 2 ∨ n = 3 ∨ n = 4 ∨ n ≥ 5 := by\n      by_cases h : n ≥ 5\n      · exact Or.inr (Or.inr (Or.inr (Or.inr h)))\n      · \n        have h₃ : n ≤ 4 := by linarith\n        interval_cases n <;> norm_num at h₀ ⊢ <;> (try omega) <;> (try norm_num) <;> (try aesop)\n    exact h₂\n    <;> aesop\n  \n  have h₂ : ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n    have h₃ : n = 1 ∨ n = 2 ∨ n = 3 ∨ n = 4 ∨ n ≥ 5 := h₁\n    rcases h₃ with (rfl | rfl | rfl | rfl | h₃)\n    · \n      norm_num [Finset.prod_Icc_succ_top]\n    · \n      norm_num [Finset.prod_Icc_succ_top]\n    · \n      norm_num [Finset.prod_Icc_succ_top]\n    · \n      norm_num [Finset.prod_Icc_succ_top]\n    · \n      have h₄ : n ≥ 5 := h₃\n      have h₅ : ∀ m : ℕ, m ≥ 5 → ∏ k in Finset.Icc 1 m, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n        intro m hm\n        have h₆ : ∀ n : ℕ, n ≥ 5 → ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n          intro n hn\n          induction' hn with n hn IH\n          · \n            norm_num [Finset.prod_Icc_succ_top]\n          · \n            rw [Finset.prod_Icc_succ_top (by omega : 1 ≤ n.succ)]\n            have h₇ : (1 : ℝ) + 1 / (2 : ℝ) ^ (n.succ : ℕ) > 0 := by positivity\n            have h₈ : (1 : ℝ) + 1 / (2 : ℝ) ^ (n.succ : ℕ) ≤ (1 : ℝ) + 1 / (2 : ℝ) ^ 5 := by\n              have h₉ : (n.succ : ℕ) ≥ 6 := by\n                omega\n              have h₁₀ : (2 : ℝ) ^ (n.succ : ℕ) ≥ (2 : ℝ) ^ 6 := by\n                exact pow_le_pow_right (by norm_num) (by\n                  norm_cast\n                  <;> omega)\n              have h₁₁ : (1 : ℝ) / (2 : ℝ) ^ (n.succ : ℕ) ≤ (1 : ℝ) / (2 : ℝ) ^ 6 := by\n                apply div_le_div_of_le_left (by positivity) (by positivity)\n                <;>\n                  norm_cast <;>\n                  simp_all [pow_succ]\n                <;>\n                  nlinarith\n              have h₁₂ : (1 : ℝ) + 1 / (2 : ℝ) ^ (n.succ : ℕ) ≤ (1 : ℝ) + 1 / (2 : ℝ) ^ 6 := by\n                linarith\n              have h₁₃ : (1 : ℝ) + 1 / (2 : ℝ) ^ 6 ≤ (1 : ℝ) + 1 / (2 : ℝ) ^ 5 := by\n                norm_num\n              linarith\n            have h₉ : ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := IH\n            have h₁₀ : (1 : ℝ) + 1 / (2 : ℝ) ^ (n.succ : ℕ) < 2 := by\n              have h₁₁ : (1 : ℝ) / (2 : ℝ) ^ (n.succ : ℕ) < 1 := by\n                have h₁₂ : (2 : ℝ) ^ (n.succ : ℕ) ≥ 2 ^ 1 := by\n                  exact pow_le_pow_right (by norm_num) (by\n                    norm_cast <;> omega)\n                have h₁₃ : (1 : ℝ) / (2 : ℝ) ^ (n.succ : ℕ) < 1 := by\n                  rw [div_lt_one (by positivity)]\n                  have h₁₄ : (2 : ℝ) ^ (n.succ : ℕ) > 1 := by\n                    have h₁₅ : (n.succ : ℕ) ≥ 1 := by omega\n                    have h₁₆ : (2 : ℝ) ^ (n.succ : ℕ) ≥ (2 : ℝ) ^ 1 := by\n                      exact pow_le_pow_right (by norm_num) (by\n                        norm_cast <;> omega)\n                    norm_num at h₁₆ ⊢\n                    <;> linarith\n                  linarith\n                linarith\n              linarith\n            calc\n              (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) * (1 + (1 : ℝ) / 2 ^ (n.succ : ℕ)) < (5 / 2 : ℝ) * (1 + (1 : ℝ) / 2 ^ (n.succ : ℕ)) := by\n                gcongr\n              _ ≤ (5 / 2 : ℝ) * 2 := by\n                gcongr\n                <;>\n                  (try norm_num) <;>\n                  (try\n                    {\n                      have h₁₁ : (n.succ : ℕ) ≥ 6 := by\n                        omega\n                      have h₁₂ : (2 : ℝ) ^ (n.succ : ℕ) ≥ (2 : ℝ) ^ 6 := by\n                        exact pow_le_pow_right (by norm_num) (by\n                          norm_cast <;> omega)\n                      have h₁₃ : (1 : ℝ) / (2 : ℝ) ^ (n.succ : ℕ) ≤ (1 : ℝ) / (2 : ℝ) ^ 6 := by\n                        apply div_le_div_of_le_left (by positivity) (by positivity)\n                        <;>\n                          norm_cast <;>\n                          simp_all [pow_succ]\n                        <;>\n                          nlinarith\n                      have h₁₄ : (1 : ℝ) + 1 / (2 : ℝ) ^ (n.succ : ℕ) ≤ (1 : ℝ) + 1 / (2 : ℝ) ^ 6 := by\n                        linarith\n                      have h₁₅ : (1 : ℝ) + 1 / (2 : ℝ) ^ 6 ≤ 2 := by norm_num\n                      linarith\n                    })\n              _ = 5 := by ring\n              _ < 5 / 2 + 5 / 2 := by norm_num\n              _ = 5 := by ring\n              _ ≤ 5 := by norm_num\n              _ < 5 / 2 + 5 / 2 := by norm_num\n              _ = 5 := by ring\n              _ ≤ 5 := by norm_num\n              <;>\n                (try norm_num at *)\n              <;>\n                (try linarith)\n        exact h₆ m hm\n      have h₆ : ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := h₅ n h₄\n      exact h₆\n  exact h₂",
+    "compilation_result": {
+      "sorries": [],
+      "tactics": [],
+      "errors": [
+        {
+          "severity": "error",
+          "pos": {
+            "line": 43,
+            "column": 16
+          },
+          "endPos": {
+            "line": 43,
+            "column": 21
+          },
+          "data": "omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 ≤ c ≤ 4\n  b ≥ 5\n  a ≥ 5\nwhere\n a := ↑n✝¹\n b := ↑m\n c := ↑n"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 54,
+            "column": 18
+          },
+          "endPos": {
+            "line": 54,
+            "column": 27
+          },
+          "data": "linarith failed to find a contradiction\ncase a\nn✝¹ : ℕ\nh₀ : 0 < n✝¹\nm n✝ n : ℕ\nh₄ : 5 ≤ n✝¹\nhm : 5 ≤ m\nhn : 5 ≤ n\nIH : ∏ x ∈ Finset.Icc 1 n, (1 + (2 ^ x)⁻¹) < 5 / 2\nh₇ : 0 < 1 + 2⁻¹ * (2 ^ n)⁻¹\nh₁₀ : 2 * 2 * 2 * 2 * 2 ≤ 2 ^ n\na✝ : 64 > 2 ^ n * 2\n⊢ False\nfailed"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 48,
+            "column": 85
+          },
+          "endPos": {
+            "line": 54,
+            "column": 27
+          },
+          "data": "unsolved goals\nn✝¹ : ℕ\nh₀ : 0 < n✝¹\nm n✝ n : ℕ\nh₄ : 5 ≤ n✝¹\nhm : 5 ≤ m\nhn : 5 ≤ n\nIH : ∏ x ∈ Finset.Icc 1 n, (1 + (2 ^ x)⁻¹) < 5 / 2\nh₇ : 0 < 1 + 2⁻¹ * (2 ^ n)⁻¹\nh₁₀ : 2 * 2 * 2 * 2 * 2 ≤ 2 ^ n\n⊢ 64 ≤ 2 ^ n * 2"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 74,
+            "column": 24
+          },
+          "endPos": {
+            "line": 74,
+            "column": 32
+          },
+          "data": "linarith failed to find a contradiction\ncase h\nn✝¹ : ℕ\nh₀ : 0 < n✝¹\nh₁ : n✝¹ = 1 ∨ n✝¹ = 2 ∨ n✝¹ = 3 ∨ n✝¹ = 4 ∨ n✝¹ ≥ 5\nh₃ h₄ : n✝¹ ≥ 5\nm : ℕ\nhm : m ≥ 5\nn✝ n : ℕ\nhn : Nat.le 5 n\nIH : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₇ : 1 + 1 / 2 ^ n.succ > 0\nh₈ : 1 + 1 / 2 ^ n.succ ≤ 1 + 1 / 2 ^ 5\nh₉ : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₁₂ : 2 ^ n.succ ≥ 2 ^ 1\nh₁₅ : n.succ ≥ 1\nh₁₆ : 2 ≤ 2 ^ (n + 1)\na✝ : 1 ≥ 2 ^ (n + 1)\n⊢ False\nfailed"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 68,
+            "column": 59
+          },
+          "endPos": {
+            "line": 74,
+            "column": 32
+          },
+          "data": "unsolved goals\nn✝¹ : ℕ\nh₀ : 0 < n✝¹\nh₁ : n✝¹ = 1 ∨ n✝¹ = 2 ∨ n✝¹ = 3 ∨ n✝¹ = 4 ∨ n✝¹ ≥ 5\nh₃ h₄ : n✝¹ ≥ 5\nm : ℕ\nhm : m ≥ 5\nn✝ n : ℕ\nhn : Nat.le 5 n\nIH : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₇ : 1 + 1 / 2 ^ n.succ > 0\nh₈ : 1 + 1 / 2 ^ n.succ ≤ 1 + 1 / 2 ^ 5\nh₉ : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₁₂ : 2 ^ n.succ ≥ 2 ^ 1\nh₁₅ : n.succ ≥ 1\nh₁₆ : 2 ≤ 2 ^ (n + 1)\n⊢ 1 < 2 ^ (n + 1)"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 105,
+            "column": 35
+          },
+          "endPos": {
+            "line": 105,
+            "column": 46
+          },
+          "data": "unsolved goals\nn✝¹ : ℕ\nh₀ : 0 < n✝¹\nh₁ : n✝¹ = 1 ∨ n✝¹ = 2 ∨ n✝¹ = 3 ∨ n✝¹ = 4 ∨ n✝¹ ≥ 5\nh₃ h₄ : n✝¹ ≥ 5\nm : ℕ\nhm : m ≥ 5\nn✝ n : ℕ\nhn : Nat.le 5 n\nIH : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₇ : 1 + 1 / 2 ^ n.succ > 0\nh₈ : 1 + 1 / 2 ^ n.succ ≤ 1 + 1 / 2 ^ 5\nh₉ : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₁₀ : 1 + 1 / 2 ^ n.succ < 2\n⊢ False"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 108,
+            "column": 35
+          },
+          "endPos": {
+            "line": 108,
+            "column": 46
+          },
+          "data": "unsolved goals\nn✝¹ : ℕ\nh₀ : 0 < n✝¹\nh₁ : n✝¹ = 1 ∨ n✝¹ = 2 ∨ n✝¹ = 3 ∨ n✝¹ = 4 ∨ n✝¹ ≥ 5\nh₃ h₄ : n✝¹ ≥ 5\nm : ℕ\nhm : m ≥ 5\nn✝ n : ℕ\nhn : Nat.le 5 n\nIH : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₇ : 1 + 1 / 2 ^ n.succ > 0\nh₈ : 1 + 1 / 2 ^ n.succ ≤ 1 + 1 / 2 ^ 5\nh₉ : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₁₀ : 1 + 1 / 2 ^ n.succ < 2\n⊢ False"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 38,
+            "column": 10
+          },
+          "endPos": {
+            "line": 38,
+            "column": 11
+          },
+          "data": "unsolved goals\ncase step.calc.step\nn✝¹ : ℕ\nh₀ : 0 < n✝¹\nh₁ : n✝¹ = 1 ∨ n✝¹ = 2 ∨ n✝¹ = 3 ∨ n✝¹ = 4 ∨ n✝¹ ≥ 5\nh₃ h₄ : n✝¹ ≥ 5\nm : ℕ\nhm : m ≥ 5\nn✝ n : ℕ\nhn : Nat.le 5 n\nIH : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₇ : 1 + 1 / 2 ^ n.succ > 0\nh₈ : 1 + 1 / 2 ^ n.succ ≤ 1 + 1 / 2 ^ 5\nh₉ : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₁₀ : 1 + 1 / 2 ^ n.succ < 2\n⊢ 5 < 5 / 2"
+        }
+      ],
+      "warnings": [
+        {
+          "severity": "warning",
+          "pos": {
+            "line": 49,
+            "column": 22
+          },
+          "endPos": {
+            "line": 49,
+            "column": 43
+          },
+          "data": "`div_le_div_of_le_left` has been deprecated, use `div_le_div_of_nonneg_left` instead"
+        }
+      ],
+      "infos": [],
+      "ast": {},
+      "system_errors": null,
+      "pass": false,
+      "complete": false
+    },
+    "name": "induction_pord1p1on2powklt5on2_g7",
+    "verify_time": 4.85
+  },
+  "problem_scope": {
+    "candidates_in_source_run": 32,
+    "successful_candidates": 0,
+    "problem_solved_at_pass32": false,
+    "included_in_published_unsolved_problem_scope": true,
+    "selection_purpose": "Qualitative illustration of a local mechanism; no frequency estimate."
+  }
+}

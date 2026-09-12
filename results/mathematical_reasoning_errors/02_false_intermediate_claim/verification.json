@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "analysis_dimension": "mathematical_reasoning_errors",
+  "category": "False intermediate claim",
+  "annotation_method": "Manual local-mechanism interpretation with independent mathematical explanation; not a compiler-message classifier.",
+  "model": "Goedel-Prover-V2-32B",
+  "benchmark": "miniF2F",
+  "candidate_id": "mathd_numbertheory_764_g15",
+  "generation_index": 15,
+  "sources": {
+    "generation": {
+      "artifact": "full_records.json",
+      "artifact_sha256": "ce9304fd22a004bf9e46637c9a4c75d595e9088f9cabcdb6c306a482e9c8e75a",
+      "record_index": 3343,
+      "record_index_base": 0
+    },
+    "verification": {
+      "artifact": "code_compilation_repl.json",
+      "artifact_sha256": "9a46557218c47f89c0b898394dcd11029f57a7300b000a97a1509608f3024d59",
+      "record_index": 3405,
+      "record_index_base": 0
+    }
+  },
+  "model_output": {
+    "file": "model_output.txt",
+    "source_field": "model_output",
+    "sha256": "4bbbf889638c1ced98b71e5db044fef3617cf27e4e0664f363b6a0977fdf56d4",
+    "encoding": "UTF-8",
+    "preservation": "Exact decoded source string; no added newline or edits."
+  },
+  "statement_excerpt": {
+    "start_line": 195,
+    "end_line": 196,
+    "sha256": "a79106ffe1c49e0af60769482eca7db5ad94c349d1bca7fe726302cf866c8c23"
+  },
+  "case_excerpts": [
+    {
+      "start_line": 15,
+      "end_line": 39,
+      "sha256": "6c0cee32e02fe291e74fec1eb20d7d3e54cfc7c1e268b41b5f8adc5d62c6fef8"
+    },
+    {
+      "start_line": 79,
+      "end_line": 121,
+      "sha256": "c6e1c4d815896303ca234e2ffd49f947d2b60d942c7aab4e7b298cb56f7d16f4"
+    }
+  ],
+  "excerpt_line_index_base": 1,
+  "input_statement": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Given that $p\\ge 7$ is a prime number, evaluate $$1^{-1} \\cdot 2^{-1} + 2^{-1} \\cdot 3^{-1} + 3^{-1} \\cdot 4^{-1} + \\cdots + (p-2)^{-1} \\cdot (p-1)^{-1} \\pmod{p}.$$ Show that it is 2.-/\ntheorem mathd_numbertheory_764 (p : ℕ) (h₀ : Nat.Prime p) (h₁ : 7 ≤ p) :\n    (∑ k in Finset.Icc 1 (p - 2), (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) = 2 := by\n",
+  "generation_extracted_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n\ntheorem mathd_numbertheory_764 (p : ℕ) (h₀ : Nat.Prime p) (h₁ : 7 ≤ p) :\n    (∑ k in Finset.Icc 1 (p - 2), (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) = 2 := by \n  have h_main : (∑ k in Finset.Icc 1 (p - 2), (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) = 2 := by\n    haveI := Fact.mk h₀\n    have h₂ : p ≥ 7 := by exact_mod_cast h₁\n    have h₃ : p ≥ 2 := by linarith\n    have h₄ : (p : ℕ) - 2 + 1 ≥ 6 := by\n      have h₅ : p ≥ 7 := by exact_mod_cast h₁\n      omega\n    \n    have h₅ : ∀ (k : ℕ), 1 ≤ k → k ≤ p - 2 → (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹ = (k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹ := by\n      intro k hk₁ hk₂\n      have h₆ : (k : ZMod p) ≠ 0 := by\n        have h₇ : (k : ℕ) < p := by\n          have h₈ : k ≤ p - 2 := hk₂\n          have h₉ : p - 2 < p := by\n            have h₁₀ : p ≥ 2 := by linarith\n            omega\n          omega\n        have h₈ : (k : ZMod p) ≠ 0 := by\n          intro h₉\n          have h₁₀ : (k : ZMod p) = 0 := h₉\n          have h₁₁ : (p : ℕ) ∣ k := by\n            simpa [h₁₀] using ZMod.nat_cast_zmod_eq_zero_iff_dvd k p\n          have h₁₂ : p ≤ k := Nat.le_of_dvd (by omega) h₁₁\n          omega\n        exact h₈\n      have h₇ : ((k : ZMod p) + 1 : ZMod p) ≠ 0 := by\n        have h₈ : (k : ℕ) < p - 1 := by\n          have h₉ : k ≤ p - 2 := hk₂\n          have h₁₀ : p - 2 < p - 1 := by\n            have h₁₁ : p ≥ 2 := by linarith\n            omega\n          omega\n        have h₉ : (k : ℕ) + 1 < p := by\n          omega\n        have h₁₀ : ((k : ZMod p) + 1 : ZMod p) ≠ 0 := by\n          intro h₁₁\n          have h₁₂ : ((k : ZMod p) + 1 : ZMod p) = 0 := h₁₁\n          have h₁₃ : (p : ℕ) ∣ (k + 1) := by\n            simpa [h₁₂] using ZMod.nat_cast_zmod_eq_zero_iff_dvd (k + 1) p\n          have h₁₄ : p ≤ k + 1 := Nat.le_of_dvd (by omega) h₁₃\n          omega\n        exact h₁₀\n      \n      have h₈ : (k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹ = (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹ := by\n        have h₉ : (k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹ = ((k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) := by\n          calc\n            (k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹ = (k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹ := rfl\n            _ = ((k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) := by\n              have h₁₀ : (k : ZMod p) ≠ 0 := h₆\n              have h₁₁ : ((k : ZMod p) + 1 : ZMod p) ≠ 0 := h₇\n              field_simp [h₁₀, h₁₁]\n              <;> ring_nf\n              <;> field_simp [h₁₀, h₁₁]\n              <;> ring_nf\n              <;> simp_all [ZMod.nat_cast_self]\n              <;> norm_num\n              <;>\n              (try omega) <;>\n              (try\n                {\n                  simp_all [Fin.ext_iff, ZMod.val_nat_cast]\n                  <;> omega\n                })\n        rw [h₉]\n      rw [h₈]\n      <;>\n      (try omega) <;>\n      (try\n        {\n          simp_all [Fin.ext_iff, ZMod.val_nat_cast]\n          <;> omega\n        })\n    \n    have h₆ : (∑ k in Finset.Icc 1 (p - 2), (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) = (∑ k in Finset.Icc 1 (p - 2), ((k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹)) := by\n      apply Finset.sum_congr rfl\n      intro k hk\n      have h₇ : 1 ≤ k := by\n        simp [Finset.mem_Icc] at hk\n        linarith\n      have h₈ : k ≤ p - 2 := by\n        simp [Finset.mem_Icc] at hk\n        linarith\n      rw [h₅ k h₇ h₈]\n    rw [h₆]\n    \n    have h₇ : (∑ k in Finset.Icc 1 (p - 2), ((k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹)) = (1 : ZMod p)⁻¹ - ((p - 2 : ℕ) : ZMod p + 1)⁻¹ := by\n      have h₈ : ∀ (n : ℕ), (∑ k in Finset.Icc 1 n, ((k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹)) = (1 : ZMod p)⁻¹ - ((n : ℕ) : ZMod p + 1)⁻¹ := by\n        intro n\n        induction n with\n        | zero =>\n          simp\n        | succ n ih =>\n          rw [Finset.sum_Icc_succ_top (by omega : 1 ≤ n.succ), ih]\n          <;> simp [Nat.cast_add, Nat.cast_one, add_assoc]\n          <;>\n          (try ring_nf) <;>\n          (try norm_num) <;>\n          (try simp_all [Fin.ext_iff, ZMod.val_nat_cast]) <;>\n          (try omega)\n          <;>\n          (try\n            {\n              field_simp [show (p : ℕ) ≠ 0 by linarith]\n              <;> ring_nf\n              <;> simp_all [Fin.ext_iff, ZMod.val_nat_cast]\n              <;> omega\n            })\n          <;>\n          (try\n            {\n              simp_all [Fin.ext_iff, ZMod.val_nat_cast]\n              <;> omega\n            })\n      have h₉ : (∑ k in Finset.Icc 1 (p - 2), ((k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹)) = (1 : ZMod p)⁻¹ - ((p - 2 : ℕ) : ZMod p + 1)⁻¹ := by\n        have h₁₀ := h₈ (p - 2)\n        simpa using h₁₀\n      rw [h₉]\n    rw [h₇]\n    \n    have h₈ : ((p - 2 : ℕ) : ZMod p) + 1 = (p - 1 : ℕ) : ZMod p := by\n      have h₉ : (p : ℕ) ≥ 7 := by exact_mod_cast h₁\n      have h₁₀ : (p : ℕ) ≥ 2 := by linarith\n      have h₁₁ : (p - 2 : ℕ) + 1 = p - 1 := by\n        have h₁₂ : p ≥ 2 := by linarith\n        have h₁₃ : p - 2 + 1 = p - 1 := by\n          omega\n        exact h₁₃\n      have h₁₂ : ((p - 2 : ℕ) : ZMod p) + 1 = (p - 1 : ℕ) : ZMod p := by\n        norm_cast at h₁₁ ⊢\n        <;>\n        (try simp_all [ZMod.nat_cast_self]) <;>\n        (try omega) <;>\n        (try\n          {\n            simp_all [Fin.ext_iff, ZMod.val_nat_cast]\n            <;> omega\n          })\n      exact h₁₂\n    rw [h₈]\n    \n    have h₉ : ((p - 1 : ℕ) : ZMod p) = -1 := by\n      have h₁₀ : (p : ℕ) ≥ 7 := by exact_mod_cast h₁\n      have h₁₁ : (p : ℕ) ≥ 2 := by linarith\n      have h₁₂ : ((p - 1 : ℕ) : ZMod p) = -1 := by\n        have h₁₃ : (p : ℕ) ≠ 0 := by linarith\n        have h₁₄ : ((p - 1 : ℕ) : ZMod p) = -1 := by\n          norm_num [ZMod.nat_cast_self]\n          <;>\n          (try simp_all [Fin.ext_iff, ZMod.val_nat_cast]) <;>\n          (try omega)\n          <;>\n          (try\n            {\n              cases p with\n              | zero => contradiction\n              | succ p' =>\n                cases p' with\n                | zero => contradiction\n                | succ p'' =>\n                  simp_all [Fin.ext_iff, ZMod.val_nat_cast, Nat.mod_eq_of_lt]\n                  <;> ring_nf at *\n                  <;> omega\n            })\n        exact h₁₄\n      exact h₁₂\n    rw [h₉]\n    \n    have h₁₀ : (1 : ZMod p)⁻¹ - (-1 : ZMod p)⁻¹ = 2 := by\n      have h₁₁ : (1 : ZMod p)⁻¹ = (1 : ZMod p) := by\n        simp\n      rw [h₁₁]\n      have h₁₂ : (-1 : ZMod p)⁻¹ = -1 := by\n        have h₁₃ : (-1 : ZMod p) ≠ 0 := by\n          intro h₁₄\n          have h₁₅ : (p : ℕ) ∣ 1 := by\n            simpa [h₁₄] using ZMod.nat_cast_zmod_eq_zero_iff_dvd 1 p\n          have h₁₆ : p ≤ 1 := Nat.le_of_dvd (by norm_num) h₁₅\n          linarith\n        have h₁₄ : (-1 : ZMod p)⁻¹ = -1 := by\n          have h₁₅ : (-1 : ZMod p) * (-1 : ZMod p) = 1 := by\n            norm_num [ZMod.nat_cast_self]\n            <;>\n            (try simp_all [Fin.ext_iff, ZMod.val_nat_cast]) <;>\n            (try omega)\n          have h₁₆ : (-1 : ZMod p)⁻¹ = -1 := by\n            apply inv_eq_of_mul_eq_one_right\n            simpa using h₁₅\n          exact h₁₆\n        exact h₁₄\n      rw [h₁₂]\n      norm_num [ZMod.nat_cast_self]\n      <;>\n      (try simp_all [Fin.ext_iff, ZMod.val_nat_cast]) <;>\n      (try omega)\n      <;>\n      (try\n        {\n          cases p with\n          | zero => contradiction\n          | succ p' =>\n            cases p' with\n            | zero => contradiction\n            | succ p'' =>\n              simp_all [Fin.ext_iff, ZMod.val_nat_cast, Nat.mod_eq_of_lt]\n              <;> ring_nf at *\n              <;> omega\n        })\n    rw [h₁₀]\n  exact h_main",
+  "submitted_code_sha256": "66da2f74657ff2a0f8adfc701c960605ee3b09381164d416a805a77188e79d4d",
+  "verification_record": {
+    "code": "\n\n\n\ntheorem mathd_numbertheory_764 (p : ℕ) (h₀ : Nat.Prime p) (h₁ : 7 ≤ p) :\n    (∑ k in Finset.Icc 1 (p - 2), (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) = 2 := by \n  have h_main : (∑ k in Finset.Icc 1 (p - 2), (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) = 2 := by\n    haveI := Fact.mk h₀\n    have h₂ : p ≥ 7 := by exact_mod_cast h₁\n    have h₃ : p ≥ 2 := by linarith\n    have h₄ : (p : ℕ) - 2 + 1 ≥ 6 := by\n      have h₅ : p ≥ 7 := by exact_mod_cast h₁\n      omega\n    \n    have h₅ : ∀ (k : ℕ), 1 ≤ k → k ≤ p - 2 → (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹ = (k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹ := by\n      intro k hk₁ hk₂\n      have h₆ : (k : ZMod p) ≠ 0 := by\n        have h₇ : (k : ℕ) < p := by\n          have h₈ : k ≤ p - 2 := hk₂\n          have h₉ : p - 2 < p := by\n            have h₁₀ : p ≥ 2 := by linarith\n            omega\n          omega\n        have h₈ : (k : ZMod p) ≠ 0 := by\n          intro h₉\n          have h₁₀ : (k : ZMod p) = 0 := h₉\n          have h₁₁ : (p : ℕ) ∣ k := by\n            simpa [h₁₀] using ZMod.nat_cast_zmod_eq_zero_iff_dvd k p\n          have h₁₂ : p ≤ k := Nat.le_of_dvd (by omega) h₁₁\n          omega\n        exact h₈\n      have h₇ : ((k : ZMod p) + 1 : ZMod p) ≠ 0 := by\n        have h₈ : (k : ℕ) < p - 1 := by\n          have h₉ : k ≤ p - 2 := hk₂\n          have h₁₀ : p - 2 < p - 1 := by\n            have h₁₁ : p ≥ 2 := by linarith\n            omega\n          omega\n        have h₉ : (k : ℕ) + 1 < p := by\n          omega\n        have h₁₀ : ((k : ZMod p) + 1 : ZMod p) ≠ 0 := by\n          intro h₁₁\n          have h₁₂ : ((k : ZMod p) + 1 : ZMod p) = 0 := h₁₁\n          have h₁₃ : (p : ℕ) ∣ (k + 1) := by\n            simpa [h₁₂] using ZMod.nat_cast_zmod_eq_zero_iff_dvd (k + 1) p\n          have h₁₄ : p ≤ k + 1 := Nat.le_of_dvd (by omega) h₁₃\n          omega\n        exact h₁₀\n      \n      have h₈ : (k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹ = (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹ := by\n        have h₉ : (k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹ = ((k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) := by\n          calc\n            (k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹ = (k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹ := rfl\n            _ = ((k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) := by\n              have h₁₀ : (k : ZMod p) ≠ 0 := h₆\n              have h₁₁ : ((k : ZMod p) + 1 : ZMod p) ≠ 0 := h₇\n              field_simp [h₁₀, h₁₁]\n              <;> ring_nf\n              <;> field_simp [h₁₀, h₁₁]\n              <;> ring_nf\n              <;> simp_all [ZMod.nat_cast_self]\n              <;> norm_num\n              <;>\n              (try omega) <;>\n              (try\n                {\n                  simp_all [Fin.ext_iff, ZMod.val_nat_cast]\n                  <;> omega\n                })\n        rw [h₉]\n      rw [h₈]\n      <;>\n      (try omega) <;>\n      (try\n        {\n          simp_all [Fin.ext_iff, ZMod.val_nat_cast]\n          <;> omega\n        })\n    \n    have h₆ : (∑ k in Finset.Icc 1 (p - 2), (k : ZMod p)⁻¹ * ((k : ZMod p) + 1)⁻¹) = (∑ k in Finset.Icc 1 (p - 2), ((k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹)) := by\n      apply Finset.sum_congr rfl\n      intro k hk\n      have h₇ : 1 ≤ k := by\n        simp [Finset.mem_Icc] at hk\n        linarith\n      have h₈ : k ≤ p - 2 := by\n        simp [Finset.mem_Icc] at hk\n        linarith\n      rw [h₅ k h₇ h₈]\n    rw [h₆]\n    \n    have h₇ : (∑ k in Finset.Icc 1 (p - 2), ((k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹)) = (1 : ZMod p)⁻¹ - ((p - 2 : ℕ) : ZMod p + 1)⁻¹ := by\n      have h₈ : ∀ (n : ℕ), (∑ k in Finset.Icc 1 n, ((k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹)) = (1 : ZMod p)⁻¹ - ((n : ℕ) : ZMod p + 1)⁻¹ := by\n        intro n\n        induction n with\n        | zero =>\n          simp\n        | succ n ih =>\n          rw [Finset.sum_Icc_succ_top (by omega : 1 ≤ n.succ), ih]\n          <;> simp [Nat.cast_add, Nat.cast_one, add_assoc]\n          <;>\n          (try ring_nf) <;>\n          (try norm_num) <;>\n          (try simp_all [Fin.ext_iff, ZMod.val_nat_cast]) <;>\n          (try omega)\n          <;>\n          (try\n            {\n              field_simp [show (p : ℕ) ≠ 0 by linarith]\n              <;> ring_nf\n              <;> simp_all [Fin.ext_iff, ZMod.val_nat_cast]\n              <;> omega\n            })\n          <;>\n          (try\n            {\n              simp_all [Fin.ext_iff, ZMod.val_nat_cast]\n              <;> omega\n            })\n      have h₉ : (∑ k in Finset.Icc 1 (p - 2), ((k : ZMod p)⁻¹ - ((k : ZMod p) + 1)⁻¹)) = (1 : ZMod p)⁻¹ - ((p - 2 : ℕ) : ZMod p + 1)⁻¹ := by\n        have h₁₀ := h₈ (p - 2)\n        simpa using h₁₀\n      rw [h₉]\n    rw [h₇]\n    \n    have h₈ : ((p - 2 : ℕ) : ZMod p) + 1 = (p - 1 : ℕ) : ZMod p := by\n      have h₉ : (p : ℕ) ≥ 7 := by exact_mod_cast h₁\n      have h₁₀ : (p : ℕ) ≥ 2 := by linarith\n      have h₁₁ : (p - 2 : ℕ) + 1 = p - 1 := by\n        have h₁₂ : p ≥ 2 := by linarith\n        have h₁₃ : p - 2 + 1 = p - 1 := by\n          omega\n        exact h₁₃\n      have h₁₂ : ((p - 2 : ℕ) : ZMod p) + 1 = (p - 1 : ℕ) : ZMod p := by\n        norm_cast at h₁₁ ⊢\n        <;>\n        (try simp_all [ZMod.nat_cast_self]) <;>\n        (try omega) <;>\n        (try\n          {\n            simp_all [Fin.ext_iff, ZMod.val_nat_cast]\n            <;> omega\n          })\n      exact h₁₂\n    rw [h₈]\n    \n    have h₉ : ((p - 1 : ℕ) : ZMod p) = -1 := by\n      have h₁₀ : (p : ℕ) ≥ 7 := by exact_mod_cast h₁\n      have h₁₁ : (p : ℕ) ≥ 2 := by linarith\n      have h₁₂ : ((p - 1 : ℕ) : ZMod p) = -1 := by\n        have h₁₃ : (p : ℕ) ≠ 0 := by linarith\n        have h₁₄ : ((p - 1 : ℕ) : ZMod p) = -1 := by\n          norm_num [ZMod.nat_cast_self]\n          <;>\n          (try simp_all [Fin.ext_iff, ZMod.val_nat_cast]) <;>\n          (try omega)\n          <;>\n          (try\n            {\n              cases p with\n              | zero => contradiction\n              | succ p' =>\n                cases p' with\n                | zero => contradiction\n                | succ p'' =>\n                  simp_all [Fin.ext_iff, ZMod.val_nat_cast, Nat.mod_eq_of_lt]\n                  <;> ring_nf at *\n                  <;> omega\n            })\n        exact h₁₄\n      exact h₁₂\n    rw [h₉]\n    \n    have h₁₀ : (1 : ZMod p)⁻¹ - (-1 : ZMod p)⁻¹ = 2 := by\n      have h₁₁ : (1 : ZMod p)⁻¹ = (1 : ZMod p) := by\n        simp\n      rw [h₁₁]\n      have h₁₂ : (-1 : ZMod p)⁻¹ = -1 := by\n        have h₁₃ : (-1 : ZMod p) ≠ 0 := by\n          intro h₁₄\n          have h₁₅ : (p : ℕ) ∣ 1 := by\n            simpa [h₁₄] using ZMod.nat_cast_zmod_eq_zero_iff_dvd 1 p\n          have h₁₆ : p ≤ 1 := Nat.le_of_dvd (by norm_num) h₁₅\n          linarith\n        have h₁₄ : (-1 : ZMod p)⁻¹ = -1 := by\n          have h₁₅ : (-1 : ZMod p) * (-1 : ZMod p) = 1 := by\n            norm_num [ZMod.nat_cast_self]\n            <;>\n            (try simp_all [Fin.ext_iff, ZMod.val_nat_cast]) <;>\n            (try omega)\n          have h₁₆ : (-1 : ZMod p)⁻¹ = -1 := by\n            apply inv_eq_of_mul_eq_one_right\n            simpa using h₁₅\n          exact h₁₆\n        exact h₁₄\n      rw [h₁₂]\n      norm_num [ZMod.nat_cast_self]\n      <;>\n      (try simp_all [Fin.ext_iff, ZMod.val_nat_cast]) <;>\n      (try omega)\n      <;>\n      (try\n        {\n          cases p with\n          | zero => contradiction\n          | succ p' =>\n            cases p' with\n            | zero => contradiction\n            | succ p'' =>\n              simp_all [Fin.ext_iff, ZMod.val_nat_cast, Nat.mod_eq_of_lt]\n              <;> ring_nf at *\n              <;> omega\n        })\n    rw [h₁₀]\n  exact h_main",
+    "compilation_result": {
+      "sorries": [],
+      "tactics": [],
+      "errors": [
+        {
+          "severity": "error",
+          "pos": {
+            "line": 92,
+            "column": 119
+          },
+          "endPos": {
+            "line": 92,
+            "column": 129
+          },
+          "data": "failed to synthesize\n  HAdd Type ℕ Type\nuse `set_option diagnostics true` to get diagnostic information"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 92,
+            "column": 104
+          },
+          "endPos": {
+            "line": 92,
+            "column": 132
+          },
+          "data": "failed to synthesize\n  Inv (ZMod p + 1)\nuse `set_option diagnostics true` to get diagnostic information"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 92,
+            "column": 104
+          },
+          "endPos": {
+            "line": 92,
+            "column": 130
+          },
+          "data": "type mismatch\n  p - 2\nhas type\n  ℕ : outParam Type\nbut is expected to have type\n  ZMod p + 1 : Type"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 6,
+            "column": 80
+          },
+          "endPos": {
+            "line": 126,
+            "column": 54
+          },
+          "data": "unsolved goals\np : ℕ\nh₀ : p.Prime\nh₁ : 7 ≤ p\nh_main : ∑ k ∈ Finset.Icc 1 (p - 2), (↑k)⁻¹ * (↑k + 1)⁻¹ = 2\n⊢ ∑ k ∈ Finset.Icc 1 (p - 2), (↑k)⁻¹ * (↑k + 1)⁻¹ = 2"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 126,
+            "column": 55
+          },
+          "endPos": {
+            "line": 126,
+            "column": 56
+          },
+          "data": "unexpected token ':'; expected command"
+        }
+      ],
+      "warnings": [
+        {
+          "severity": "warning",
+          "pos": {
+            "line": 28,
+            "column": 30
+          },
+          "endPos": {
+            "line": 28,
+            "column": 64
+          },
+          "data": "`ZMod.nat_cast_zmod_eq_zero_iff_dvd` has been deprecated, use `ZMod.natCast_zmod_eq_zero_iff_dvd` instead"
+        },
+        {
+          "severity": "warning",
+          "pos": {
+            "line": 45,
+            "column": 30
+          },
+          "endPos": {
+            "line": 45,
+            "column": 64
+          },
+          "data": "`ZMod.nat_cast_zmod_eq_zero_iff_dvd` has been deprecated, use `ZMod.natCast_zmod_eq_zero_iff_dvd` instead"
+        }
+      ],
+      "infos": [],
+      "ast": {},
+      "system_errors": null,
+      "pass": false,
+      "complete": false
+    },
+    "name": "mathd_numbertheory_764_g15",
+    "verify_time": 2.57
+  },
+  "problem_scope": {
+    "candidates_in_source_run": 32,
+    "successful_candidates": 0,
+    "problem_solved_at_pass32": false,
+    "included_in_published_unsolved_problem_scope": true,
+    "selection_purpose": "Qualitative illustration of a local mechanism; no frequency estimate."
+  }
+}

@@ -1,4 +1,4 @@
-# Diagnostic analysis results
+# Analysis results and error explanations
 
 Published results for five models across miniF2F, ProofNet, Putnam, FATE-M and FATE-H (25 model–benchmark cells). The analysis includes all supplied candidates of problems unsolved at Pass@32, after the recorded exclusions. It contains **788,234 parsed diagnostics** and **676,049 counted error occurrences**.
 
@@ -20,9 +20,15 @@ These results use the historical occurrence rule: repeated reports at the same s
 
 This Markdown guide summarizes the CSVs and links the published outputs. Candidate-level `raw_errors.jsonl` and redundant per-cell message-count CSVs remain local intermediates under `results/scans/`; the published mapping preserves complete distinct messages and both counts by cell. Original verifier inputs and exclusion lists are required to rebuild those intermediates. Their filenames and SHA-256 fingerprints are recorded in `analysis_summary.json`.
 
-## Eight-category definitions and cases
+## Error definitions and original-output evidence
 
-See [case_studies/README.md](case_studies/README.md) for the eight categories, each organized as **definition → case study → explanation**. Every category directory includes the complete original model response, a verbatim case excerpt with source lines, and the original verification record with source fingerprints. The cases match thesis Table 6.1; the excerpt notes disclose its shortened presentation.
+| Collection | Content |
+|---|---|
+| [Compiler diagnostic categories](compiler_diagnostics/README.md) | Eight definitions and thesis Table 6.1 examples, with complete model outputs and saved diagnostics. |
+| [Mathematical reasoning errors](mathematical_reasoning_errors/README.md) | Three categories with definitions, identified examples, and mathematical derivations or counterexamples. |
+| [Plan-to-code errors](plan_to_code_errors/README.md) | Three translation mechanisms with valid local mathematics, original code, and minimal Lean checks of the failure and correction. |
+
+Each category follows **definition → case study → explanation**, with sibling `model_output.txt`, `case_excerpt.md` and `verification.json`. Excerpts are verbatim and preserve relevant self-corrections. These qualitative collections describe separate analytical dimensions; they do not add mathematical or translation frequencies to the compiler tables. A successful minimal Lean correction is not a verified repair of the complete candidate. The original compiler collection was previously named `case_studies/`.
 
 ## Figure presentation
 

@@ -1,4 +1,4 @@
-# Eight-category case studies
+# Compiler diagnostic categories
 
 Each category follows the same reading order: **definition → case study → explanation**. The eight candidates are the examples used in thesis Table 6.1. Seven come from Goedel-Prover-V2-32B on miniF2F; the termination example comes from Kimina-Prover-Distill-8B on FATE-M.
 
