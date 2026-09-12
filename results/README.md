@@ -20,6 +20,12 @@ These results use the historical occurrence rule: repeated reports at the same s
 
 This Markdown guide summarizes the CSVs and links the published outputs. Candidate-level `raw_errors.jsonl` and redundant per-cell message-count CSVs remain local intermediates under `results/scans/`; the published mapping preserves complete distinct messages and both counts by cell. Original verifier inputs and exclusion lists are required to rebuild those intermediates. Their filenames and SHA-256 fingerprints are recorded in `analysis_summary.json`.
 
+## Figure presentation
+
+Both heatmaps adopt the thesis's muted blue palette, serif labels and category-by-model layout. The cell figure groups model columns by benchmark. G32 = Goedel-32B; G8 = Goedel-8B; DS7 = DeepSeek-Prover-V2-7B; K8 = Kimina-Prover-Distill-8B; P4 = Pythagoras-Prover-4B. The axis labels “Termination” and “Resource” abbreviate Termination failure and Resource exhaustion.
+
+Only presentation follows the thesis. These figures use the full eight-category occurrence counts in the published CSVs, including resource exhaustion and `no goals to be solved`; they do not use the thesis's candidate-level primary labels or seven-category denominator. Both figures share a 0–60% color scale, covering every value; the plotting command rounds the joint maximum up to the next ten percentage points. Exact percentages are available in the linked tables.
+
 ## Pooled model distributions
 
 Percentages below use each model's total error occurrences across the five benchmarks. They measure the composition of retained compiler errors, not proof success rates. Benchmark contributions are weighted by their occurrence counts. Values are rounded to two decimals here; the CSVs retain six decimals.

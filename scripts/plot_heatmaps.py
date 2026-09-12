@@ -15,6 +15,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 from matplotlib import pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 
 from error_taxonomy import CATEGORY_ORDER
 
@@ -27,6 +28,7 @@ MODEL_ORDER = (
     "Pythagoras-Prover-4B",
 )
 BENCHMARK_ORDER = ("miniF2F", "ProofNet", "Putnam", "FATE-H", "FATE-M")
+MODEL_SHORT = dict(zip(MODEL_ORDER, ("G32", "G8", "DS7", "K8", "P4")))
 
 
 def _order_key(value: str, preferred: tuple[str, ...]) -> tuple[int, str]:
@@ -40,7 +42,7 @@ def _order_key(value: str, preferred: tuple[str, ...]) -> tuple[int, str]:
 def read_heatmap_table(
     path: Path, group_columns: tuple[str, ...]
 ) -> tuple[list[str], list[list[float]]]:
-    """Read a category CSV and return ordered row labels and percentage values.
+    """Read a category CSV and return group labels and eight-category percentages.
 
     ``group_columns`` must be ``('model',)`` or ``('model', 'benchmark')``.
     The file must contain one row per category per group, nonnegative integer
@@ -49,6 +51,7 @@ def read_heatmap_table(
     blank or NA percentages and yield NaN values. Percentages are recomputed
     from counts after validation. The input is never modified. Invalid data
     raises ValueError; filesystem and decoding errors propagate to the caller.
+    Cells sort by benchmark then model; pooled groups sort by model.
     """
     if group_columns not in (("model",), ("model", "benchmark")):
         raise ValueError("group_columns must be model or model and benchmark")
@@ -106,8 +109,8 @@ def read_heatmap_table(
         if sum(entry[0] for entry in entries.values()) != next(iter(denominators)):
             raise ValueError(f"{path}: category counts do not sum to denominator for {key!r}")
     ordered = sorted(groups, key=lambda key: (
-        _order_key(key[0], MODEL_ORDER),
         _order_key(key[1], BENCHMARK_ORDER) if len(key) == 2 else (0, ""),
+        _order_key(key[0], MODEL_ORDER),
     ))
     labels = [" / ".join(key) for key in ordered]
     values = [[groups[key][category][2] for category in CATEGORY_ORDER] for key in ordered]
@@ -116,19 +119,28 @@ def read_heatmap_table(
 
 def plot_heatmap(
     labels: list[str], values: list[list[float]], title: str, output_stem: Path,
-    count_unit: str = "occurrence",
+    count_unit: str = "occurrence", group_by_benchmark: bool = False,
+    color_max: float = 100,
 ) -> tuple[Path, Path]:
-    """Save a percentage matrix as PNG and PDF, returning both output paths.
+    """Save a thesis-style category-by-group heatmap as PNG and PDF.
 
-    ``labels`` identifies rows; ``values`` has eight columns in CATEGORY_ORDER
-    with finite values from 0 to 100 or NaN for undefined percentages.
-    ``count_unit`` is ``occurrence`` (default) or ``diagnostic`` and identifies
-    the denominator in the colorbar and NA note. The
-    function validates dimensions and range before creating the output parent
-    directory. It overwrites files sharing the requested stem, fixes the color
-    scale to 0..100, annotates to one decimal place, and shades NaNs gray with
-    NA text. Invalid matrix data raises ValueError; save errors propagate.
-    Matplotlib figures are closed even if saving fails.
+    Input rows in ``values`` correspond to ``labels``; each has eight values
+    in CATEGORY_ORDER, from 0 to 100 or NaN. Rendering transposes this matrix
+    so categories run vertically and model groups horizontally. For cell
+    plots, set ``group_by_benchmark`` and supply contiguous benchmark groups
+    labelled ``model / benchmark`` (as returned by read_heatmap_table).
+    Benchmark headings and separators mark the groups; pooled plots use
+    model abbreviations alone. Unknown model labels are shown in full.
+
+    The muted blue palette, serif labels and compact layout follow the thesis
+    presentation. The color scale runs from zero to ``color_max`` (default 100), which must
+    cover every finite value. The CLI chooses one shared upper limit for both
+    figures, rounding their maximum up to the next ten percentage points.
+    The colorbar identifies
+    ``count_unit`` as occurrence or diagnostic. Numeric cell annotations are
+    omitted; undefined percentages are gray and labelled NA. Dimensions and
+    values are checked before output creation. Files sharing the stem are
+    overwritten; figures are closed even if saving fails.
     """
     if count_unit not in ("occurrence", "diagnostic"):
         raise ValueError("count_unit must be occurrence or diagnostic")
@@ -140,38 +152,67 @@ def plot_heatmap(
     if any(not math.isnan(value) and (not math.isfinite(value) or not 0 <= value <= 100)
            for row in values for value in row):
         raise ValueError("heatmap values must be percentages or NaN")
+    if (not math.isfinite(color_max) or not 0 < color_max <= 100
+            or any(value > color_max for row in values for value in row if not math.isnan(value))):
+        raise ValueError("color_max must cover all finite percentages and be in (0, 100]")
+    columns = [label.rsplit(" / ", 1) for label in labels] if group_by_benchmark else [[label] for label in labels]
+    if group_by_benchmark and any(len(column) != 2 for column in columns):
+        raise ValueError("benchmark plots require model / benchmark labels")
     output_stem = Path(output_stem)
     output_stem.parent.mkdir(parents=True, exist_ok=True)
     paths = (output_stem.with_suffix(".png"), output_stem.with_suffix(".pdf"))
-    cmap = plt.get_cmap("Blues").with_extremes(bad="#d9d9d9")
-    figure, axes = plt.subplots(figsize=(13, max(4.5, 0.39 * len(labels) + 2.4)))
-    try:
-        heatmap = axes.imshow(values, cmap=cmap, vmin=0, vmax=100, aspect="auto")
-        axes.set_xticks(range(len(CATEGORY_ORDER)),
-                        [category.replace(" ", "\n", 1) for category in CATEGORY_ORDER],
-                        fontsize=10)
-        axes.set_yticks(range(len(labels)), labels, fontsize=10)
-        axes.tick_params(axis="both", length=0, pad=7)
-        axes.set_title(title, fontsize=14, pad=16)
-        axes.set_xticks([index - 0.5 for index in range(len(CATEGORY_ORDER) + 1)], minor=True)
-        axes.set_yticks([index - 0.5 for index in range(len(labels) + 1)], minor=True)
-        axes.grid(which="minor", color="white", linewidth=0.7)
-        axes.tick_params(which="minor", bottom=False, left=False)
-        for row_index, row in enumerate(values):
-            for column_index, value in enumerate(row):
-                axes.text(column_index, row_index, "NA" if math.isnan(value) else f"{value:.1f}",
-                          ha="center", va="center", fontsize=9,
-                          color="white" if not math.isnan(value) and value >= 55 else "#202020")
-        colorbar = figure.colorbar(heatmap, ax=axes, fraction=0.035, pad=0.025)
-        colorbar.set_label(f"Share of {unit_label} (%)", fontsize=10)
-        colorbar.set_ticks([0, 20, 40, 60, 80, 100])
-        figure.text(0.99, 0.01, f"NA: no {unit_label} (denominator = 0)",
-                    ha="right", fontsize=9, color="#555555")
-        figure.tight_layout(rect=(0, 0.03, 1, 1))
-        for path in paths:
-            figure.savefig(path, dpi=200, bbox_inches="tight", facecolor="white")
-    finally:
-        plt.close(figure)
+    cmap = LinearSegmentedColormap.from_list(
+        "thesis_blues", ["#f7f9fc", "#dbe5f2", "#a3badc", "#4b6fa7"]
+    ).with_extremes(bad="#d9d9d9")
+    matrix = list(map(list, zip(*values)))
+    style = {"font.family": "serif", "font.serif": ["STIXGeneral"],
+             "pdf.fonttype": 42, "axes.linewidth": 0.5}
+    with plt.rc_context(style):
+        width = max(6.2, 2.6 + 0.34 * len(labels))
+        figure, axes = plt.subplots(figsize=(width, 4.5))
+        try:
+            heatmap = axes.imshow(matrix, cmap=cmap, vmin=0, vmax=color_max, aspect="auto")
+            axes.set_xticks(range(len(labels)),
+                            [MODEL_SHORT.get(column[0], column[0]) for column in columns],
+                            rotation=55, ha="right", rotation_mode="anchor", fontsize=9)
+            axes.set_yticks(range(len(CATEGORY_ORDER)),
+                            ["Termination" if category == "Termination failure" else
+                             "Resource" if category == "Resource exhaustion" else category
+                             for category in CATEGORY_ORDER], fontsize=11)
+            axes.tick_params(axis="both", length=2.5, width=0.4, direction="in", pad=5,
+                             top=True, right=True, color="#777777")
+            axes.set_title(title, fontsize=12, pad=32 if group_by_benchmark else 14)
+            for spine in axes.spines.values():
+                spine.set_color("#777777")
+            if group_by_benchmark:
+                start = 0
+                for stop in range(1, len(columns) + 1):
+                    if stop == len(columns) or columns[stop][1] != columns[start][1]:
+                        benchmark = columns[start][1]
+                        axes.text((start + stop - 1) / 2, 1.035,
+                                  "PutnamBench" if benchmark == "Putnam" else benchmark,
+                                  transform=axes.get_xaxis_transform(), ha="center",
+                                  va="bottom", fontsize=10)
+                        if stop < len(columns):
+                            axes.axvline(stop - 0.5, color="white", linewidth=1.2)
+                        start = stop
+            for row_index, row in enumerate(matrix):
+                for column_index, value in enumerate(row):
+                    if math.isnan(value):
+                        axes.text(column_index, row_index, "NA", ha="center", va="center",
+                                  fontsize=8, color="#555555")
+            colorbar = figure.colorbar(heatmap, ax=axes, fraction=0.035, pad=0.025)
+            colorbar.set_label(f"Share of {unit_label} (%)", fontsize=10)
+            colorbar.set_ticks([*range(0, math.ceil(color_max), 20), color_max])
+            colorbar.ax.tick_params(labelsize=9, width=0.4, length=2)
+            colorbar.outline.set_edgecolor("#777777")
+            figure.text(0.99, 0.015, f"NA: no {unit_label} (denominator = 0)",
+                        ha="right", fontsize=8, color="#555555")
+            figure.tight_layout(rect=(0, 0.045, 1, 1))
+            for path in paths:
+                figure.savefig(path, dpi=250, bbox_inches="tight", facecolor="white")
+        finally:
+            plt.close(figure)
     return paths
 
 
@@ -202,10 +243,15 @@ def main(argv: list[str] | None = None) -> int:
         count_unit = metadata["count_unit"]
         cell = read_heatmap_table(args.input_dir / "categories_by_cell.csv", ("model", "benchmark"))
         model = read_heatmap_table(args.input_dir / "categories_by_model.csv", ("model",))
+        largest = max((value for values in (cell[1], model[1]) for row in values
+                       for value in row if math.isfinite(value)), default=0)
+        color_max = max(10, math.ceil(largest / 10) * 10)
         plot_heatmap(*cell, "Diagnostic categories by model and benchmark",
-                     args.output_dir / "category_heatmap_by_cell", count_unit=count_unit)
+                     args.output_dir / "category_heatmap_by_cell", count_unit=count_unit,
+                     group_by_benchmark=True, color_max=color_max)
         plot_heatmap(*model, "Diagnostic categories by model (pooled counts)",
-                     args.output_dir / "category_heatmap_by_model", count_unit=count_unit)
+                     args.output_dir / "category_heatmap_by_model", count_unit=count_unit,
+                     color_max=color_max)
     except (OSError, UnicodeError, ValueError, csv.Error) as exc:
         parser.error(str(exc))
     return 0

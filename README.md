@@ -149,7 +149,7 @@ These exclusions apply **only to Top50**, not to the eight-category tables or he
 
 Both tables contain all eight categories, including zero-count rows. Percentages range from 0 to 100 and use six decimal places; a zero denominator has a blank percentage. For five models and five benchmarks, the cell table has 200 rows and the pooled table has 40 rows.
 
-The plotting script reads the two category CSVs and the required `analysis_summary.json`. It validates the recorded counting unit, category completeness, duplicate rows, nonnegative counts, denominator conservation and percentage consistency before drawing. Each exported figure identifies error occurrences or error diagnostics on its colorbar and footnote. Both heatmaps use a fixed 0–100% color scale, one-decimal annotations and gray `NA` cells for zero denominators. The cell heatmap has one row per model–benchmark pair; the pooled heatmap has one row per model.
+The plotting script reads the two category CSVs and the required `analysis_summary.json`. It validates the recorded counting unit, category completeness, duplicate rows, nonnegative counts, denominator conservation and percentage consistency before drawing. Each exported figure identifies error occurrences or error diagnostics on its colorbar and footnote. Both heatmaps follow the thesis presentation with muted blue shading, serif labels and categories on the vertical axis. The cell heatmap groups model columns under benchmark headings; the pooled heatmap has one column per model. Both share one color scale starting at zero, with its upper limit rounded up from the largest percentage across the two matrices to the next multiple of ten (0–60% for the published data). Gray `NA` cells indicate zero denominators. Numeric cell annotations are omitted for readability; exact percentages remain in the CSV tables. G32/G8 denote Goedel-32B/8B, DS7 denotes DeepSeek, K8 denotes Kimina and P4 denotes Pythagoras. Only the visual style follows the thesis: these figures retain the full eight-category error-occurrence analysis, including resource exhaustion and `no goals to be solved`.
 
 ## Output files and columns
 
@@ -259,6 +259,6 @@ Each function also has a source docstring. Pure mapping helpers do not modify ra
 | Function | Purpose |
 |---|---|
 | `_order_key()` | Return a sorting key placing known labels first, then others alphabetically. |
-| `read_heatmap_table()` | Read a category CSV and return ordered row labels and percentage values. |
-| `plot_heatmap()` | Save a percentage matrix as PNG and PDF, returning both output paths. |
+| `read_heatmap_table()` | Validate a category CSV and return labels/percentages ordered by benchmark then model, or by model for pooled counts. |
+| `plot_heatmap()` | Render categories vertically with thesis-style blue shading and serif labels, grouping model columns by benchmark when requested; save PNG and PDF. |
 | `main()` | Parse CLI arguments, validate both input tables, and save four figures. |
