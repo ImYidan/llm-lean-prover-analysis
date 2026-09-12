@@ -5,5 +5,7 @@ __pycache__/
 .env.*
 outputs/
 data/
-results/
+results/scans/
+results/local/
+results/tables/mapped_errors.csv
 *.log

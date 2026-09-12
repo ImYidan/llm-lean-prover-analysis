@@ -1,0 +1,93 @@
+model,benchmark,rank,category,template,count,denominator,percentage,cumulative_count,cumulative_percentage,cutoff_count
+DeepSeek-Prover-V2-7B,FATE-H,1,Unsolved goals,unsolved goals,586,3644,16.081229,586,16.081229,356
+DeepSeek-Prover-V2-7B,FATE-H,2,Unresolved name,unknown constant 'ID',501,3644,13.748628,1087,29.829857,356
+DeepSeek-Prover-V2-7B,FATE-H,3,Missing instance,failed to synthesize instance of type class,415,3644,11.388584,1502,41.218441,356
+DeepSeek-Prover-V2-7B,FATE-H,4,Unresolved name,unknown identifier 'ID',356,3644,9.769484,1858,50.987925,356
+DeepSeek-Prover-V2-7B,FATE-M,1,Missing instance,failed to synthesize instance of type class,2028,8446,24.011366,2028,24.011366,886
+DeepSeek-Prover-V2-7B,FATE-M,2,Unsolved goals,unsolved goals,1033,8446,12.230642,3061,36.242008,886
+DeepSeek-Prover-V2-7B,FATE-M,3,Unresolved name,unknown identifier 'ID',906,8446,10.726971,3967,46.968979,886
+DeepSeek-Prover-V2-7B,FATE-M,4,Tactic failure,tactic 'ID' made no progress,886,8446,10.490173,4853,57.459152,886
+DeepSeek-Prover-V2-7B,ProofNet,1,Unsolved goals,unsolved goals,2450,10633,23.041475,2450,23.041475,868
+DeepSeek-Prover-V2-7B,ProofNet,2,Missing instance,failed to synthesize,1289,10633,12.122637,3739,35.164112,868
+DeepSeek-Prover-V2-7B,ProofNet,3,Unresolved name,unknown identifier 'ID',873,10633,8.210289,4612,43.374400,868
+DeepSeek-Prover-V2-7B,ProofNet,4,Type mismatch,type mismatch,868,10633,8.163265,5480,51.537666,868
+DeepSeek-Prover-V2-7B,Putnam,1,Unsolved goals,unsolved goals,8849,28626,30.912457,8849,30.912457,1972
+DeepSeek-Prover-V2-7B,Putnam,2,Tactic failure,linarith failed to find a contradiction,2539,28626,8.869559,11388,39.782016,1972
+DeepSeek-Prover-V2-7B,Putnam,3,Missing instance,failed to synthesize,2113,28626,7.381402,13501,47.163418,1972
+DeepSeek-Prover-V2-7B,Putnam,4,Tactic failure,tactic 'ID' made no progress,1972,28626,6.888842,15473,54.052260,1972
+DeepSeek-Prover-V2-7B,miniF2F,1,Unsolved goals,unsolved goals,1427,4056,35.182446,1427,35.182446,989
+DeepSeek-Prover-V2-7B,miniF2F,2,Tactic failure,linarith failed to find a contradiction,989,4056,24.383629,2416,59.566075,989
+Goedel-32B,FATE-H,1,Unresolved name,unknown constant 'ID',7237,40442,17.894763,7237,17.894763,4408
+Goedel-32B,FATE-H,2,Missing instance,failed to synthesize instance of type class,6838,40442,16.908165,14075,34.802928,4408
+Goedel-32B,FATE-H,3,Unresolved name,unknown identifier 'ID',4966,40442,12.279314,19041,47.082241,4408
+Goedel-32B,FATE-H,4,Unresolved name,"invalid field 'ID', the environment does not contain 'ID'",4408,40442,10.899560,23449,57.981801,4408
+Goedel-32B,FATE-M,1,Missing instance,failed to synthesize instance of type class,8730,30938,28.217726,8730,28.217726,3468
+Goedel-32B,FATE-M,2,Unresolved name,unknown constant 'ID',5995,30938,19.377465,14725,47.595190,3468
+Goedel-32B,FATE-M,3,Unsolved goals,unsolved goals,3468,30938,11.209516,18193,58.804706,3468
+Goedel-32B,ProofNet,1,Missing instance,failed to synthesize,8032,50931,15.770356,8032,15.770356,4711
+Goedel-32B,ProofNet,2,Unsolved goals,unsolved goals,6971,50931,13.687145,15003,29.457501,4711
+Goedel-32B,ProofNet,3,Unresolved name,unknown constant 'ID',6857,50931,13.463313,21860,42.920814,4711
+Goedel-32B,ProofNet,4,Unresolved name,unknown identifier 'ID',4711,50931,9.249769,26571,52.170584,4711
+Goedel-32B,Putnam,1,Unsolved goals,unsolved goals,23128,83099,27.831863,23128,27.831863,6336
+Goedel-32B,Putnam,2,Tactic failure,linarith failed to find a contradiction,7379,83099,8.879770,30507,36.711633,6336
+Goedel-32B,Putnam,3,Type mismatch,type mismatch,6489,83099,7.808758,36996,44.520391,6336
+Goedel-32B,Putnam,4,Missing instance,failed to synthesize,6336,83099,7.624640,43332,52.145032,6336
+Goedel-32B,miniF2F,1,Unsolved goals,unsolved goals,2107,6171,34.143575,2107,34.143575,806
+Goedel-32B,miniF2F,2,Tactic failure,omega could not prove the goal:,822,6171,13.320369,2929,47.463944,806
+Goedel-32B,miniF2F,3,Tactic failure,linarith failed to find a contradiction,806,6171,13.061092,3735,60.525036,806
+Goedel-8B,FATE-H,1,Missing instance,failed to synthesize instance of type class,2247,14919,15.061331,2247,15.061331,1885
+Goedel-8B,FATE-H,2,Unresolved name,unknown constant 'ID',2193,14919,14.699377,4440,29.760708,1885
+Goedel-8B,FATE-H,3,Unsolved goals,unsolved goals,2001,14919,13.412427,6441,43.173135,1885
+Goedel-8B,FATE-H,4,Unresolved name,unknown identifier 'ID',1885,14919,12.634895,8326,55.808030,1885
+Goedel-8B,FATE-M,1,Missing instance,failed to synthesize instance of type class,6738,23739,28.383672,6738,28.383672,2838
+Goedel-8B,FATE-M,2,Unsolved goals,unsolved goals,3095,23739,13.037617,9833,41.421290,2838
+Goedel-8B,FATE-M,3,Unresolved name,unknown constant 'ID',2838,23739,11.955011,12671,53.376301,2838
+Goedel-8B,ProofNet,1,Unsolved goals,unsolved goals,4931,27491,17.936779,4931,17.936779,1961
+Goedel-8B,ProofNet,2,Missing instance,failed to synthesize,3584,27491,13.036994,8515,30.973773,1961
+Goedel-8B,ProofNet,3,Unresolved name,unknown identifier 'ID',2742,27491,9.974173,11257,40.947947,1961
+Goedel-8B,ProofNet,4,Type mismatch,type mismatch,2283,27491,8.304536,13540,49.252483,1961
+Goedel-8B,ProofNet,5,Type mismatch,application type mismatch,1961,27491,7.133244,15501,56.385726,1961
+Goedel-8B,Putnam,1,Unsolved goals,unsolved goals,21310,81081,26.282360,21310,26.282360,7193
+Goedel-8B,Putnam,2,Missing instance,failed to synthesize,7648,81081,9.432543,28958,35.714902,7193
+Goedel-8B,Putnam,3,Unresolved name,unknown identifier 'ID',7626,81081,9.405409,36584,45.120312,7193
+Goedel-8B,Putnam,4,Tactic failure,linarith failed to find a contradiction,7193,81081,8.871376,43777,53.991687,7193
+Goedel-8B,miniF2F,1,Unsolved goals,unsolved goals,2734,7742,35.313872,2734,35.313872,1550
+Goedel-8B,miniF2F,2,Tactic failure,linarith failed to find a contradiction,1550,7742,20.020666,4284,55.334539,1550
+Kimina-Prover-Distill-8B,FATE-H,1,Unresolved name,unknown identifier 'ID',382,2191,17.434961,382,17.434961,211
+Kimina-Prover-Distill-8B,FATE-H,2,Unsolved goals,unsolved goals,360,2191,16.430853,742,33.865815,211
+Kimina-Prover-Distill-8B,FATE-H,3,Unresolved name,unknown constant 'ID',333,2191,15.198539,1075,49.064354,211
+Kimina-Prover-Distill-8B,FATE-H,4,Missing instance,failed to synthesize instance of type class,211,2191,9.630306,1286,58.694660,211
+Kimina-Prover-Distill-8B,FATE-M,1,Unsolved goals,unsolved goals,1306,8652,15.094776,1306,15.094776,742
+Kimina-Prover-Distill-8B,FATE-M,2,Unresolved name,unknown constant 'ID',1104,8652,12.760055,2410,27.854831,742
+Kimina-Prover-Distill-8B,FATE-M,3,Missing instance,failed to synthesize instance of type class,1003,8652,11.592695,3413,39.447527,742
+Kimina-Prover-Distill-8B,FATE-M,4,Unresolved name,unknown identifier 'ID',778,8652,8.992141,4191,48.439667,742
+Kimina-Prover-Distill-8B,FATE-M,5,Tactic failure,tactic 'ID' made no progress,742,8652,8.576052,4933,57.015719,742
+Kimina-Prover-Distill-8B,ProofNet,1,Unsolved goals,unsolved goals,872,5758,15.144147,872,15.144147,411
+Kimina-Prover-Distill-8B,ProofNet,2,Unresolved name,unknown identifier 'ID',847,5758,14.709969,1719,29.854116,411
+Kimina-Prover-Distill-8B,ProofNet,3,Missing instance,failed to synthesize,574,5758,9.968739,2293,39.822855,411
+Kimina-Prover-Distill-8B,ProofNet,4,Unresolved name,"invalid field 'ID', the environment does not contain 'ID'",518,5758,8.996179,2811,48.819034,411
+Kimina-Prover-Distill-8B,ProofNet,5,Unresolved name,unknown constant 'ID',411,5758,7.137895,3222,55.956929,411
+Kimina-Prover-Distill-8B,Putnam,1,Unsolved goals,unsolved goals,5858,21610,27.107820,5858,27.107820,1628
+Kimina-Prover-Distill-8B,Putnam,2,Tactic failure,linarith failed to find a contradiction,2533,21610,11.721425,8391,38.829246,1628
+Kimina-Prover-Distill-8B,Putnam,3,Unresolved name,unknown identifier 'ID',1995,21610,9.231837,10386,48.061083,1628
+Kimina-Prover-Distill-8B,Putnam,4,Missing instance,failed to synthesize,1628,21610,7.533549,12014,55.594632,1628
+Kimina-Prover-Distill-8B,miniF2F,1,Tactic failure,linarith failed to find a contradiction,1319,5026,26.243534,1319,26.243534,406
+Kimina-Prover-Distill-8B,miniF2F,2,Unsolved goals,unsolved goals,1103,5026,21.945881,2422,48.189415,406
+Kimina-Prover-Distill-8B,miniF2F,3,Unresolved name,"ambiguous, possible interpretations",406,5026,8.077994,2828,56.267409,406
+Pythagoras-Prover-4B,FATE-H,1,Unresolved name,unknown constant 'ID',1891,11361,16.644662,1891,16.644662,1415
+Pythagoras-Prover-4B,FATE-H,2,Unsolved goals,unsolved goals,1837,11361,16.169351,3728,32.814013,1415
+Pythagoras-Prover-4B,FATE-H,3,Unresolved name,unknown identifier 'ID',1474,11361,12.974210,5202,45.788223,1415
+Pythagoras-Prover-4B,FATE-H,4,Missing instance,failed to synthesize,1415,11361,12.454890,6617,58.243112,1415
+Pythagoras-Prover-4B,FATE-M,1,Missing instance,failed to synthesize,3315,18059,18.356498,3315,18.356498,1477
+Pythagoras-Prover-4B,FATE-M,2,Unsolved goals,unsolved goals,2708,18059,14.995293,6023,33.351791,1477
+Pythagoras-Prover-4B,FATE-M,3,Unresolved name,unknown constant 'ID',2566,18059,14.208982,8589,47.560773,1477
+Pythagoras-Prover-4B,FATE-M,4,Unresolved name,unknown identifier 'ID',1477,18059,8.178747,10066,55.739520,1477
+Pythagoras-Prover-4B,ProofNet,1,Unsolved goals,unsolved goals,4582,22998,19.923472,4582,19.923472,1924
+Pythagoras-Prover-4B,ProofNet,2,Unresolved name,unknown identifier 'ID',2877,22998,12.509783,7459,32.433255,1924
+Pythagoras-Prover-4B,ProofNet,3,Missing instance,failed to synthesize,2710,22998,11.783633,10169,44.216888,1924
+Pythagoras-Prover-4B,ProofNet,4,Type mismatch,type mismatch,1924,22998,8.365945,12093,52.582833,1924
+Pythagoras-Prover-4B,Putnam,1,Unsolved goals,unsolved goals,22676,63736,35.578009,22676,35.578009,4837
+Pythagoras-Prover-4B,Putnam,2,Unresolved name,unknown identifier 'ID',5400,63736,8.472449,28076,44.050458,4837
+Pythagoras-Prover-4B,Putnam,3,Type mismatch,type mismatch,4837,63736,7.589118,32913,51.639576,4837
+Pythagoras-Prover-4B,miniF2F,1,Unsolved goals,unsolved goals,6085,16800,36.220238,6085,36.220238,2662
+Pythagoras-Prover-4B,miniF2F,2,Tactic failure,linarith failed to find a contradiction,2662,16800,15.845238,8747,52.065476,2662

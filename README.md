@@ -2,18 +2,28 @@
 
 Code for the diagnostic analysis of the [LLM Lean prover experiments](https://github.com/ImYidan/llm-lean-prover-evaluation): complete error inventories, eight-category mappings, compiler-message templates, cumulative-50% error tables, and category heatmaps.
 
-## Code layout
+## Repository layout
 
 | File | Responsibility |
 |---|---|
-| `scan_raw_errors.py` | Read verification artifacts and preserve all parsed diagnostics for problems unsolved in the input run. |
-| `error_taxonomy.py` | Assign each diagnostic to one of the eight manually defined categories using fixed rules. |
-| `error_templates.py` | Group diagnostic wordings into deterministic compiler-message templates. |
-| `summarize_errors.py` | Produce mappings, template frequencies, Top50 coverage tables, category distributions by cell, and pooled distributions by model. |
-| `plot_heatmaps.py` | Render and validate the category heatmaps. |
+| `scripts/scan_raw_errors.py` | Read verification artifacts and preserve all parsed diagnostics for problems unsolved in the input run. |
+| `scripts/error_taxonomy.py` | Assign each diagnostic to one of the eight manually defined categories using fixed rules. |
+| `scripts/error_templates.py` | Group diagnostic wordings into deterministic compiler-message templates. |
+| `scripts/summarize_errors.py` | Produce mappings, template frequencies, Top50 coverage tables, category distributions by cell, and pooled distributions by model. |
+| `scripts/plot_heatmaps.py` | Render and validate the category heatmaps. |
 | `requirements.txt` | Pin the plotting dependency used for validation. |
 
-Experiment data, generated results and local audit files are stored separately. The analysis does not run Lean or query a language model.
+All analysis code lives in `scripts/`. Published tables, compressed complete-message mappings, heatmaps and their Markdown guide live in [`results/`](results/README.md). Experiment inputs and intermediate candidate inventories are generated locally. The analysis does not run Lean or query a language model.
+
+```text
+scripts/                 Analysis scripts and mapping rules
+results/
+  README.md              Result index, scope and statistical overview
+  tables/                CSV tables, metadata and compressed full-message mapping
+  figures/               Cell and pooled-model heatmaps in PNG/PDF
+README.md                Methods, commands and function reference
+requirements.txt         Plotting dependency
+```
 
 ## Install and run
 
@@ -23,31 +33,33 @@ Scanning, mapping and statistics require Python 3.10 or later and use only the s
 python3 -m pip install -r requirements.txt
 ```
 
+Run the following commands from the repository root. To redraw the published figures, run only the plotting command against `results/tables/`; no experiment inputs are needed. To regenerate all tables, the original verification artifacts and applicable exclusion lists are required.
+
 First, scan one complete verification artifact for each model and benchmark. Include successful candidates in the input so that the script can identify solved problems:
 
 ```bash
-python3 scan_raw_errors.py \
+python3 scripts/scan_raw_errors.py \
   --input /path/to/code_compilation_repl.json \
   --input-format standard-json \
   --model Goedel-32B \
   --benchmark miniF2F \
-  --output-dir outputs/scans/goedel32b/minif2f
+  --output-dir results/scans/goedel32b/minif2f
 ```
 
-Repeat for the other cells, choosing the adapter from the table below. Keep one scan directory per model–benchmark pair under `outputs/scans/`. Use consistent model and benchmark labels across commands.
+Repeat for the other cells, choosing the adapter from the table below. Keep one scan directory per model–benchmark pair under `results/scans/`. Use consistent model and benchmark labels across commands.
 
 For problem exclusions, append `--exclude-problems /path/to/excluded_problems.json` to the scan command. The file accepts a JSON list of names, or objects with `name` or `problem_id`. Exclusions apply before solved/unsolved selection. Missing exclusions cause an error unless `--allow-missing-exclusions` is supplied; the summary records requested, applied and missing counts.
 
 Next, build all statistical tables and figures:
 
 ```bash
-python3 summarize_errors.py \
-  --input-dir outputs/scans \
-  --output-dir outputs/tables
+python3 scripts/summarize_errors.py \
+  --input-dir results/scans \
+  --output-dir results/tables
 
-python3 plot_heatmaps.py \
-  --input-dir outputs/tables \
-  --output-dir outputs/figures
+python3 scripts/plot_heatmaps.py \
+  --input-dir results/tables \
+  --output-dir results/figures
 ```
 
 The summarizer finds scanner `summary.json` files recursively. It checks their schema, rejects duplicate model–benchmark cells and mixed scan counting rules, and verifies diagnostic totals against each inventory. Output metadata lists the supplied cells; supplying a subset produces a subset analysis.
@@ -78,13 +90,13 @@ Two counts are available:
 
 The header serves only as a technical key for the existing deduplication, mapping and template rules. Complete messages remain available for examination. When repeated messages share a deduplication key but have different bodies, the first parsed report receives the occurrence count; all reports still contribute to diagnostic counts.
 
-By default, `summarize_errors.py` uses occurrence counts to reproduce the historical tables. To base the entire analysis on every diagnostic, including repeats, use a separate output directory:
+By default, `scripts/summarize_errors.py` uses occurrence counts to reproduce the historical tables. To base the entire analysis on every diagnostic, including repeats, use a separate output directory:
 
 ```bash
-python3 summarize_errors.py \
-  --input-dir outputs/scans \
+python3 scripts/summarize_errors.py \
+  --input-dir results/scans \
   --count-unit diagnostic \
-  --output-dir outputs/tables_diagnostic
+  --output-dir results/local/tables_diagnostic
 ```
 
 No rescan is needed for this alternative. The scanner also accepts `--count-rule raw`, which marks every parsed diagnostic as a counted occurrence; use the same scanner rule across all cells. `analysis_summary.json` records both the scanner rule and the chosen analysis unit.
@@ -109,8 +121,8 @@ Specific wording overrides run before broad fallback patterns. Rule order can re
 `compiler_template(category, message)` performs **rule-based template aggregation**. It masks concrete identifiers, terms, token spellings and numeric values while retaining failure wording and meaningful suffixes. It uses category-specific rules; it is not a learned or unsupervised clustering algorithm.
 
 ```python
-from error_taxonomy import classify_error
-from error_templates import compiler_template
+from scripts.error_taxonomy import classify_error
+from scripts.error_templates import compiler_template
 
 message = "unknown identifier 'Example.lemma'\n⊢ P"
 category = classify_error(message)                 # Unresolved name
@@ -165,6 +177,8 @@ Statistical outputs in the table directory:
 
 Figures: `category_heatmap_by_cell.png`, `category_heatmap_by_cell.pdf`, `category_heatmap_by_model.png` and `category_heatmap_by_model.pdf`.
 
+The published full-message mapping is losslessly compressed as `results/tables/mapped_errors.csv.gz`; the summarizer produces its uncompressed CSV. See [the result guide](results/README.md) for reading and compression commands. Intermediate `results/scans/`, alternative local analyses under `results/local/`, and the uncompressed mapping are ignored by Git.
+
 Commands replace their own output filenames. The summarizer builds in a temporary directory and publishes only after all cells pass mapping and conservation checks. Complete diagnostic fields can exceed Python CSV's default field-size limit; readers of the full-message CSVs may need `csv.field_size_limit(sys.maxsize)`. JSONL preserves these messages without that CSV limit.
 
 ## Limits of the saved diagnostics
@@ -179,7 +193,7 @@ Commands replace their own output filenames. The summarizer builds in a temporar
 
 Each function also has a source docstring. Pure mapping helpers do not modify raw input; the command entry points handle filesystem outputs.
 
-### scan_raw_errors.py
+### scripts/scan_raw_errors.py
 
 | Function | Purpose |
 |---|---|
@@ -200,7 +214,7 @@ Each function also has a source docstring. Pure mapping helpers do not modify ra
 | `file_sha256()` | Stream a local file to compute its SHA-256 fingerprint without loading a second full copy into memory. |
 | `main()` | Read one verification artifact, select unsolved problems after exclusions, and overwrite the three inventory outputs. Preserve every parsed diagnostic and report both pre-deduplication and occurrence counts; reject invalid IDs or an output path that aliases an input. |
 
-### error_taxonomy.py
+### scripts/error_taxonomy.py
 
 | Function | Purpose |
 |---|---|
@@ -209,7 +223,7 @@ Each function also has a source docstring. Pure mapping helpers do not modify ra
 | `_classify_head()` | Apply historical header-specific overrides, then the broad regex rules; raise on an unknown diagnostic. |
 | `classify_error()` | Map one complete parsed diagnostic to exactly one of CATEGORY_ORDER. |
 
-### error_templates.py
+### scripts/error_templates.py
 
 | Function | Purpose |
 |---|---|
@@ -226,7 +240,7 @@ Each function also has a source docstring. Pure mapping helpers do not modify ra
 | `aggregate_template()` | Dispatch a diagnostic header to its category-specific deterministic template function. |
 | `compiler_template()` | Return the historical compiler-shaped template for a full diagnostic. |
 
-### summarize_errors.py
+### scripts/summarize_errors.py
 
 | Function | Purpose |
 |---|---|
@@ -240,7 +254,7 @@ Each function also has a source docstring. Pure mapping helpers do not modify ra
 | `build_tables()` | Build audited mappings, template counts, Top50 tables and cell/model category distributions. |
 | `main()` | Validate scans and build tables in a temporary directory, publishing outputs only after all cells succeed. |
 
-### plot_heatmaps.py
+### scripts/plot_heatmaps.py
 
 | Function | Purpose |
 |---|---|
