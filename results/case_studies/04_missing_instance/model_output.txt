@@ -1,0 +1,310 @@
+### Detailed Proof and Analysis
+
+#### Understanding the Problem
+
+We need to compute the product of two sums:
+1. The first sum is $\sum_{k=1}^{20} \log_{5^k} 3^{k^2}$.
+2. The second sum is $\sum_{k=1}^{100} \log_{9^k} 25^k$.
+
+The result should be $21,000$.
+
+#### Simplifying $\log_{5^k} 3^{k^2}$
+
+Recall that $\log_b a = \frac{\ln a}{\ln b}$. Also, the logarithm power rule is $\log_b a^c = c \log_b a$.
+
+First, simplify $\log_{5^k} 3^{k^2}$:
+\[
+\log_{5^k} 3^{k^2} = \frac{\ln 3^{k^2}}{\ln 5^k} = \frac{k^2 \ln 3}{k \ln 5} = k \cdot \frac{\ln 3}{\ln 5} = k \log_5 3.
+\]
+Therefore, the first sum becomes:
+\[
+\sum_{k=1}^{20} \log_{5^k} 3^{k^2} = \sum_{k=1}^{20} k \log_5 3 = \log_5 3 \sum_{k=1}^{20} k = \log_5 3 \cdot \frac{20 \cdot 21}{2} = 210 \log_5 3.
+\]
+
+#### Simplifying $\log_{9^k} 25^k$
+
+Now, simplify $\log_{9^k} 25^k$:
+\[
+\log_{9^k} 25^k = \frac{\ln 25^k}{\ln 9^k} = \frac{k \ln 25}{k \ln 9} = \frac{\ln 25}{\ln 9}.
+\]
+Notice that $\ln 25 = 2 \ln 5$ and $\ln 9 = 2 \ln 3$, so:
+\[
+\log_{9^k} 25^k = \frac{2 \ln 5}{2 \ln 3} = \frac{\ln 5}{\ln 3} = \log_3 5.
+\]
+Thus, the second sum becomes:
+\[
+\sum_{k=1}^{100} \log_{9^k} 25^k = \sum_{k=1}^{100} \log_3 5 = 100 \log_3 5.
+\]
+
+#### Calculating the Product
+
+Now, multiply the two sums:
+\[
+(210 \log_5 3) \cdot (100 \log_3 5) = 21000 \cdot (\log_5 3 \cdot \log_3 5).
+\]
+But $\log_5 3 \cdot \log_3 5 = 1$ because:
+\[
+\log_b a \cdot \log_a b = \frac{\ln a}{\ln b} \cdot \frac{\ln b}{\ln a} = 1.
+\]
+Therefore, the product is $21000 \cdot 1 = 21000$.
+
+#### Formal Proof in Lean
+
+In Lean, `Real.logb b x` is defined as $\log_b x = \frac{\ln x}{\ln b}$. We need to compute each sum carefully using Lean's definitions and properties of logarithms.
+
+1. For the first sum, we need to prove that for each $k$, $\log_{5^k} 3^{k^2} = k \log_5 3$. This follows from logarithm properties as shown above.
+   - Note that in Lean, $3^{k^2}$ is `3 ^ (k ^ 2)` and $5^k$ is `5 ^ k`.
+   - We'll use `Real.logb_pow` and `Real.logb_rpow` to manipulate the exponents.
+
+2. For the second sum, we need to prove that $\log_{9^k} 25^k = \log_3 5$.
+   - Here, $9^k = (3^2)^k = 3^{2k}$ and $25^k = (5^2)^k = 5^{2k}$.
+   - So $\log_{9^k} 25^k = \frac{\ln 25^k}{\ln 9^k} = \frac{2k \ln 5}{2k \ln 3} = \frac{\ln 5}{\ln 3} = \log_3 5$.
+
+However, in Lean, `9 ^ k` is not automatically simplified to `3 ^ (2 * k)`, so we might need to do this manually or find another approach. 
+
+But perhaps it's easier to note that $\ln 25^k = k \ln 25 = 2k \ln 5$ and $\ln 9^k = k \ln 9 = 2k \ln 3$, so:
+\[
+\log_{9^k} 25^k = \frac{2k \ln 5}{2k \ln 3} = \frac{\ln 5}{\ln 3}.
+\]
+Thus, we don't need to rewrite $9^k$ as $3^{2k}$ explicitly.
+
+#### Formal Steps
+
+1. **First Sum Simplification**:
+   - For each $k$, $\log_{5^k} 3^{k^2} = \frac{\ln 3^{k^2}}{\ln 5^k} = \frac{k^2 \ln 3}{k \ln 5} = k \cdot \frac{\ln 3}{\ln 5}$.
+   - The sum $\sum_{k=1}^{20} k = 210$, so the first sum is $210 \cdot \frac{\ln 3}{\ln 5}$.
+
+2. **Second Sum Simplification**:
+   - For each $k$, $\log_{9^k} 25^k = \frac{\ln 25^k}{\ln 9^k} = \frac{k \ln 25}{k \ln 9} = \frac{\ln 25}{\ln 9}$.
+   - But $\ln 25 = 2 \ln 5$ and $\ln 9 = 2 \ln 3$, so $\log_{9^k} 25^k = \frac{2 \ln 5}{2 \ln 3} = \frac{\ln 5}{\ln 3}$.
+   - The sum $\sum_{k=1}^{100} \log_{9^k} 25^k = 100 \cdot \frac{\ln 5}{\ln 3}$.
+
+3. **Product Calculation**:
+   - The product is $210 \cdot \frac{\ln 3}{\ln 5} \cdot 100 \cdot \frac{\ln 5}{\ln 3} = 210 \cdot 100 = 21000$.
+
+#### Challenges in Lean
+
+1. **Logarithm Simplifications**: We need to carefully use Lean's `Real.log_pow`, `Real.log_mul`, etc., to simplify expressions like $\ln 3^{k^2}$ and $\ln 5^k$.
+2. **Sum Calculations**: The sum $\sum_{k=1}^n k = n(n+1)/2$ is straightforward, but we need to ensure Lean can compute it for specific cases like $n=20$.
+3. **Numerical Constants**: Lean will require exact computations for $\sum_{k=1}^{20} k$ and $\sum_{k=1}^{100} 1$.
+
+#### Step-by-Step Abstract Plan
+
+1. **Simplify the First Summand**:
+   - Prove that $\log_{5^k} 3^{k^2} = k \cdot \log_5 3$ for each $k \in \mathbb{N}^+$.
+   - Deduce that the first sum is $210 \cdot \log_5 3$.
+
+2. **Simplify the Second Summand**:
+   - Prove that $\log_{9^k} 25^k = \log_3 5$ for each $k \in \mathbb{N}^+$.
+   - Deduce that the second sum is $100 \cdot \log_3 5$.
+
+3. **Multiply the Sums**:
+   - Compute $(210 \cdot \log_5 3) \cdot (100 \cdot \log_3 5) = 21000$ using $\log_5 3 \cdot \log_3 5 = 1$.
+
+### Intermediate Statements in Lean
+
+Here is the proof broken into intermediate `have` statements with `sorry`:
+
+```lean4
+theorem amc12a_2021_p14 :
+    ((∑ k in Finset.Icc 1 20, Real.logb (5 ^ k) (3 ^ k ^ 2)) *
+        ∑ k in Finset.Icc 1 100, Real.logb (9 ^ k) (25 ^ k)) = 21000 := by
+  have h₁ : (∑ k in Finset.Icc 1 20, Real.logb (5 ^ k) (3 ^ k ^ 2)) = 210 * (Real.log 3 / Real.log 5) := by sorry
+  have h₂ : (∑ k in Finset.Icc 1 100, Real.logb (9 ^ k) (25 ^ k)) = 100 * (Real.log 5 / Real.log 3) := by sorry
+  have h₃ : ((∑ k in Finset.Icc 1 20, Real.logb (5 ^ k) (3 ^ k ^ 2)) * ∑ k in Finset.Icc 1 100, Real.logb (9 ^ k) (25 ^ k)) = 21000 := by sorry
+  exact h₃
+```
+
+### Explanation of Intermediate Statements
+
+1. **`h₁`**: The first sum is $210 \cdot (\ln 3 / \ln 5)$. Here, $\log_5 3 = \ln 3 / \ln 5$.
+2. **`h₂`**: The second sum is $100 \cdot (\ln 5 / \ln 3)$. Here, $\log_3 5 = \ln 5 / \ln 3$.
+3. **`h₃`**: The product of the two sums is $21000$. This follows from multiplying `h₁` and `h₂` and noting that $(\ln 3 / \ln 5) \cdot (\ln 5 / \ln 3) = 1$.
+
+These steps align with the abstract plan and ensure that the proof is manageable in Lean.
+
+### Complete Lean 4 Proof
+
+```lean4
+theorem amc12a_2021_p14 :
+    ((∑ k in Finset.Icc 1 20, Real.logb (5 ^ k) (3 ^ k ^ 2)) *
+        ∑ k in Finset.Icc 1 100, Real.logb (9 ^ k) (25 ^ k)) = 21000 := by
+  have h₁ : (∑ k in Finset.Icc 1 20, Real.logb (5 ^ k) (3 ^ k ^ 2)) = 210 * (Real.log 3 / Real.log 5) := by
+    have h₁₁ : ∀ (k : ℕ), k ∈ Finset.Icc 1 20 → Real.logb (5 ^ k) (3 ^ k ^ 2) = (k : ℝ) * (Real.log 3 / Real.log 5) := by
+      intro k hk
+      have h₁₂ : Real.logb (5 ^ k) (3 ^ k ^ 2) = (Real.log (3 ^ k ^ 2) : ℝ) / (Real.log (5 ^ k) : ℝ) := by
+        rw [Real.logb]
+        <;> norm_cast
+      rw [h₁₂]
+      have h₁₃ : (Real.log (3 ^ k ^ 2) : ℝ) = (k ^ 2 : ℝ) * Real.log 3 := by
+        have h₁₄ : Real.log (3 ^ k ^ 2) = (k ^ 2 : ℝ) * Real.log 3 := by
+          rw [Real.log_pow]
+          <;> norm_cast
+          <;> field_simp [Real.log_mul, Real.log_rpow]
+          <;> ring_nf
+          <;> norm_num
+          <;> linarith [Finset.mem_Icc.mp hk]
+        exact_mod_cast h₁₄
+      have h₁₄ : (Real.log (5 ^ k) : ℝ) = (k : ℝ) * Real.log 5 := by
+        have h₁₅ : Real.log (5 ^ k) = (k : ℝ) * Real.log 5 := by
+          rw [Real.log_pow]
+          <;> norm_cast
+          <;> field_simp [Real.log_mul, Real.log_rpow]
+          <;> ring_nf
+          <;> norm_num
+          <;> linarith [Finset.mem_Icc.mp hk]
+        exact_mod_cast h₁₅
+      rw [h₁₃, h₁₄]
+      have h₁₅ : ((k : ℝ) ^ 2 * Real.log 3) / ((k : ℝ) * Real.log 5) = (k : ℝ) * (Real.log 3 / Real.log 5) := by
+        have h₁₆ : (k : ℝ) ≠ 0 := by
+          have h₁₇ : 1 ≤ k := by
+            simp [Finset.mem_Icc] at hk
+            linarith
+          have h₁₈ : (k : ℝ) ≥ 1 := by exact_mod_cast h₁₇
+          linarith
+        have h₁₉ : Real.log 5 ≠ 0 := by
+          have h₂₀ : Real.log 5 > 0 := Real.log_pos (by norm_num)
+          linarith
+        field_simp [h₁₆, h₁₉]
+        <;> ring_nf
+        <;> field_simp [h₁₆, h₁₉]
+        <;> ring_nf
+        <;> norm_num
+        <;> linarith
+      rw [h₁₅]
+    calc
+      (∑ k in Finset.Icc 1 20, Real.logb (5 ^ k) (3 ^ k ^ 2)) = ∑ k in Finset.Icc 1 20, ((k : ℝ) * (Real.log 3 / Real.log 5)) := by
+        apply Finset.sum_congr rfl
+        intro k hk
+        rw [h₁₁ k hk]
+      _ = (∑ k in Finset.Icc 1 20, (k : ℝ)) * (Real.log 3 / Real.log 5) := by
+        have h₂₀ : ∑ k in Finset.Icc 1 20, ((k : ℝ) * (Real.log 3 / Real.log 5)) = (∑ k in Finset.Icc 1 20, (k : ℝ)) * (Real.log 3 / Real.log 5) := by
+          rw [Finset.sum_mul]
+        rw [h₂₀]
+      _ = 210 * (Real.log 3 / Real.log 5) := by
+        have h₂₁ : (∑ k in Finset.Icc 1 20, (k : ℝ)) = 210 := by
+          norm_num [Finset.sum_Icc_succ_top]
+          <;> rfl
+        rw [h₂₁]
+        <;> ring_nf
+        <;> norm_num
+  
+  have h₂ : (∑ k in Finset.Icc 1 100, Real.logb (9 ^ k) (25 ^ k)) = 100 * (Real.log 5 / Real.log 3) := by
+    have h₂₁ : ∀ (k : ℕ), k ∈ Finset.Icc 1 100 → Real.logb (9 ^ k) (25 ^ k) = Real.log 25 / Real.log 9 := by
+      intro k hk
+      have h₂₂ : Real.logb (9 ^ k) (25 ^ k) = (Real.log (25 ^ k) : ℝ) / (Real.log (9 ^ k) : ℝ) := by
+        rw [Real.logb]
+        <;> norm_cast
+      rw [h₂₂]
+      have h₂₃ : (Real.log (25 ^ k) : ℝ) = (k : ℝ) * Real.log 25 := by
+        have h₂₄ : Real.log (25 ^ k) = (k : ℝ) * Real.log 25 := by
+          rw [Real.log_pow]
+          <;> norm_cast
+          <;> field_simp [Real.log_mul, Real.log_rpow]
+          <;> ring_nf
+          <;> norm_num
+          <;> linarith [Finset.mem_Icc.mp hk]
+        exact_mod_cast h₂₄
+      have h₂₄ : (Real.log (9 ^ k) : ℝ) = (k : ℝ) * Real.log 9 := by
+        have h₂₅ : Real.log (9 ^ k) = (k : ℝ) * Real.log 9 := by
+          rw [Real.log_pow]
+          <;> norm_cast
+          <;> field_simp [Real.log_mul, Real.log_rpow]
+          <;> ring_nf
+          <;> norm_num
+          <;> linarith [Finset.mem_Icc.mp hk]
+        exact_mod_cast h₂₅
+      rw [h₂₃, h₂₄]
+      have h₂₅ : ((k : ℝ) * Real.log 25) / ((k : ℝ) * Real.log 9) = Real.log 25 / Real.log 9 := by
+        have h₂₆ : (k : ℝ) ≠ 0 := by
+          have h₂₇ : 1 ≤ k := by
+            simp [Finset.mem_Icc] at hk
+            linarith
+          have h₂₈ : (k : ℝ) ≥ 1 := by exact_mod_cast h₂₇
+          linarith
+        have h₂₉ : Real.log 9 ≠ 0 := by
+          have h₃₀ : Real.log 9 > 0 := Real.log_pos (by norm_num)
+          linarith
+        field_simp [h₂₆, h₂₉]
+        <;> ring_nf
+        <;> field_simp [h₂₆, h₂₉]
+        <;> ring_nf
+        <;> norm_num
+        <;> linarith
+      rw [h₂₅]
+    calc
+      (∑ k in Finset.Icc 1 100, Real.logb (9 ^ k) (25 ^ k)) = ∑ k in Finset.Icc 1 100, (Real.log 25 / Real.log 9 : ℝ) := by
+        apply Finset.sum_congr rfl
+        intro k hk
+        rw [h₂₁ k hk]
+      _ = (100 : ℝ) * (Real.log 25 / Real.log 9) := by
+        have h₃₀ : ∑ k in Finset.Icc 1 100, (Real.log 25 / Real.log 9 : ℝ) = (100 : ℝ) * (Real.log 25 / Real.log 9) := by
+          simp [Finset.sum_const, Finset.card_range]
+          <;> norm_num
+          <;> field_simp
+          <;> ring_nf
+          <;> norm_num
+        rw [h₃₀]
+      _ = 100 * (Real.log 5 / Real.log 3) := by
+        have h₃₁ : Real.log 25 = 2 * Real.log 5 := by
+          have h₃₂ : Real.log 25 = Real.log (5 ^ 2) := by norm_num
+          rw [h₃₂]
+          have h₃₃ : Real.log (5 ^ 2) = 2 * Real.log 5 := by
+            rw [Real.log_pow] <;> norm_num
+          rw [h₃₃]
+        have h₃₂ : Real.log 9 = 2 * Real.log 3 := by
+          have h₃₃ : Real.log 9 = Real.log (3 ^ 2) := by norm_num
+          rw [h₃₃]
+          have h₃₄ : Real.log (3 ^ 2) = 2 * Real.log 3 := by
+            rw [Real.log_pow] <;> norm_num
+          rw [h₃₄]
+        rw [h₃₁, h₃₂]
+        <;> ring_nf
+        <;> field_simp [Real.log_mul, Real.log_pow]
+        <;> ring_nf
+        <;> norm_num
+        <;>
+        (try
+          {
+            have h₃₃ : Real.log 5 ≠ 0 := by
+              have h₃₄ : Real.log 5 > 0 := Real.log_pos (by norm_num)
+              linarith
+            have h₃₄ : Real.log 3 ≠ 0 := by
+              have h₃₅ : Real.log 3 > 0 := Real.log_pos (by norm_num)
+              linarith
+            field_simp [h₃₃, h₃₄]
+            <;> ring_nf
+            <;> norm_num
+          })
+        <;>
+        (try
+          {
+            have h₃₃ : Real.log 5 > 0 := Real.log_pos (by norm_num)
+            have h₃₄ : Real.log 3 > 0 := Real.log_pos (by norm_num)
+            linarith
+          })
+  
+  have h₃ : ((∑ k in Finset.Icc 1 20, Real.logb (5 ^ k) (3 ^ k ^ 2)) * ∑ k in Finset.Icc 1 100, Real.logb (9 ^ k) (25 ^ k)) = 21000 := by
+    rw [h₁, h₂]
+    have h₃₁ : Real.log 5 ≠ 0 := by
+      have h₃₂ : Real.log 5 > 0 := Real.log_pos (by norm_num)
+      linarith
+    have h₃₂ : Real.log 3 ≠ 0 := by
+      have h₃₃ : Real.log 3 > 0 := Real.log_pos (by norm_num)
+      linarith
+    have h₃₃ : (210 * (Real.log 3 / Real.log 5)) * (100 * (Real.log 5 / Real.log 3)) = 21000 := by
+      field_simp [h₃₁, h₃₂]
+      <;> ring_nf
+      <;> norm_num
+      <;>
+      (try
+        {
+          have h₃₄ : Real.log 5 > 0 := Real.log_pos (by norm_num)
+          have h₃₅ : Real.log 3 > 0 := Real.log_pos (by norm_num)
+          linarith
+        })
+    rw [h₃₃]
+    <;> norm_num
+  
+  exact h₃
+```

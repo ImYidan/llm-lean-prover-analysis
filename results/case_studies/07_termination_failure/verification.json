@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "category": "Termination failure",
+  "model": "Kimina-Prover-Distill-8B",
+  "benchmark": "FATE-M",
+  "candidate_id": "FATE-M_006_g23",
+  "generation_index": 23,
+  "sources": {
+    "generation": {
+      "artifact": "generation.jsonl",
+      "artifact_sha256": "738cc83ac1294e0303abab010c4d0d215f88b9fe50777a405a1fe623f5375579",
+      "record_index": 183,
+      "record_index_base": 0
+    },
+    "verification": {
+      "artifact": "verification.jsonl",
+      "artifact_sha256": "0204024b911e164219e3d0ec84b1690b170007bded37cd9ff7f30a2dbafadee3",
+      "record_index": 2549,
+      "record_index_base": 0
+    }
+  },
+  "model_output": {
+    "file": "model_output.txt",
+    "source_field": "model_output",
+    "sha256": "40ceab13661943b419401abe1cff0d2ce5238a3d3d8a7d2feca7e9f794e501fc",
+    "encoding": "UTF-8",
+    "preservation": "Exact decoded source string; no added newline or edits."
+  },
+  "statement_excerpt": {
+    "start_line": 147,
+    "end_line": 148,
+    "sha256": "cb9b316ce877840ce0c4ca52a5c115c1cbcba3d2e67476e86dd42eea55bf7a49"
+  },
+  "case_excerpts": [
+    {
+      "start_line": 149,
+      "end_line": 156,
+      "sha256": "ac142e6f9a8fc95d79061cb6201b47d6ba34b77e680a07e23126721b794c0dd0"
+    }
+  ],
+  "excerpt_line_index_base": 1,
+  "selected_diagnostic_index": 0,
+  "diagnostic_index_base": 0,
+  "input_statement": "import Mathlib\n\n/--\nProve that a if $G$ and $H$ are finite groups and their orders are coprime,\nthen any homomorphism $f: G \\rightarrow H$ is trivial, i.e. $f(G) = \\{ 1_H \\}$.\n-/\ntheorem MonoidHom.eq_id_of_card_gcd_eq_one {G H: Type*} [Finite H] [Finite G][Group G] [Group H]\n    (h : (Nat.card H).gcd (Nat.card G) = 1) (f : G →* H) : ∀ p : G , f p = 1 := by sorry\n",
+  "generation_extracted_code": "import Mathlib\n\n/--\nProve that a if $G$ and $H$ are finite groups and their orders are coprime,\nthen any homomorphism $f: G \\rightarrow H$ is trivial, i.e. $f(G) = \\{ 1_H \\}$.\n-/\ntheorem MonoidHom.eq_id_of_card_gcd_eq_one {G H: Type*} [Finite H] [Finite G][Group G] [Group H]\n    (h : (Nat.card H).gcd (Nat.card G) = 1) (f : G →* H) : ∀ p : G , f p = 1 := by\n  intro p\n  have h2 : Nat.Coprime (Nat.card H) (Nat.card G) := by \n    rw [Nat.coprime_iff_gcd_eq_one]\n    exact h\n  have h3 : ∀ p : G, f p = 1 := by\n    apply MonoidHom.eq_id_of_card_gcd_eq_one h2 f\n  specialize h3 p\n  exact h3",
+  "submitted_code_sha256": "06e4082049f6e84a7fc9d334a949db75e57fceeb2f5b9bc8f2fcfabbd1047fcb",
+  "verification_record": {
+    "benchmark": "fate_m",
+    "problem_id": "FATE-M_006_g23",
+    "name": "FATE-M_006",
+    "sample_idx": 23,
+    "success": false,
+    "error_type": "lean_error",
+    "error": "[5:8] fail to show termination for\n  MonoidHom.eq_id_of_card_gcd_eq_one\nwith errors\nfailed to infer structural recursion:\nNot considering parameter G of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter H of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter #3 of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter #4 of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter #5 of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter #6 of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter h of MonoidHom.eq_id_of_card_gcd_eq_one:\n  its type Eq is an inductive family and indices are not variables\n    (Nat.card H).gcd (Nat.card G) = 1\nNot considering parameter f of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter p of MonoidHom.eq_id_of_card_gcd_eq_one:\n  its type is not an inductive\nno parameters suitable for structural recursion\n\nCould not find a decreasing measure.\nThe basic measures relate at each recursive call as follows:\n(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)\n           \n1) 12:10-49\nPlease use `termination_by` to specify a decreasing measure.",
+    "lean_messages": {
+      "errors": [
+        {
+          "severity": "error",
+          "pos": {
+            "line": 5,
+            "column": 8
+          },
+          "endPos": {
+            "line": 5,
+            "column": 42
+          },
+          "data": "fail to show termination for\n  MonoidHom.eq_id_of_card_gcd_eq_one\nwith errors\nfailed to infer structural recursion:\nNot considering parameter G of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter H of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter #3 of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter #4 of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter #5 of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter #6 of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter h of MonoidHom.eq_id_of_card_gcd_eq_one:\n  its type Eq is an inductive family and indices are not variables\n    (Nat.card H).gcd (Nat.card G) = 1\nNot considering parameter f of MonoidHom.eq_id_of_card_gcd_eq_one:\n  it is unchanged in the recursive calls\nNot considering parameter p of MonoidHom.eq_id_of_card_gcd_eq_one:\n  its type is not an inductive\nno parameters suitable for structural recursion\n\nCould not find a decreasing measure.\nThe basic measures relate at each recursive call as follows:\n(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)\n           \n1) 12:10-49\nPlease use `termination_by` to specify a decreasing measure."
+        }
+      ],
+      "warnings": [],
+      "infos": [],
+      "sorries": [],
+      "system_errors": null,
+      "verified_code": "/--\nProve that a if $G$ and $H$ are finite groups and their orders are coprime,\nthen any homomorphism $f: G \\rightarrow H$ is trivial, i.e. $f(G) = \\{ 1_H \\}$.\n-/\ntheorem MonoidHom.eq_id_of_card_gcd_eq_one {G H: Type*} [Finite H] [Finite G][Group G] [Group H]\n    (h : (Nat.card H).gcd (Nat.card G) = 1) (f : G →* H) : ∀ p : G , f p = 1 := by\n  intro p\n  have h2 : Nat.Coprime (Nat.card H) (Nat.card G) := by \n    rw [Nat.coprime_iff_gcd_eq_one]\n    exact h\n  have h3 : ∀ p : G, f p = 1 := by\n    apply MonoidHom.eq_id_of_card_gcd_eq_one h2 f\n  specialize h3 p\n  exact h3"
+    },
+    "extracted_from": "full_code"
+  },
+  "problem_scope": {
+    "candidates_in_source_run": 32,
+    "successful_candidates": 0,
+    "problem_solved_at_pass32": false,
+    "included_in_published_unsolved_problem_scope": true,
+    "selection_purpose": "Illustrative case retained from thesis Table 6.1."
+  }
+}

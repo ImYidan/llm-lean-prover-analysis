@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "category": "Syntax error",
+  "model": "Goedel-Prover-V2-32B",
+  "benchmark": "miniF2F",
+  "candidate_id": "mathd_algebra_125_g30",
+  "generation_index": 30,
+  "sources": {
+    "generation": {
+      "artifact": "full_records.json",
+      "artifact_sha256": "ce9304fd22a004bf9e46637c9a4c75d595e9088f9cabcdb6c306a482e9c8e75a",
+      "record_index": 5182,
+      "record_index_base": 0
+    },
+    "verification": {
+      "artifact": "code_compilation_repl.json",
+      "artifact_sha256": "9a46557218c47f89c0b898394dcd11029f57a7300b000a97a1509608f3024d59",
+      "record_index": 3368,
+      "record_index_base": 0
+    }
+  },
+  "model_output": {
+    "file": "model_output.txt",
+    "source_field": "model_output",
+    "sha256": "73cc69c9c763ba17f1a2dfa092a9796795f3c590ed605a663b86faed77019199",
+    "encoding": "UTF-8",
+    "preservation": "Exact decoded source string; no added newline or edits."
+  },
+  "statement_excerpt": {
+    "start_line": 98,
+    "end_line": 99,
+    "sha256": "2542a3b56aa6bc902c77ae3cc6c16144466cb8bc5f1a408f9f1a6f45a46d2df3"
+  },
+  "case_excerpts": [
+    {
+      "start_line": 100,
+      "end_line": 103,
+      "sha256": "7492712022b2eaa0c822b9433abb8c44384ce450405af26bf445c6d4c42515d7"
+    }
+  ],
+  "excerpt_line_index_base": 1,
+  "selected_diagnostic_index": 0,
+  "diagnostic_index_base": 0,
+  "input_statement": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Today a father's age is five times his son's age. Exactly three years ago, the sum of their ages was 30. How old is the son today? Show that it is 6.-/\ntheorem mathd_algebra_125 (x y : ℕ) (h₀ : 0 < x ∧ 0 < y) (h₁ : 5 * x = y)\n    (h₂ : ↑x - (3 : ℤ) + (y - (3 : ℤ)) = 30) : x = 6 := by\n",
+  "generation_extracted_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n\ntheorem mathd_algebra_125 (x y : ℕ) (h₀ : 0 < x ∧ 0 < y) (h₁ : 5 * x = y)\n    (h₂ : ↑x - (3 : ℤ) + (y - (3 : ℤ)) = 30) : x = 6 := by \n  have h₃ : (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 = 30 := by\n    have h₃₁ : (y : ℤ) = (5 * x : ℕ : ℤ) := by\n      norm_cast\n      <;> simp [h₁]\n      <;> ring_nf\n      <;> norm_num\n    have h₃₂ : (x : ℤ) - 3 + (y - (3 : ℤ)) = 30 := h₂\n    have h₃₃ : (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 = 30 := by\n      calc\n        (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 = (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 := rfl\n        _ = (x : ℤ) - 3 + (y : ℤ) - 3 := by\n          rw [h₃₁]\n          <;> simp [Int.add_assoc]\n          <;> ring_nf at *\n          <;> norm_cast at *\n          <;> simp_all\n          <;> linarith\n        _ = (x : ℤ) - 3 + (y - (3 : ℤ)) := by\n          ring_nf at *\n          <;> simp_all [Int.add_assoc]\n          <;> linarith\n        _ = 30 := by rw [h₃₂]\n    exact h₃₃\n  \n  have h₄ : 6 * (x : ℤ) - 6 = 30 := by\n    have h₄₁ : (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 = 30 := h₃\n    have h₄₂ : 6 * (x : ℤ) - 6 = 30 := by\n      \n      have h₄₃ : (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 = 6 * (x : ℤ) - 6 := by\n        norm_cast at h₄₁ ⊢\n        <;> ring_nf at h₄₁ ⊢ <;>\n        (try norm_num at h₄₁ ⊢) <;>\n        (try omega) <;>\n        (try\n          {\n            simp_all [mul_comm]\n            <;> ring_nf at *\n            <;> norm_num at *\n            <;> linarith\n          })\n        <;>\n        (try\n          {\n            simp_all [mul_comm]\n            <;> ring_nf at *\n            <;> norm_num at *\n            <;> omega\n          })\n        <;>\n        (try\n          {\n            simp_all [mul_comm]\n            <;> ring_nf at *\n            <;> norm_num at *\n            <;> linarith\n          })\n      \n      linarith\n    exact h₄₂\n  \n  have h₅ : 6 * (x : ℤ) = 36 := by\n    have h₅₁ : 6 * (x : ℤ) - 6 = 30 := h₄\n    have h₅₂ : 6 * (x : ℤ) = 36 := by\n      linarith\n    exact h₅₂\n  \n  have h₆ : (x : ℤ) = 6 := by\n    have h₆₁ : 6 * (x : ℤ) = 36 := h₅\n    have h₆₂ : (x : ℤ) = 6 := by\n      \n      linarith\n    exact h₆₂\n  \n  have h₇ : x = 6 := by\n    have h₇₁ : (x : ℤ) = 6 := h₆\n    norm_cast at h₇₁ ⊢\n    <;>\n    (try omega) <;>\n    (try linarith)\n  \n  apply h₇",
+  "submitted_code_sha256": "4b0be4550997f2efa80f64bb0db4285593bcef6a0daa4e8f4e8f316e620532f0",
+  "verification_record": {
+    "code": "\n\n\n\ntheorem mathd_algebra_125 (x y : ℕ) (h₀ : 0 < x ∧ 0 < y) (h₁ : 5 * x = y)\n    (h₂ : ↑x - (3 : ℤ) + (y - (3 : ℤ)) = 30) : x = 6 := by \n  have h₃ : (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 = 30 := by\n    have h₃₁ : (y : ℤ) = (5 * x : ℕ : ℤ) := by\n      norm_cast\n      <;> simp [h₁]\n      <;> ring_nf\n      <;> norm_num\n    have h₃₂ : (x : ℤ) - 3 + (y - (3 : ℤ)) = 30 := h₂\n    have h₃₃ : (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 = 30 := by\n      calc\n        (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 = (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 := rfl\n        _ = (x : ℤ) - 3 + (y : ℤ) - 3 := by\n          rw [h₃₁]\n          <;> simp [Int.add_assoc]\n          <;> ring_nf at *\n          <;> norm_cast at *\n          <;> simp_all\n          <;> linarith\n        _ = (x : ℤ) - 3 + (y - (3 : ℤ)) := by\n          ring_nf at *\n          <;> simp_all [Int.add_assoc]\n          <;> linarith\n        _ = 30 := by rw [h₃₂]\n    exact h₃₃\n  \n  have h₄ : 6 * (x : ℤ) - 6 = 30 := by\n    have h₄₁ : (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 = 30 := h₃\n    have h₄₂ : 6 * (x : ℤ) - 6 = 30 := by\n      \n      have h₄₃ : (x : ℤ) - 3 + ((5 * x : ℕ) : ℤ) - 3 = 6 * (x : ℤ) - 6 := by\n        norm_cast at h₄₁ ⊢\n        <;> ring_nf at h₄₁ ⊢ <;>\n        (try norm_num at h₄₁ ⊢) <;>\n        (try omega) <;>\n        (try\n          {\n            simp_all [mul_comm]\n            <;> ring_nf at *\n            <;> norm_num at *\n            <;> linarith\n          })\n        <;>\n        (try\n          {\n            simp_all [mul_comm]\n            <;> ring_nf at *\n            <;> norm_num at *\n            <;> omega\n          })\n        <;>\n        (try\n          {\n            simp_all [mul_comm]\n            <;> ring_nf at *\n            <;> norm_num at *\n            <;> linarith\n          })\n      \n      linarith\n    exact h₄₂\n  \n  have h₅ : 6 * (x : ℤ) = 36 := by\n    have h₅₁ : 6 * (x : ℤ) - 6 = 30 := h₄\n    have h₅₂ : 6 * (x : ℤ) = 36 := by\n      linarith\n    exact h₅₂\n  \n  have h₆ : (x : ℤ) = 6 := by\n    have h₆₁ : 6 * (x : ℤ) = 36 := h₅\n    have h₆₂ : (x : ℤ) = 6 := by\n      \n      linarith\n    exact h₆₂\n  \n  have h₇ : x = 6 := by\n    have h₇₁ : (x : ℤ) = 6 := h₆\n    norm_cast at h₇₁ ⊢\n    <;>\n    (try omega) <;>\n    (try linarith)\n  \n  apply h₇",
+    "compilation_result": {
+      "sorries": [],
+      "tactics": [],
+      "errors": [
+        {
+          "severity": "error",
+          "pos": {
+            "line": 8,
+            "column": 35
+          },
+          "endPos": {
+            "line": 8,
+            "column": 37
+          },
+          "data": "unexpected token ':'; expected ')'"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 7,
+            "column": 56
+          },
+          "endPos": {
+            "line": 8,
+            "column": 35
+          },
+          "data": "unsolved goals\ncase h₃₁\nx y : ℕ\nh₀ : 0 < x ∧ 0 < y\nh₁ : 5 * x = y\nh₂ : ↑x - 3 + (↑y - 3) = 30\n⊢ ↑y = ↑(5 * x)\n\nx y : ℕ\nh₀ : 0 < x ∧ 0 < y\nh₁ : 5 * x = y\nh₂ : ↑x - 3 + (↑y - 3) = 30\nh₃₁ : ↑y = ↑(5 * x)\n⊢ ↑x - 3 + ↑(5 * x) - 3 = 30"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 6,
+            "column": 56
+          },
+          "endPos": {
+            "line": 8,
+            "column": 35
+          },
+          "data": "unsolved goals\nx y : ℕ\nh₀ : 0 < x ∧ 0 < y\nh₁ : 5 * x = y\nh₂ : ↑x - 3 + (↑y - 3) = 30\nh₃ : ↑x - 3 + ↑(5 * x) - 3 = 30\n⊢ x = 6"
+        }
+      ],
+      "warnings": [],
+      "infos": [],
+      "ast": {},
+      "system_errors": null,
+      "pass": false,
+      "complete": false
+    },
+    "name": "mathd_algebra_125_g30",
+    "verify_time": 0.34
+  },
+  "problem_scope": {
+    "candidates_in_source_run": 32,
+    "successful_candidates": 22,
+    "problem_solved_at_pass32": true,
+    "included_in_published_unsolved_problem_scope": false,
+    "selection_purpose": "Illustrative case retained from thesis Table 6.1."
+  }
+}

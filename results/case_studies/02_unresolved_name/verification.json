@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "category": "Unresolved name",
+  "model": "Goedel-Prover-V2-32B",
+  "benchmark": "miniF2F",
+  "candidate_id": "amc12a_2021_p12_g29",
+  "generation_index": 29,
+  "sources": {
+    "generation": {
+      "artifact": "full_records.json",
+      "artifact_sha256": "ce9304fd22a004bf9e46637c9a4c75d595e9088f9cabcdb6c306a482e9c8e75a",
+      "record_index": 6237,
+      "record_index_base": 0
+    },
+    "verification": {
+      "artifact": "code_compilation_repl.json",
+      "artifact_sha256": "9a46557218c47f89c0b898394dcd11029f57a7300b000a97a1509608f3024d59",
+      "record_index": 506,
+      "record_index_base": 0
+    }
+  },
+  "model_output": {
+    "file": "model_output.txt",
+    "source_field": "model_output",
+    "sha256": "5101778f20e2ba25e5b916f559c205beb76dcad286e90843befae53b8ea2a7d8",
+    "encoding": "UTF-8",
+    "preservation": "Exact decoded source string; no added newline or edits."
+  },
+  "statement_excerpt": {
+    "start_line": 1076,
+    "end_line": 1078,
+    "sha256": "48563932fd8da966542957e9ef9a6c29a054ac5c80b8857c6e0d2fb357a656e9"
+  },
+  "case_excerpts": [
+    {
+      "start_line": 1084,
+      "end_line": 1087,
+      "sha256": "f853770a37fb90bf358b6f3ecaff4a060ffe757b3ab072de664848a5b9137a52"
+    }
+  ],
+  "excerpt_line_index_base": 1,
+  "selected_diagnostic_index": 0,
+  "diagnostic_index_base": 0,
+  "input_statement": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- All the roots of the polynomial $z^6-10z^5+Az^4+Bz^3+Cz^2+Dz+16$ are positive integers, possibly repeated. What is the value of $B$?\n\n$\\textbf{(A) }{-}88 \\qquad \\textbf{(B) }{-}80 \\qquad \\textbf{(C) }{-}64 \\qquad \\textbf{(D) }{-}41\\qquad \\textbf{(E) }{-}40$ Show that it is \\textbf{(A) }{-}88.-/\ntheorem amc12a_2021_p12 (a b c d : ℝ) (f : ℂ → ℂ)\n    (h₀ : ∀ z, f z = z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16)\n    (h₁ : ∀ z, f z = 0 → z.im = 0 ∧ 0 < z.re ∧ ↑(Int.floor z.re) = z.re) : b = -88 := by\n",
+  "generation_extracted_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n\ntheorem amc12a_2021_p12 (a b c d : ℝ) (f : ℂ → ℂ)\n    (h₀ : ∀ z, f z = z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16)\n    (h₁ : ∀ z, f z = 0 → z.im = 0 ∧ 0 < z.re ∧ ↑(Int.floor z.re) = z.re) : b = -88 := by \n  have h₂ : ∃ (z : ℂ), f z = 0 := by\n    have h₃ : ∃ (z : ℂ), z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16 = 0 := by\n      \n      have h₄ : ∃ (z : ℂ), z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16 = 0 := by\n        \n        have h₅ : ∃ (z : ℂ), z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16 = 0 := by\n          \n          apply exists_root\n          intro h\n          \n          norm_num [Complex.ext_iff, pow_succ, mul_comm] at h\n          <;>\n          (try contradiction) <;>\n          (try linarith) <;>\n          (try nlinarith)\n        exact h₅\n      exact h₄\n    obtain ⟨z, hz⟩ := h₃\n    use z\n    rw [h₀]\n    exact hz\n  \n  have h₃ : False := by\n    obtain ⟨z, hz⟩ := h₂\n    have h₄ : z.im = 0 ∧ 0 < z.re ∧ ↑(Int.floor z.re) = z.re := h₁ z hz\n    have h₅ : z.im = 0 := h₄.1\n    have h₆ : 0 < z.re := h₄.2.1\n    have h₇ : ↑(Int.floor z.re) = z.re := h₄.2.2\n    \n    \n    \n    \n    \n    have h₈ : False := by\n      \n      have h₉ : z.re > 0 := by exact_mod_cast h₆\n      have h₁₀ : (Int.floor z.re : ℝ) = z.re := by exact_mod_cast h₇\n      have h₁₁ : (z.re : ℝ) = (Int.floor z.re : ℝ) := by linarith\n      have h₁₂ : (z.re : ℝ) = (Int.floor z.re : ℝ) := by linarith\n      have h₁₃ : ∃ (n : ℤ), (n : ℝ) = z.re := by\n        refine' ⟨Int.floor z.re, _⟩\n        linarith\n      obtain ⟨n, hn⟩ := h₁₃\n      have h₁₄ : (n : ℝ) = z.re := by exact_mod_cast hn\n      have h₁₅ : (n : ℝ) > 0 := by\n        have h₁₆ : (z.re : ℝ) > 0 := by exact_mod_cast h₆\n        linarith\n      have h₁₆ : (n : ℤ) > 0 := by\n        norm_cast at h₁₅ ⊢\n        <;>\n        (try norm_num at h₁₅ ⊢) <;>\n        (try linarith) <;>\n        (try nlinarith)\n      \n      \n      have h₁₇ : (n : ℤ) ≥ 1 := by linarith\n      have h₁₈ : (n : ℝ) ≥ 1 := by exact_mod_cast h₁₇\n      \n      \n      have h₁₉ : f z = 0 := hz\n      have h₂₀ : f z = z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16 := by rw [h₀]\n      rw [h₂₀] at h₁₉\n      have h₂₁ : (z : ℂ) ^ 6 - 10 * (z : ℂ) ^ 5 + a * (z : ℂ) ^ 4 + b * (z : ℂ) ^ 3 + c * (z : ℂ) ^ 2 + d * (z : ℂ) + 16 = 0 := by simpa using h₁₉\n      \n      \n      have h₂₂ : z.im = 0 := h₅\n      have h₂₃ : (z.re : ℝ) = (n : ℝ) := by\n        have h₂₄ : (n : ℝ) = z.re := by exact_mod_cast hn\n        linarith\n      have h₂₄ : (z : ℂ) = (n : ℂ) := by\n        apply Complex.ext <;> simp_all [Complex.ext_iff, pow_succ, mul_comm]\n        <;> ring_nf at * <;> norm_cast at * <;>\n        (try linarith) <;>\n        (try nlinarith)\n      rw [h₂₄] at h₂₁\n      \n      \n      simp [Complex.ext_iff, pow_succ, pow_zero, pow_one, Complex.ext_iff, pow_succ, pow_zero, pow_one] at h₂₁\n      norm_cast at h₂₁\n      <;>\n      (try ring_nf at h₂₁) <;>\n      (try norm_num at h₂₁) <;>\n      (try nlinarith [sq_nonneg (n : ℝ), sq_nonneg ((n : ℝ) ^ 2), sq_nonneg ((n : ℝ) ^ 3)])\n    exact h₈\n  \n  have h₄ : b = -88 := by\n    exfalso\n    exact h₃\n  \n  exact h₄",
+  "submitted_code_sha256": "514a5514fbb9f63e4c26e22d6692168cda778a0a78f220d108c2afee08014c25",
+  "verification_record": {
+    "code": "\n\n\n\ntheorem amc12a_2021_p12 (a b c d : ℝ) (f : ℂ → ℂ)\n    (h₀ : ∀ z, f z = z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16)\n    (h₁ : ∀ z, f z = 0 → z.im = 0 ∧ 0 < z.re ∧ ↑(Int.floor z.re) = z.re) : b = -88 := by \n  have h₂ : ∃ (z : ℂ), f z = 0 := by\n    have h₃ : ∃ (z : ℂ), z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16 = 0 := by\n      \n      have h₄ : ∃ (z : ℂ), z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16 = 0 := by\n        \n        have h₅ : ∃ (z : ℂ), z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16 = 0 := by\n          \n          apply exists_root\n          intro h\n          \n          norm_num [Complex.ext_iff, pow_succ, mul_comm] at h\n          <;>\n          (try contradiction) <;>\n          (try linarith) <;>\n          (try nlinarith)\n        exact h₅\n      exact h₄\n    obtain ⟨z, hz⟩ := h₃\n    use z\n    rw [h₀]\n    exact hz\n  \n  have h₃ : False := by\n    obtain ⟨z, hz⟩ := h₂\n    have h₄ : z.im = 0 ∧ 0 < z.re ∧ ↑(Int.floor z.re) = z.re := h₁ z hz\n    have h₅ : z.im = 0 := h₄.1\n    have h₆ : 0 < z.re := h₄.2.1\n    have h₇ : ↑(Int.floor z.re) = z.re := h₄.2.2\n    \n    \n    \n    \n    \n    have h₈ : False := by\n      \n      have h₉ : z.re > 0 := by exact_mod_cast h₆\n      have h₁₀ : (Int.floor z.re : ℝ) = z.re := by exact_mod_cast h₇\n      have h₁₁ : (z.re : ℝ) = (Int.floor z.re : ℝ) := by linarith\n      have h₁₂ : (z.re : ℝ) = (Int.floor z.re : ℝ) := by linarith\n      have h₁₃ : ∃ (n : ℤ), (n : ℝ) = z.re := by\n        refine' ⟨Int.floor z.re, _⟩\n        linarith\n      obtain ⟨n, hn⟩ := h₁₃\n      have h₁₄ : (n : ℝ) = z.re := by exact_mod_cast hn\n      have h₁₅ : (n : ℝ) > 0 := by\n        have h₁₆ : (z.re : ℝ) > 0 := by exact_mod_cast h₆\n        linarith\n      have h₁₆ : (n : ℤ) > 0 := by\n        norm_cast at h₁₅ ⊢\n        <;>\n        (try norm_num at h₁₅ ⊢) <;>\n        (try linarith) <;>\n        (try nlinarith)\n      \n      \n      have h₁₇ : (n : ℤ) ≥ 1 := by linarith\n      have h₁₈ : (n : ℝ) ≥ 1 := by exact_mod_cast h₁₇\n      \n      \n      have h₁₉ : f z = 0 := hz\n      have h₂₀ : f z = z ^ 6 - 10 * z ^ 5 + a * z ^ 4 + b * z ^ 3 + c * z ^ 2 + d * z + 16 := by rw [h₀]\n      rw [h₂₀] at h₁₉\n      have h₂₁ : (z : ℂ) ^ 6 - 10 * (z : ℂ) ^ 5 + a * (z : ℂ) ^ 4 + b * (z : ℂ) ^ 3 + c * (z : ℂ) ^ 2 + d * (z : ℂ) + 16 = 0 := by simpa using h₁₉\n      \n      \n      have h₂₂ : z.im = 0 := h₅\n      have h₂₃ : (z.re : ℝ) = (n : ℝ) := by\n        have h₂₄ : (n : ℝ) = z.re := by exact_mod_cast hn\n        linarith\n      have h₂₄ : (z : ℂ) = (n : ℂ) := by\n        apply Complex.ext <;> simp_all [Complex.ext_iff, pow_succ, mul_comm]\n        <;> ring_nf at * <;> norm_cast at * <;>\n        (try linarith) <;>\n        (try nlinarith)\n      rw [h₂₄] at h₂₁\n      \n      \n      simp [Complex.ext_iff, pow_succ, pow_zero, pow_one, Complex.ext_iff, pow_succ, pow_zero, pow_one] at h₂₁\n      norm_cast at h₂₁\n      <;>\n      (try ring_nf at h₂₁) <;>\n      (try norm_num at h₂₁) <;>\n      (try nlinarith [sq_nonneg (n : ℝ), sq_nonneg ((n : ℝ) ^ 2), sq_nonneg ((n : ℝ) ^ 3)])\n    exact h₈\n  \n  have h₄ : b = -88 := by\n    exfalso\n    exact h₃\n  \n  exact h₄",
+    "compilation_result": {
+      "sorries": [],
+      "tactics": [],
+      "errors": [
+        {
+          "severity": "error",
+          "pos": {
+            "line": 15,
+            "column": 16
+          },
+          "endPos": {
+            "line": 15,
+            "column": 27
+          },
+          "data": "unknown identifier 'exists_root'"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 78,
+            "column": 30
+          },
+          "endPos": {
+            "line": 78,
+            "column": 76
+          },
+          "data": "tactic 'simp' failed, nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 78,
+            "column": 30
+          },
+          "endPos": {
+            "line": 78,
+            "column": 76
+          },
+          "data": "tactic 'simp' failed, nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 41,
+            "column": 23
+          },
+          "endPos": {
+            "line": 90,
+            "column": 91
+          },
+          "data": "unsolved goals\ncase intro\na b c d : ℝ\nf : ℂ → ℂ\nh₀ : ∀ (z : ℂ), f z = z ^ 6 - 10 * z ^ 5 + ↑a * z ^ 4 + ↑b * z ^ 3 + ↑c * z ^ 2 + ↑d * z + 16\nh₁ : ∀ (z : ℂ), f z = 0 → z.im = 0 ∧ 0 < z.re ∧ ↑⌊z.re⌋ = z.re\nz : ℂ\nhz : f z = 0\nh₄ : z.im = 0 ∧ 0 < z.re ∧ ↑⌊z.re⌋ = z.re\nh₅ : z.im = 0\nh₆ : 0 < z.re\nh₇ : ↑⌊z.re⌋ = z.re\nh₉ : z.re > 0\nh₁₀ : ↑⌊z.re⌋ = z.re\nh₁₁ h₁₂ : z.re = ↑⌊z.re⌋\nn : ℤ\nhn h₁₄ : ↑n = z.re\nh₁₅ : ↑n > 0\nh₁₆ : n > 0\nh₁₇ : n ≥ 1\nh₁₈ : ↑n ≥ 1\nh₁₉ : z ^ 6 - 10 * z ^ 5 + ↑a * z ^ 4 + ↑b * z ^ 3 + ↑c * z ^ 2 + ↑d * z + 16 = 0\nh₂₀ : f z = z ^ 6 - 10 * z ^ 5 + ↑a * z ^ 4 + ↑b * z ^ 3 + ↑c * z ^ 2 + ↑d * z + 16\nh₂₂ : z.im = 0\nh₂₃ : z.re = ↑n\nh₂₄ : z = ↑n\nh₂₁ : 16 + (-(↑n ^ 5 * 10) + ↑n ^ 6) + a * ↑n ^ 4 + b * ↑n ^ 3 + c * ↑n ^ 2 + d * ↑n = 0\n⊢ False"
+        }
+      ],
+      "warnings": [],
+      "infos": [],
+      "ast": {},
+      "system_errors": null,
+      "pass": false,
+      "complete": false
+    },
+    "name": "amc12a_2021_p12_g29",
+    "verify_time": 13.82
+  },
+  "problem_scope": {
+    "candidates_in_source_run": 32,
+    "successful_candidates": 0,
+    "problem_solved_at_pass32": false,
+    "included_in_published_unsolved_problem_scope": true,
+    "selection_purpose": "Illustrative case retained from thesis Table 6.1."
+  }
+}

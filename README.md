@@ -21,9 +21,14 @@ results/
   README.md              Result index, scope and statistical overview
   tables/                CSV tables, metadata and compressed full-message mapping
   figures/               Cell and pooled-model heatmaps in PNG/PDF
+  case_studies/          Eight definitions, cases and original response evidence
 README.md                Methods, commands and function reference
 requirements.txt         Plotting dependency
 ```
+
+## Eight-category case studies
+
+The [case-study index](results/case_studies/README.md) organizes the eight cases from thesis Table 6.1. Each category has a `README.md` with **definition → case study → explanation**, plus sibling `model_output.txt`, `case_excerpt.md` and `verification.json` files. Excerpts preserve the original text and record its line ranges; the verification evidence preserves all diagnostics and distinguishes model output from submitted code. The selected diagnostic is interpreted without an exclusive primary label. The case index separately documents scope: the syntax illustration comes from a solved problem and is not part of the published unsolved-problem statistics.
 
 ## Install and run
 

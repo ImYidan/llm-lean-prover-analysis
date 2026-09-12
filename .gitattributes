@@ -1,0 +1,3 @@
+# Preserve original model-response text and verbatim excerpt whitespace.
+results/case_studies/*/model_output.txt -text -whitespace
+results/case_studies/*/case_excerpt.md -text -whitespace

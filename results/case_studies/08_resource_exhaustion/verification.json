@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "category": "Resource exhaustion",
+  "model": "Goedel-Prover-V2-32B",
+  "benchmark": "miniF2F",
+  "candidate_id": "mathd_numbertheory_451_g10",
+  "generation_index": 10,
+  "sources": {
+    "generation": {
+      "artifact": "full_records.json",
+      "artifact_sha256": "ce9304fd22a004bf9e46637c9a4c75d595e9088f9cabcdb6c306a482e9c8e75a",
+      "record_index": 1450,
+      "record_index_base": 0
+    },
+    "verification": {
+      "artifact": "code_compilation_repl.json",
+      "artifact_sha256": "9a46557218c47f89c0b898394dcd11029f57a7300b000a97a1509608f3024d59",
+      "record_index": 4481,
+      "record_index_base": 0
+    }
+  },
+  "model_output": {
+    "file": "model_output.txt",
+    "source_field": "model_output",
+    "sha256": "34fa610853fc78ba589683b5bfff5c258c74edfb3b812472ee200f857efcc329",
+    "encoding": "UTF-8",
+    "preservation": "Exact decoded source string; no added newline or edits."
+  },
+  "statement_excerpt": {
+    "start_line": 583,
+    "end_line": 588,
+    "sha256": "6a62238a0837149f7532f751ca29c4b9c0b1700a541abc1393fdc0cc293bc6f1"
+  },
+  "case_excerpts": [
+    {
+      "start_line": 695,
+      "end_line": 705,
+      "sha256": "ace64b7092b8d3573ff38976d6a47ff12c3273d3a026b0c7094fc599cc4eb284"
+    }
+  ],
+  "excerpt_line_index_base": 1,
+  "selected_diagnostic_index": 0,
+  "diagnostic_index_base": 0,
+  "input_statement": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- A positive integer $n$ is nice if there is a positive integer $m$ with exactly four positive divisors (including $1$ and $m$) such that the sum of the four divisors is equal to $n.$ Find the sum of all the nice numbers in the set $\\{ 2010,2011,2012,\\dots,2019 \\}.$ Show that it is 2016.-/\ntheorem mathd_numbertheory_451 (S : Finset ℕ)\n    (h₀ :\n      ∀ n : ℕ,\n        n ∈ S ↔\n          2010 ≤ n ∧ n ≤ 2019 ∧ ∃ m, (Nat.divisors m).card = 4 ∧ (∑ p in Nat.divisors m, p) = n) :\n    (∑ k in S, k) = 2016 := by\n",
+  "generation_extracted_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n\ntheorem mathd_numbertheory_451 (S : Finset ℕ)\n    (h₀ :\n      ∀ n : ℕ,\n        n ∈ S ↔\n          2010 ≤ n ∧ n ≤ 2019 ∧ ∃ m, (Nat.divisors m).card = 4 ∧ (∑ p in Nat.divisors m, p) = n) :\n    (∑ k in S, k) = 2016 := by \n  have h₁ : S = {2016} := by\n    apply Finset.ext\n    intro n\n    simp only [Finset.mem_singleton, h₀]\n    constructor\n    · \n      intro h\n      have h₂ : 2010 ≤ n := h.1\n      have h₃ : n ≤ 2019 := h.2.1\n      have h₄ : ∃ m, (Nat.divisors m).card = 4 ∧ (∑ p in Nat.divisors m, p) = n := h.2.2\n      \n      have h₅ : n = 2016 := by\n        \n        obtain ⟨m, hm₁, hm₂⟩ := h₄\n        \n        \n        \n        have h₆ : n = 2016 := by\n          \n          \n          have h₇ : n = 2016 := by\n            \n            interval_cases n <;> norm_num at hm₁ hm₂ ⊢ <;>\n              (try contradiction) <;>\n              (try {\n                \n                \n                have h₈ : m ≠ 0 := by\n                  by_contra h₉\n                  simp_all [Nat.divisors_zero]\n                  <;> norm_num at *\n                  <;> contradiction\n                \n                have h₉ : (Nat.divisors m).card = 4 := by simp_all\n                have h₁₀ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                \n                have h₁₁ : m ≠ 0 := by\n                  by_contra h₁₂\n                  simp_all [Nat.divisors_zero]\n                  <;> norm_num at *\n                  <;> contradiction\n                \n                have h₁₂ : False := by\n                  \n                  \n                  \n                  \n                  have h₁₃ : m ≠ 0 := by\n                    by_contra h₁₄\n                    simp_all [Nat.divisors_zero]\n                    <;> norm_num at *\n                    <;> contradiction\n                  \n                  \n                  \n                  \n                  have h₁₄ : (Nat.divisors m).card = 4 := by simp_all\n                  have h₁₅ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                  \n                  \n                  \n                  \n                  have h₁₆ : False := by\n                    \n                    \n                    \n                    \n                    have h₁₇ : m ≠ 0 := by\n                      by_contra h₁₈\n                      simp_all [Nat.divisors_zero]\n                      <;> norm_num at *\n                      <;> contradiction\n                    \n                    \n                    \n                    \n                    have h₁₈ : (Nat.divisors m).card = 4 := by simp_all\n                    have h₁₉ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                    \n                    \n                    \n                    \n                    have h₂₀ : False := by\n                      \n                      \n                      \n                      \n                      have h₂₁ : m ≠ 0 := by\n                        by_contra h₂₂\n                        simp_all [Nat.divisors_zero]\n                        <;> norm_num at *\n                        <;> contradiction\n                      \n                      \n                      \n                      \n                      have h₂₂ : (Nat.divisors m).card = 4 := by simp_all\n                      have h₂₃ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                      \n                      \n                      \n                      \n                      norm_num at h₂₂ h₂₃ ⊢\n                      <;>\n                        (try omega) <;>\n                        (try {\n                          have h₂₄ : m ≤ 2010 := by\n                            have h₂₅ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                            have h₂₆ : m ∈ Nat.divisors m := by\n                              apply Nat.mem_divisors.mpr\n                              exact ⟨Nat.dvd_refl m, by omega⟩\n                            have h₂₇ : m ≤ ∑ p in Nat.divisors m, p := by\n                              apply Finset.single_le_sum (fun x _ => Nat.zero_le x) h₂₆\n                            linarith\n                          interval_cases m <;> norm_num [Nat.divisors] at h₂₂ h₂₃ ⊢ <;>\n                            (try contradiction) <;>\n                            (try omega)\n                        }) <;>\n                        (try {\n                          have h₂₄ : m ≤ 2010 := by\n                            have h₂₅ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                            have h₂₆ : m ∈ Nat.divisors m := by\n                              apply Nat.mem_divisors.mpr\n                              exact ⟨Nat.dvd_refl m, by omega⟩\n                            have h₂₇ : m ≤ ∑ p in Nat.divisors m, p := by\n                              apply Finset.single_le_sum (fun x _ => Nat.zero_le x) h₂₆\n                            linarith\n                          interval_cases m <;> norm_num [Nat.divisors] at h₂₂ h₂₃ ⊢ <;>\n                            (try contradiction) <;>\n                            (try omega)\n                        })\n                    exact h₂₀\n                  exact h₁₆\n                exact h₁₂\n              }) <;>\n              (try {\n                \n                \n                \n                \n                norm_num at hm₁ hm₂ ⊢ <;>\n                  (try {\n                    use 1837\n                    <;> norm_num [Nat.divisors, Finset.card_eq_succ, Finset.sum_const, Finset.card_range]\n                    <;>\n                      (try decide) <;>\n                      (try {\n                        rfl\n                      })\n                  })\n              })\n          exact h₇\n        exact h₆\n      simp_all\n    · \n      intro h\n      rw [h]\n      \n      \n      refine' ⟨by norm_num, by norm_num, _⟩\n      \n      \n      \n      use 1837\n      <;> norm_num [Nat.divisors, Finset.card_eq_succ, Finset.sum_const, Finset.card_range]\n      <;>\n        (try decide) <;>\n        (try {\n          rfl\n        })\n  \n  have h₂ : (∑ k in S, k) = 2016 := by\n    rw [h₁]\n    <;> simp\n    <;> norm_num\n  \n  exact h₂",
+  "submitted_code_sha256": "7140bd84d722e78d83b7ad4c41331204f79b0c7c84d4527ec6e4fb4904676ede",
+  "verification_record": {
+    "code": "\n\n\n\ntheorem mathd_numbertheory_451 (S : Finset ℕ)\n    (h₀ :\n      ∀ n : ℕ,\n        n ∈ S ↔\n          2010 ≤ n ∧ n ≤ 2019 ∧ ∃ m, (Nat.divisors m).card = 4 ∧ (∑ p in Nat.divisors m, p) = n) :\n    (∑ k in S, k) = 2016 := by \n  have h₁ : S = {2016} := by\n    apply Finset.ext\n    intro n\n    simp only [Finset.mem_singleton, h₀]\n    constructor\n    · \n      intro h\n      have h₂ : 2010 ≤ n := h.1\n      have h₃ : n ≤ 2019 := h.2.1\n      have h₄ : ∃ m, (Nat.divisors m).card = 4 ∧ (∑ p in Nat.divisors m, p) = n := h.2.2\n      \n      have h₅ : n = 2016 := by\n        \n        obtain ⟨m, hm₁, hm₂⟩ := h₄\n        \n        \n        \n        have h₆ : n = 2016 := by\n          \n          \n          have h₇ : n = 2016 := by\n            \n            interval_cases n <;> norm_num at hm₁ hm₂ ⊢ <;>\n              (try contradiction) <;>\n              (try {\n                \n                \n                have h₈ : m ≠ 0 := by\n                  by_contra h₉\n                  simp_all [Nat.divisors_zero]\n                  <;> norm_num at *\n                  <;> contradiction\n                \n                have h₉ : (Nat.divisors m).card = 4 := by simp_all\n                have h₁₀ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                \n                have h₁₁ : m ≠ 0 := by\n                  by_contra h₁₂\n                  simp_all [Nat.divisors_zero]\n                  <;> norm_num at *\n                  <;> contradiction\n                \n                have h₁₂ : False := by\n                  \n                  \n                  \n                  \n                  have h₁₃ : m ≠ 0 := by\n                    by_contra h₁₄\n                    simp_all [Nat.divisors_zero]\n                    <;> norm_num at *\n                    <;> contradiction\n                  \n                  \n                  \n                  \n                  have h₁₄ : (Nat.divisors m).card = 4 := by simp_all\n                  have h₁₅ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                  \n                  \n                  \n                  \n                  have h₁₆ : False := by\n                    \n                    \n                    \n                    \n                    have h₁₇ : m ≠ 0 := by\n                      by_contra h₁₈\n                      simp_all [Nat.divisors_zero]\n                      <;> norm_num at *\n                      <;> contradiction\n                    \n                    \n                    \n                    \n                    have h₁₈ : (Nat.divisors m).card = 4 := by simp_all\n                    have h₁₉ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                    \n                    \n                    \n                    \n                    have h₂₀ : False := by\n                      \n                      \n                      \n                      \n                      have h₂₁ : m ≠ 0 := by\n                        by_contra h₂₂\n                        simp_all [Nat.divisors_zero]\n                        <;> norm_num at *\n                        <;> contradiction\n                      \n                      \n                      \n                      \n                      have h₂₂ : (Nat.divisors m).card = 4 := by simp_all\n                      have h₂₃ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                      \n                      \n                      \n                      \n                      norm_num at h₂₂ h₂₃ ⊢\n                      <;>\n                        (try omega) <;>\n                        (try {\n                          have h₂₄ : m ≤ 2010 := by\n                            have h₂₅ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                            have h₂₆ : m ∈ Nat.divisors m := by\n                              apply Nat.mem_divisors.mpr\n                              exact ⟨Nat.dvd_refl m, by omega⟩\n                            have h₂₇ : m ≤ ∑ p in Nat.divisors m, p := by\n                              apply Finset.single_le_sum (fun x _ => Nat.zero_le x) h₂₆\n                            linarith\n                          interval_cases m <;> norm_num [Nat.divisors] at h₂₂ h₂₃ ⊢ <;>\n                            (try contradiction) <;>\n                            (try omega)\n                        }) <;>\n                        (try {\n                          have h₂₄ : m ≤ 2010 := by\n                            have h₂₅ : (∑ p in Nat.divisors m, p) = 2010 := by simp_all\n                            have h₂₆ : m ∈ Nat.divisors m := by\n                              apply Nat.mem_divisors.mpr\n                              exact ⟨Nat.dvd_refl m, by omega⟩\n                            have h₂₇ : m ≤ ∑ p in Nat.divisors m, p := by\n                              apply Finset.single_le_sum (fun x _ => Nat.zero_le x) h₂₆\n                            linarith\n                          interval_cases m <;> norm_num [Nat.divisors] at h₂₂ h₂₃ ⊢ <;>\n                            (try contradiction) <;>\n                            (try omega)\n                        })\n                    exact h₂₀\n                  exact h₁₆\n                exact h₁₂\n              }) <;>\n              (try {\n                \n                \n                \n                \n                norm_num at hm₁ hm₂ ⊢ <;>\n                  (try {\n                    use 1837\n                    <;> norm_num [Nat.divisors, Finset.card_eq_succ, Finset.sum_const, Finset.card_range]\n                    <;>\n                      (try decide) <;>\n                      (try {\n                        rfl\n                      })\n                  })\n              })\n          exact h₇\n        exact h₆\n      simp_all\n    · \n      intro h\n      rw [h]\n      \n      \n      refine' ⟨by norm_num, by norm_num, _⟩\n      \n      \n      \n      use 1837\n      <;> norm_num [Nat.divisors, Finset.card_eq_succ, Finset.sum_const, Finset.card_range]\n      <;>\n        (try decide) <;>\n        (try {\n          rfl\n        })\n  \n  have h₂ : (∑ k in S, k) = 2016 := by\n    rw [h₁]\n    <;> simp\n    <;> norm_num\n  \n  exact h₂",
+    "compilation_result": {
+      "sorries": [],
+      "tactics": [],
+      "errors": [
+        {
+          "severity": "error",
+          "pos": {
+            "line": 126,
+            "column": 33
+          },
+          "endPos": {
+            "line": 126,
+            "column": 46
+          },
+          "data": "maximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information"
+        },
+        {
+          "severity": "error",
+          "pos": {
+            "line": 165,
+            "column": 4
+          },
+          "endPos": {
+            "line": 165,
+            "column": 5
+          },
+          "data": "unsolved goals\ncase h\nS : Finset ℕ\nh₀ : ∀ (n : ℕ), n ∈ S ↔ 2010 ≤ n ∧ n ≤ 2019 ∧ ∃ m, m.divisors.card = 4 ∧ ∑ p ∈ m.divisors, p = n\nn : ℕ\nh : n = 2016\n⊢ (∃ a t,\n      a ∉ t ∧\n        insert a t = Finset.filter (fun x => x ∣ 1837) (Finset.Ico 1 1838) ∧\n          ∃ a t_1, a ∉ t_1 ∧ insert a t_1 = t ∧ ∃ a t, a ∉ t ∧ insert a t = t_1 ∧ ∃ a, {a} = t) ∧\n    ∑ x ∈ Finset.filter (fun x => x ∣ 1837) (Finset.Ico 1 1838), x = 2016"
+        }
+      ],
+      "warnings": [],
+      "infos": [],
+      "ast": {},
+      "system_errors": null,
+      "pass": false,
+      "complete": false
+    },
+    "name": "mathd_numbertheory_451_g10",
+    "verify_time": 173.19
+  },
+  "problem_scope": {
+    "candidates_in_source_run": 32,
+    "successful_candidates": 0,
+    "problem_solved_at_pass32": false,
+    "included_in_published_unsolved_problem_scope": true,
+    "selection_purpose": "Illustrative case retained from thesis Table 6.1."
+  }
+}

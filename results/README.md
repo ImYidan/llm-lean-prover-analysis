@@ -20,6 +20,10 @@ These results use the historical occurrence rule: repeated reports at the same s
 
 This Markdown guide summarizes the CSVs and links the published outputs. Candidate-level `raw_errors.jsonl` and redundant per-cell message-count CSVs remain local intermediates under `results/scans/`; the published mapping preserves complete distinct messages and both counts by cell. Original verifier inputs and exclusion lists are required to rebuild those intermediates. Their filenames and SHA-256 fingerprints are recorded in `analysis_summary.json`.
 
+## Eight-category definitions and cases
+
+See [case_studies/README.md](case_studies/README.md) for the eight categories, each organized as **definition → case study → explanation**. Every category directory includes the complete original model response, a verbatim case excerpt with source lines, and the original verification record with source fingerprints. The cases match thesis Table 6.1; the excerpt notes disclose its shortened presentation.
+
 ## Figure presentation
 
 Both heatmaps adopt the thesis's muted blue palette, serif labels and category-by-model layout. The cell figure groups model columns by benchmark. G32 = Goedel-32B; G8 = Goedel-8B; DS7 = DeepSeek-Prover-V2-7B; K8 = Kimina-Prover-Distill-8B; P4 = Pythagoras-Prover-4B. The axis labels “Termination” and “Resource” abbreviate Termination failure and Resource exhaustion.

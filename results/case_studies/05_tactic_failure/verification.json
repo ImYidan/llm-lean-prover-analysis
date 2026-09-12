@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "category": "Tactic failure",
+  "model": "Goedel-Prover-V2-32B",
+  "benchmark": "miniF2F",
+  "candidate_id": "induction_pord1p1on2powklt5on2_g27",
+  "generation_index": 27,
+  "sources": {
+    "generation": {
+      "artifact": "full_records.json",
+      "artifact_sha256": "ce9304fd22a004bf9e46637c9a4c75d595e9088f9cabcdb6c306a482e9c8e75a",
+      "record_index": 2683,
+      "record_index_base": 0
+    },
+    "verification": {
+      "artifact": "code_compilation_repl.json",
+      "artifact_sha256": "9a46557218c47f89c0b898394dcd11029f57a7300b000a97a1509608f3024d59",
+      "record_index": 1076,
+      "record_index_base": 0
+    }
+  },
+  "model_output": {
+    "file": "model_output.txt",
+    "source_field": "model_output",
+    "sha256": "41df031e70e41b4362efe24e9591dabb5080ea38c4c4918146621a0fd3b6a255",
+    "encoding": "UTF-8",
+    "preservation": "Exact decoded source string; no added newline or edits."
+  },
+  "statement_excerpt": {
+    "start_line": 992,
+    "end_line": 993,
+    "sha256": "d99c9911935387261982096e302c286900a736074a80b10842a720a65a09ad61"
+  },
+  "case_excerpts": [
+    {
+      "start_line": 1027,
+      "end_line": 1034,
+      "sha256": "19b849ace43bbf2094d1102e334dc47439d8537f0b3ba45a685397dfadcacb07"
+    }
+  ],
+  "excerpt_line_index_base": 1,
+  "selected_diagnostic_index": 0,
+  "diagnostic_index_base": 0,
+  "input_statement": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n/-- Show that for positive integer $n$, $(\\prod_{k=1}^{n} (1 + 1/2^k)) < 5/2$.-/\ntheorem induction_pord1p1on2powklt5on2 (n : ℕ) (h₀ : 0 < n) :\n    ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n",
+  "generation_extracted_code": "import Mathlib\nimport Aesop\n\nset_option maxHeartbeats 0\n\nopen BigOperators Real Nat Topology Rat\n\n\ntheorem induction_pord1p1on2powklt5on2 (n : ℕ) (h₀ : 0 < n) :\n    ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by \n  have h_main : ∀ (n : ℕ), 0 < n → ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n    intro n hn\n    have h₁ : ∀ n : ℕ, 0 < n → ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n      intro n hn\n      induction' hn with n hn IH\n      · \n        norm_num [Finset.prod_Icc_succ_top]\n      · \n        rw [Finset.prod_Icc_succ_top (by omega : 1 ≤ n.succ)]\n        have h₂ : (1 : ℝ) + (1 : ℝ) / 2 ^ (n + 1 : ℕ) ≤ (1 : ℝ) + (1 : ℝ) / 2 ^ 1 := by\n          have h₃ : (2 : ℝ) ^ (n + 1 : ℕ) ≥ 2 ^ 1 := by\n            apply pow_le_pow_right\n            · norm_num\n            · omega\n          have h₄ : (1 : ℝ) / (2 : ℝ) ^ (n + 1 : ℕ) ≤ (1 : ℝ) / (2 : ℝ) ^ 1 := by\n            apply div_le_div_of_le_left (by positivity) (by positivity)\n            <;> norm_cast at h₃ ⊢ <;>\n              simp_all [pow_succ]\n            <;> nlinarith\n          linarith\n        have h₃ : (1 : ℝ) + (1 : ℝ) / 2 ^ (n + 1 : ℕ) > 0 := by positivity\n        have h₄ : ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) ≥ 0 := by\n          apply Finset.prod_nonneg\n          intro i _\n          positivity\n        have h₅ : (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) * (1 + (1 : ℝ) / 2 ^ (n + 1 : ℕ)) < 5 / 2 := by\n          calc\n            (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) * (1 + (1 : ℝ) / 2 ^ (n + 1 : ℕ)) ≤\n                (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) * (1 + (1 : ℝ) / 2 ^ 1) := by\n              gcongr\n              <;> simp_all [Nat.cast_add, pow_succ]\n              <;> norm_num\n              <;> linarith\n            _ = (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) * (3 / 2) := by norm_num\n            _ < 5 / 2 := by\n              have h₆ : (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) < 5 / 2 := IH\n              have h₇ : (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) ≥ 0 := by\n                apply Finset.prod_nonneg\n                intro i _\n                positivity\n              nlinarith\n        linarith\n    exact h₁ n hn\n  have h_final : ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n    have h₂ : 0 < n := h₀\n    exact h_main n h₂\n  exact h_final",
+  "submitted_code_sha256": "7baa8f863a6fce4f407f924f709035fb21b88e9bbd558bdc8f84f8c65a814b2d",
+  "verification_record": {
+    "code": "\n\n\n\ntheorem induction_pord1p1on2powklt5on2 (n : ℕ) (h₀ : 0 < n) :\n    ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by \n  have h_main : ∀ (n : ℕ), 0 < n → ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n    intro n hn\n    have h₁ : ∀ n : ℕ, 0 < n → ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n      intro n hn\n      induction' hn with n hn IH\n      · \n        norm_num [Finset.prod_Icc_succ_top]\n      · \n        rw [Finset.prod_Icc_succ_top (by omega : 1 ≤ n.succ)]\n        have h₂ : (1 : ℝ) + (1 : ℝ) / 2 ^ (n + 1 : ℕ) ≤ (1 : ℝ) + (1 : ℝ) / 2 ^ 1 := by\n          have h₃ : (2 : ℝ) ^ (n + 1 : ℕ) ≥ 2 ^ 1 := by\n            apply pow_le_pow_right\n            · norm_num\n            · omega\n          have h₄ : (1 : ℝ) / (2 : ℝ) ^ (n + 1 : ℕ) ≤ (1 : ℝ) / (2 : ℝ) ^ 1 := by\n            apply div_le_div_of_le_left (by positivity) (by positivity)\n            <;> norm_cast at h₃ ⊢ <;>\n              simp_all [pow_succ]\n            <;> nlinarith\n          linarith\n        have h₃ : (1 : ℝ) + (1 : ℝ) / 2 ^ (n + 1 : ℕ) > 0 := by positivity\n        have h₄ : ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) ≥ 0 := by\n          apply Finset.prod_nonneg\n          intro i _\n          positivity\n        have h₅ : (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) * (1 + (1 : ℝ) / 2 ^ (n + 1 : ℕ)) < 5 / 2 := by\n          calc\n            (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) * (1 + (1 : ℝ) / 2 ^ (n + 1 : ℕ)) ≤\n                (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) * (1 + (1 : ℝ) / 2 ^ 1) := by\n              gcongr\n              <;> simp_all [Nat.cast_add, pow_succ]\n              <;> norm_num\n              <;> linarith\n            _ = (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) * (3 / 2) := by norm_num\n            _ < 5 / 2 := by\n              have h₆ : (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) < 5 / 2 := IH\n              have h₇ : (∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k)) ≥ 0 := by\n                apply Finset.prod_nonneg\n                intro i _\n                positivity\n              nlinarith\n        linarith\n    exact h₁ n hn\n  have h_final : ∏ k in Finset.Icc 1 n, (1 + (1 : ℝ) / 2 ^ k) < 5 / 2 := by\n    have h₂ : 0 < n := h₀\n    exact h_main n h₂\n  exact h_final",
+    "compilation_result": {
+      "sorries": [],
+      "tactics": [],
+      "errors": [
+        {
+          "severity": "error",
+          "pos": {
+            "line": 47,
+            "column": 14
+          },
+          "endPos": {
+            "line": 47,
+            "column": 23
+          },
+          "data": "linarith failed to find a contradiction\ncase h\nn✝² : ℕ\nh₀ : 0 < n✝²\nn✝¹ : ℕ\nhn✝ : 0 < n✝¹\nn✝ n : ℕ\nhn : (succ 0).le n\nIH : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₂ : 1 + 1 / 2 ^ (n + 1) ≤ 1 + 1 / 2 ^ 1\nh₃ : 1 + 1 / 2 ^ (n + 1) > 0\nh₄ : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) ≥ 0\nh₆ : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) < 5 / 2\nh₇ : ∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k) ≥ 0\na✝ : (∏ k ∈ Finset.Icc 1 n, (1 + 1 / 2 ^ k)) * (3 / 2) ≥ 5 / 2\n⊢ False\nfailed"
+        }
+      ],
+      "warnings": [
+        {
+          "severity": "warning",
+          "pos": {
+            "line": 22,
+            "column": 18
+          },
+          "endPos": {
+            "line": 22,
+            "column": 39
+          },
+          "data": "`div_le_div_of_le_left` has been deprecated, use `div_le_div_of_nonneg_left` instead"
+        }
+      ],
+      "infos": [],
+      "ast": {},
+      "system_errors": null,
+      "pass": false,
+      "complete": false
+    },
+    "name": "induction_pord1p1on2powklt5on2_g27",
+    "verify_time": 1.76
+  },
+  "problem_scope": {
+    "candidates_in_source_run": 32,
+    "successful_candidates": 0,
+    "problem_solved_at_pass32": false,
+    "included_in_published_unsolved_problem_scope": true,
+    "selection_purpose": "Illustrative case retained from thesis Table 6.1."
+  }
+}
